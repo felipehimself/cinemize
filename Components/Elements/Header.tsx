@@ -4,7 +4,7 @@ import Link from 'next/link';
 import ColorMode from '../ColorMode/ColorMode';
 const Header = () => {
   return (
-    <header className='fixed z-10 shadow-md  shadow-indigo-500/40 dark:shadow-dark  py-2  left-0 right-0 w-full bg-indigo-600 dark:bg-darker'>
+    <header className='fixed z-10 shadow-md  shadow-indigo-500/40 dark:shadow-dark  py-1  left-0 right-0 w-full bg-indigo-600 dark:bg-darker'>
       <div className='flex items-center gap-4 justify-between container mx-auto'>
         <div className='flex items-center flex-1 '>
           <h3 className='text-xl text-white'>cine.mize</h3>
@@ -50,7 +50,7 @@ const Header = () => {
             <Input
               placeHolder='Search user...'
               type='text'
-              className='w-full dark:border-darker focus:outline-indigo-700 rounded-md py-1 px-2'
+              className='w-full dark:border-darker  rounded-md py-1 px-2'
             />
           </div>
           <div className='hidden text-white md:block'>

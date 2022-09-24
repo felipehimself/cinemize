@@ -47,12 +47,14 @@ const Home: NextPage = () => {
               Create Account
             </Button>
           </Form>
-          <h3 className='text-center my-4'>Already have an account?</h3>
-          <Link href='/'>
-            <a className='block text-center text-md hover:text-gray-900 dark:hover:text-indigo-300 transition underline'>
-              Sign in
-            </a>
-          </Link>
+          <div className='flex items-center justify-center gap-2 text-md'>
+            <h3 className='text-center my-4 '>Already have an account?</h3>
+            <Link href='/'>
+              <a className='block text-center text-md hover:text-gray-900 dark:hover:text-indigo-300 transition underline'>
+                Sign in
+              </a>
+            </Link>
+          </div>
         </div>
       </div>
       <div className='fixed top-8 right-8 flex mt-auto mb-10 justify-left'>

@@ -25,12 +25,12 @@ const Home = () => {
         {/* center container */}
         <div className='flex-1 pt-4'>
           <h3 className='text-md mb-3'>Any movie or series suggestion?</h3>
-          <textarea name="" id="" placeholder='Start writting...' className='p-2 h-24 w-full border rounded-md resize-none ' ></textarea>
+          <textarea name="" id="" placeholder='Start writting...' className='dark:border-dark focus:outline-none focus:border-indigo-600 p-2 h-24 w-full border rounded-md resize-none ' ></textarea>
         </div>
 
 
         {/* right container */}
-        <div className='flex-1'>
+        <div className='hidden lg:block flex-1'>
          { Array.from(Array(200).keys()).map((item)=> {
           return <p key={item}>{item}</p>
          }) }

@@ -9,7 +9,7 @@ const Input = ({
     <input
       type={type}
       placeholder={placeHolder}
-      className={`${className} py-2 px-2 dark:focus:outline-none focus:outline-indigo-700 border border-indigo-600 `}
+      className={`${className}  py-2 px-2 dark:focus:outline-none focus:outline-none border focus:border-indigo-600 border-gray-300 `}
     />
   );
 };
