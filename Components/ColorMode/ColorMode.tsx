@@ -9,7 +9,7 @@ const ColorMode = ({size, className}:{size:number, className?:string}) :JSX.Elem
 
   const currentTheme = theme == 'system' ? systemTheme : theme;
 
-  console.log(theme)
+  
 
   useEffect(() => {
     setMount(true);

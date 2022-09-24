@@ -3,10 +3,8 @@ import { IoHome, IoPeople, IoBookmark , IoPerson} from 'react-icons/io5';
 import ColorMode from '../ColorMode/ColorMode';
 const Sidebar = () => {
   return (
-    <div className='fixed border-r- top-12 py-3 left-10 w-56 h-screen '>
-      <h2 className='text-xl'>cine<span className='text-indigo-600'>.</span>mize</h2>
-      <nav className=''>
-        
+    <div className='h-screen border-r w-48  '>
+      <nav>        
         <ul className='flex flex-col '>
         <li className='  py-3 '>
             <Link href='/home'>

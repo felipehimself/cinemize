@@ -10,11 +10,36 @@ const Home = () => {
         <meta name='home page' content='User home page' />
         <link rel='icon' href='/favicon.ico' />
       </Head>
-      <div className='fixed right-4 top-5 z-20'>
+      {/* <div className='fixed right-4 top-5 z-20'>
         <ColorMode className='fill-white' size={20} />
-      </div>
+      </div> */}
       <Header />
-      {/* <Sidebar /> */}
+
+      <div className='pt-16 flex gap-8 '>
+        {/* left container */}
+
+        {/* <Sidebar /> */}
+
+
+
+        {/* center container */}
+        <div className='flex-1 pt-4'>
+          <h3 className='text-md mb-3'>Any movie or series suggestion?</h3>
+          <textarea name="" id="" placeholder='Start writting...' className='p-2 h-24 w-full border rounded-md resize-none ' ></textarea>
+        </div>
+
+
+        {/* right container */}
+        <div className='flex-1'>
+         { Array.from(Array(200).keys()).map((item)=> {
+          return <p key={item}>{item}</p>
+         }) }
+        </div>
+
+      </div>
+
+
+
     </>
   );
 };

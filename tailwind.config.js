@@ -24,10 +24,25 @@ module.exports = {
       },
     },
   },
-  plugins: [require('tw-elements/dist/plugin'), ],
+  plugins: [require('tw-elements/dist/plugin'),function changeContainerWidth ({ addComponents }) {
+    addComponents({
+      '.container': {
+        maxWidth: '100%',
+        '@screen sm': {
+          maxWidth: '640px',
+        },
+        '@screen md': {
+          maxWidth: '768px',
+        },
+        '@screen lg': {
+          maxWidth: '1100px',
+        },
+      }
+    })
+  } ],
 }
 
-// function ({ addComponents }) {
+// function changeContainerWidth ({ addComponents }) {
 //   addComponents({
 //     '.container': {
 //       maxWidth: '100%',
