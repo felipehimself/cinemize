@@ -7,7 +7,7 @@ const Header = () => {
     <header className='fixed z-10 shadow-md  shadow-indigo-500/40 dark:shadow-dark  py-1  left-0 right-0 w-full bg-indigo-600 dark:bg-darker'>
       <div className='flex items-center gap-4 justify-between container mx-auto'>
         <div className='flex items-center flex-1 '>
-          <h3 className='text-xl text-white'>cine.mize</h3>
+          <h3 className='text-xl text-white'>cine<span className='dark:text-indigo-600'>.</span>mize</h3>
           <nav className='flex justify-center flex-1 '>
             <ul className='flex flex-1 justify-center items-center gap-6 '>
               <li className='  py-3 '>

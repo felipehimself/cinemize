@@ -7,6 +7,6 @@ const Form = ({
   children: React.ReactNode;
   className?: string;
 }): JSX.Element => {
-  return <div className={` ${className} flex flex-col `}>{children}</div>;
+  return <form className={` ${className} flex flex-col `}>{children}</form>;
 };
 export default Form;
