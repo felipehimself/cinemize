@@ -9,6 +9,11 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "axios": "^0.27.2",
+    "bcryptjs": "^2.4.3",
+    "cookie": "^0.5.0",
+    "jose": "^4.9.3",
+    "mongoose": "^6.6.1",
     "next": "12.3.1",
     "next-themes": "^0.2.1",
     "react": "18.2.0",
@@ -17,6 +22,8 @@
     "tw-elements": "^1.0.0-alpha12"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.2",
+    "@types/cookie": "^0.5.1",
     "@types/node": "18.7.19",
     "@types/react": "18.0.21",
     "autoprefixer": "^10.4.12",

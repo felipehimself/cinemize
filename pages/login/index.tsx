@@ -1,17 +1,21 @@
-import axios from 'axios';
-import type { NextPage } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
-import React, { useState } from 'react';
-import ColorMode from '../Components/ColorMode/ColorMode';
-import Input from '../Components/UI/Input';
-import Form from '../Components/UI/Form';
-import Button from '../Components/UI/Button';
+import { NextPage } from 'next';
+import { useRouter } from 'next/router';
+import { useState } from 'react';
 
+import Input from '../../Components/UI/Input';
+import Form from '../../Components/UI/Form';
+import ColorMode from '../../Components/ColorMode/ColorMode';
+import Button from '../../Components/UI/Button';
 
-const Home: NextPage = () => {
-  const [user, setUser] = useState({ name: '', email: '', password: '' });
+import axios from 'axios'
+
+const Login:NextPage = () => {
+  const [user, setUser] = useState({  email: '', password: '' });
   const [error, setError] = useState({ message: '', isError: false });
+
+  const router = useRouter()
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;
@@ -22,17 +26,21 @@ const Home: NextPage = () => {
     e.preventDefault();
     setError({ message: '', isError: false });
 
-    if (!user.name || !user.email || !user.password) {
+    if (!user.email || !user.password) {
       setError({ message: 'Todos campos são obrigatórios', isError: true });
       return;
     }
 
     try {
-      await axios.post('/api/auth/signup', user);
+      await axios.post('/api/auth/login', user);
+      router.reload()
+      
     } catch (error: any) {
-      setError({ message: error.data.message, isError: true });
+      console.log(error)
+      // setError({ message: error.data.message, isError: true });
     }
   };
+
 
   return (
     <>
@@ -49,21 +57,11 @@ const Home: NextPage = () => {
           <span className='text-indigo-600 dark:text-indigo-400'>z</span>e
         </h1>
         <div className='sm:w-6/12 md:w-80'>
-          <h2 className='text-2xl text-center '>junte-se a nós</h2>
+          <h2 className='text-2xl text-center '>login</h2>
           <span className='text-sm block text-center my-2 min-h-[20px]'>
             {error.isError && error.message}
           </span>
           <Form onSubmit={handleSubmit} className='gap-4 w-full'>
-            <Input
-              type='text'
-              className='rounded-md w-full dark:border-dark'
-              placeHolder='Nome'
-              name='name'
-              id='name'
-              value={user.name ?? ''}
-              onChange={handleChange}
-            />
-
             <Input
               type='text'
               className='rounded-md w-full dark:border-dark'
@@ -85,14 +83,14 @@ const Home: NextPage = () => {
             />
 
             <Button type='submit' className='bg-indigo-600 py-2 rounded-md'>
-              Criar conta
+              Entrar
             </Button>
           </Form>
           <div className='flex items-center justify-center gap-2 text-md'>
-            <h3 className='text-center my-4 '>Já tem uma conta?</h3>
-            <Link href='/login'>
+            <h3 className='text-center my-4 '>Não tem uma conta?</h3>
+            <Link href='/'>
               <a className='block text-center text-md hover:text-gray-900 dark:hover:text-indigo-300 transition underline'>
-                Login
+                Increva-se
               </a>
             </Link>
           </div>
@@ -104,5 +102,4 @@ const Home: NextPage = () => {
     </>
   );
 };
-
-export default Home;
+export default Login;

@@ -1,23 +1,23 @@
 import { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
+
 import Header from '../../Components/Elements/Header';
-import {
-  TextArea,
-  Label,
-  Form,
-  FormControl,
-  CheckBox,
-  Button,
-} from '../../Components/UI/Index';
 import OptionsContainer from '../../Components/Elements/OptionsContainer';
 import PostCard from '../../Components/Elements/PostCard';
+
+import TextArea from '../../Components/UI/TextArea';
+import Label from '../../Components/UI/Label';
+import Form from '../../Components/UI/Form';
+import FormControl from '../../Components/UI/FormControl';
+import CheckBox from '../../Components/UI/CheckBox';
+import Button from '../../Components/UI/Button';
+import CreatePost from '../../Components/Elements/CreatePost';
+
 const Home: NextPage<{ options: string[]; genre: string[]; posts: any }> = ({
   options,
   genre,
   posts,
 }) => {
-  console.log(posts);
-
   return (
     <>
       <Head>
@@ -28,8 +28,9 @@ const Home: NextPage<{ options: string[]; genre: string[]; posts: any }> = ({
 
       <Header />
 
-      <div className='flex gap-5 py-14'>
-        <div className='hidden sm:block w-6/12 '>
+      <section className='flex gap-1 py-14'>
+        <CreatePost options={options} genre={genre} />
+        {/* <div className='hidden sm:block w-6/12 '>
           <Form className='fixed w-4/12 pt-8 gap-4'>
             <FormControl>
               <Label htmlFor='suggestion' className='mb-2'>
@@ -105,19 +106,19 @@ const Home: NextPage<{ options: string[]; genre: string[]; posts: any }> = ({
               </OptionsContainer>
             </FormControl>
 
-            <Button className='p-2 rounded-md mt-2'>Post</Button>
+            <Button type='submit' className='p-2 rounded-md mt-2'>
+              Post
+            </Button>
           </Form>
-        </div>
+        </div> */}
 
         {/* right container */}
         <div className='flex-1 flex flex-col gap-4 pt-8'>
           {posts.map((post: any) => {
-            return (
-              <PostCard key={post.id} {...post} />
-            );
+            return <PostCard key={post.id} {...post} />;
           })}
         </div>
-      </div>
+      </section>
     </>
   );
 };
@@ -137,30 +138,45 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const posts = [
     {
       id: '1',
+      verified: true,
       user: 'cinemize',
       title: 'O segredo dos seus olhos',
       genres: ['triller', 'action'],
       comment: 'this is an amazing movie',
       whereToWatch: ['netflix', 'amazon'],
-      type:'movie'
+      type: 'movie',
+      likes: {
+        total: 5,
+        likedBy: [],
+      },
     },
     {
       id: '2',
+      verified: true,
       user: 'cinemize',
       title: 'O segredo dos seus olhos',
       genres: ['triller', 'action'],
       comment: 'this is an amazing movie',
       whereToWatch: ['netflix', 'amazon'],
-      type:'movie'
+      type: 'movie',
+      likes: {
+        total: 5,
+        likedBy: [],
+      },
     },
     {
       id: '3',
+      verified: false,
       user: 'cinemize',
       title: 'O segredo dos seus olhos',
       genres: ['triller', 'action'],
       comment: 'this is an amazing movie',
       whereToWatch: ['netflix', 'amazon'],
-      type:'movie'
+      type: 'movie',
+      likes: {
+        total: 5,
+        likedBy: [],
+      },
     },
   ];
 

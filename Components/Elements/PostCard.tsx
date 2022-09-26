@@ -1,4 +1,6 @@
 import { IPost } from './../../ts/interfaces/post';
+import { AiFillLike, AiOutlineLike,  } from 'react-icons/ai';
+import {MdVerified} from 'react-icons/md'
 
 const PostCard = ({
   id,
@@ -8,30 +10,22 @@ const PostCard = ({
   comment,
   whereToWatch,
   genres,
+  verified
 }: IPost): JSX.Element => {
   return (
-    <div
+    <article
       key={id}
       className='min-h-[126px] rounded-md w-full border bg-[#fffcfc] dark:bg-[#3b3b3b] '
     >
       <div className='py-2 px-3'>
-        <div>
+        <div className='flex items-center gap-1'>
           <span className='text-sm font-bold'>@{user}</span>
-          <span></span>
+          <span> {verified? <MdVerified /> : undefined} </span>
         </div>
         <div className='my-2 flex items-center gap-2'>
           <h3 className='text-sm'>{title}</h3>
           <span>•</span>
           <span className='text-sm'>{type}</span>
-          {/* <div>
-            {genres.map((gen) => {
-              return (
-                <span key={gen} className='text-xs'>
-                  {gen}
-                </span>
-              );
-            })}
-          </div> */}
         </div>
         <div className='flex flex-col gap-3'>
           <div className='text-sm'>
@@ -69,10 +63,15 @@ const PostCard = ({
               </ul>
             </div>
           </div>
-
+          <footer className='flex items-end justify-end gap-1'>
+            <button className='active:scale-105 active:-rotate-3 transition'>
+              <AiOutlineLike size={20} /> 
+            </button>
+            <span className='text-xs'>5</span>
+          </footer>
         </div>
       </div>
-    </div>
+    </article>
   );
 };
 export default PostCard;

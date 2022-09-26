@@ -1,8 +1,11 @@
-import { Input } from '../UI/Index';
-import { IoHome, IoPeople, IoBookmark, IoPerson } from 'react-icons/io5';
 import Link from 'next/link';
+
+import  Input  from '../UI/Input';
 import ColorMode from '../ColorMode/ColorMode';
-import { IoNotifications } from 'react-icons/io5';
+
+import { IoHome, IoPeople, IoBookmark, IoPerson, IoNotifications } from 'react-icons/io5';
+
+
 const Header = () => {
   return (
     <header className='fixed flex items-center min-h-[48px] z-10 shadow-md  shadow-indigo-500/40 dark:shadow-dark  py-1  left-0 right-0 w-full bg-indigo-600 dark:bg-darker'>
@@ -21,19 +24,19 @@ const Header = () => {
               </Link>
             </li>
             <li className='py-3 '>
-              <Link href='/home'>
+              <Link href='/profile'>
                 <a >
                   <IoPerson className=' fill-white dark:fill-white' size={22} />
                 </a>
               </Link>
             </li>
-            <li className='py-3 '>
+            {/* <li className='py-3 '>
               <Link href='/home'>
                 <a>
                   <IoPeople className=' fill-white dark:fill-white' size={24} />
                 </a>
               </Link>
-            </li>
+            </li> */}
             <li className='py-3 '>
               <Link href='/home'>
                 <a>
@@ -51,6 +54,10 @@ const Header = () => {
               placeHolder='Search user...'
               type='text'
               className='w-full dark:border-darker  rounded-md py-1 px-2'
+              name='user'
+              id='user'
+              onChange={()=>{}}
+              value=''
             />
           </div>
         <div className='flex items-center  gap-4 '>
