@@ -1,15 +1,18 @@
 import { Schema, Model } from 'mongoose';
-import createModel from '../utils/createModel';
 import { User } from '../ts/types/user';
+import createModel from '../utils/createModel';
 
 type UserModel = Model<User>;
 
 const userSchema = new Schema<User, UserModel>(
   {
     name: { type: String, required: true },
-    user: { type: String, required: false, default: '' },
+    userName: { type: String, required: true },
     email: { type: String, required: true },
     password: { type: String, required: true },
+    description: { type: String, required: false, default: '' },
+    location: { type: String, required: false, default: '' },
+    isVerified: { type: Boolean, required: false, default: false },
   },
   {
     timestamps: true,

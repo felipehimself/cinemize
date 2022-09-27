@@ -3,6 +3,8 @@ import User from './../../../models/User';
 import { connect } from 'mongoose';
 import bcrypt from 'bcryptjs';
 import { serialize } from 'cookie';
+import { v4 as uuid } from 'uuid';
+
 import * as jose from 'jose';
 
 const MONGODB_URI = process.env.MONGODB_URI || '';
@@ -32,7 +34,7 @@ export default async function handler(
       if (userExists) {
         res
           .status(401)
-          .json({ message: 'Usuário já existe', success: false });
+          .json({ message: 'Usuário já cadastrado', success: false });
       } else {
         try {
           const hashed = bcrypt.hashSync(password, 10);
@@ -40,6 +42,7 @@ export default async function handler(
             name: name,
             password: hashed,
             email: email,
+            userName: name + uuid()
           });
 
           const jwtToken = await new jose.SignJWT({ userId: user._id })

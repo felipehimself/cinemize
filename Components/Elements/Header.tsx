@@ -1,9 +1,9 @@
 import Link from 'next/link';
-
+import Logout from './Logout';
 import  Input  from '../UI/Input';
 import ColorMode from '../ColorMode/ColorMode';
 
-import { IoHome, IoPeople, IoBookmark, IoPerson, IoNotifications } from 'react-icons/io5';
+import { IoHome, IoBookmark, IoPerson, IoNotifications } from 'react-icons/io5';
 
 
 const Header = () => {
@@ -49,7 +49,7 @@ const Header = () => {
             </li>
           </ul>
         </nav>
-        <div className='hidden flex-1 -ml-3  md:block '>
+        <div className='hidden flex-1 md:block '>
             <Input
               placeHolder='Search user...'
               type='text'
@@ -68,6 +68,10 @@ const Header = () => {
           </div>
           <div className='flex items-center'>
             <ColorMode size={20} className='fill-white ' />
+          </div>
+
+          <div className='flex items-center'>
+            <Logout size={20} className='fill-white ' />
           </div>
         </div>
       </div>

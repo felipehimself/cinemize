@@ -7,30 +7,38 @@ import ColorMode from '../Components/ColorMode/ColorMode';
 import Input from '../Components/UI/Input';
 import Form from '../Components/UI/Form';
 import Button from '../Components/UI/Button';
-
+import IsLoading from '../Components/UI/IsLoading';
+import { useRouter } from 'next/router';
 
 const Home: NextPage = () => {
   const [user, setUser] = useState({ name: '', email: '', password: '' });
   const [error, setError] = useState({ message: '', isError: false });
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleChange = (e: any) => {
+  const router = useRouter();
+  
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setUser((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsLoading(true);
     setError({ message: '', isError: false });
 
     if (!user.name || !user.email || !user.password) {
       setError({ message: 'Todos campos são obrigatórios', isError: true });
+      setIsLoading(false);
       return;
     }
 
     try {
       await axios.post('/api/auth/signup', user);
+      router.reload();
     } catch (error: any) {
-      setError({ message: error.data.message, isError: true });
+      setIsLoading(false);
+      setError({ message: error.response.data.message, isError: true });
     }
   };
 
@@ -84,8 +92,8 @@ const Home: NextPage = () => {
               onChange={handleChange}
             />
 
-            <Button type='submit' className='bg-indigo-600 py-2 rounded-md'>
-              Criar conta
+            <Button type='submit' className='min-h-[40px] bg-indigo-600 py-2 rounded-md flex items-center justify-center'>
+              {isLoading? <IsLoading /> : 'Criar conta'}
             </Button>
           </Form>
           <div className='flex items-center justify-center gap-2 text-md'>

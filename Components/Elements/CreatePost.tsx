@@ -18,7 +18,7 @@ const CreatePost = ({
       <Form className='pl-2 fixed w-4/12 pt-8 gap-4'>
         <FormControl>
           <Label htmlFor='suggestion' className='mb-2'>
-            Alguma sugestão de filme ou série??
+            Alguma sugestão de filme ou série?
           </Label>
           <div className='flex gap-4'>
             <div className='flex items-center gap-2'>

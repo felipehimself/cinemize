@@ -15,7 +15,7 @@ const PostCard = ({
   return (
     <article
       key={id}
-      className='min-h-[126px] rounded-md w-full border bg-[#fffcfc] dark:bg-[#3b3b3b] '
+      className='min-h-[126px] rounded-md w-full border bg-lightWhite dark:bg-lightDark '
     >
       <div className='py-2 px-3'>
         <div className='flex items-center gap-1'>

@@ -7,11 +7,12 @@ module.exports = {
   darkMode: 'class',
   theme: {
     extend: {
-      
       colors: {
         dark: '#000',
+        lightDark: '#3b3b3b',
         darker: '#1F1F1F',
-        light: '#fff'
+        light: '#fff',
+        lightWhite: '#fffcfc',
       },
       container: {
         padding: {
@@ -22,6 +23,11 @@ module.exports = {
           '2xl': '6rem',
         },
       },
+      backgroundImage: {
+        'dark-pattern': "linear-gradient(to bottom, #000 0%, #000 50%, #3b3b3b 50%, #3b3b3b 100%)",
+        'light-pattern': "linear-gradient(to bottom, #fff 0%, #fff 50%, #fffcfc 50%, #fffcfc 100%)"
+
+      }
     },
   },
   plugins: [require('tw-elements/dist/plugin'),function changeContainerWidth ({ addComponents }) {

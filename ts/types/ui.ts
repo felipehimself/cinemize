@@ -8,19 +8,19 @@ export type Ui = {
 export type Button = {
   children?: React.ReactNode;
   className: string;
-  type: "button" | "submit" | "reset" | undefined;
-}
+  type: 'button' | 'submit' | 'reset' | undefined;
+};
 
 export type Input = {
   children?: React.ReactNode;
   className: string;
-  name:string;
-  value:string;
+  name: string;
+  value: string;
   id: string;
   placeHolder: string;
-  type:string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
-}
+  type: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+};
 
 export type Label = {
   children: React.ReactNode;
@@ -49,6 +49,16 @@ export type OptionsContainer = {
 export type Form = {
   children: React.ReactNode;
   className?: string;
-  onSubmit?: (e: React.FormEvent<HTMLFormElement>) => void
+  onSubmit?: (e: React.FormEvent<HTMLFormElement>) => void;
+};
 
+export type Logout = {
+  className: string;
+  size: number;
+};
+
+export type Fieldset = {
+  children: React.ReactNode;
+  disabled: boolean;
+  className: string;
 };
