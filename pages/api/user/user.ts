@@ -20,9 +20,9 @@ export default async function handler(
   );
 
   if (req.method === 'PATCH') {
-    const { userName, name, isVerified, type } = req.body;
+    const { userName, type } = req.body;
 
-    if (!userName || !isVerified || !name || !type) {
+    if (!userName) {
       res
         .status(400)
         .json({ message: 'Todos os campos são obrigatórios', success: false });
@@ -45,11 +45,11 @@ export default async function handler(
 
             try {
               
-              // update followed user followers
-              await User.updateOne({ userName },{ $push: { followers: { userName:currentUser?.userName, name:currentUser?.name, isVerified:currentUser?.isVerified } } });
+              // update profile followers
+              await User.updateOne({ userName }, { $push: { followers:  currentUser?.userName } });
               
               // update logged user following
-              await User.updateOne({ _id },{ $push: { following: { userName, name, isVerified } } });
+              await User.updateOne({ _id }, { $push: { following:  userName } });
 
               res.status(200).json({ message: 'Atualizado', success: true });
             } catch (error) {
@@ -63,10 +63,10 @@ export default async function handler(
             try {
 
               // update followed user followers
-              await User.updateOne({ userName },{ $pull: { followers: { userName:currentUser?.userName} } });
+              await User.updateOne({ userName },{ $pull: { followers: currentUser?.userName } });
 
               // update logged user following
-              await User.updateOne({ _id },{ $pull: { following: { userName:userName } } });
+              await User.updateOne({ _id },{ $pull: { following: userName  } });
 
               res.status(200).json({ message: 'Atualizado', success: true });
             } catch (error) {

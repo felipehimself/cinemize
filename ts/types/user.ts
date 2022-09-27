@@ -6,8 +6,8 @@ export type User = {
   description: string;
   location: string;
   isVerified: boolean;
-  followers: Follow[]
-  following: Follow[]
+  followers: string[]
+  following: string[]
 };
 
 export type Follow = {
