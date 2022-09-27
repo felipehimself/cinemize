@@ -7,10 +7,12 @@ import { useRouter } from 'next/router';
 import axios from 'axios';
 import * as jose from 'jose';
 import User from '../../models/User';
+import { connect } from 'mongoose';
 import { User as UserType } from '../../ts/types/user';
 
 import { MdVerified, MdLocationPin, MdStickyNote2 } from 'react-icons/md';
 
+const MONGODB_URI = process.env.MONGODB_URI || ""
 const JWT_SECRET = process.env.JWT_SECRET;
 
 const Profile: NextPage<{
@@ -51,8 +53,8 @@ const Profile: NextPage<{
     if (name === 'description') {
       if (userInfo.description.length < 112) {
         setUserInfo((prev) => ({ ...prev, [name]: value }));
-      } else {  
-        setUserInfo((prev) => ({ ...prev, [name]: value.slice(0,-1) }));
+      } else {
+        setUserInfo((prev) => ({ ...prev, [name]: value.slice(0, -1) }));
       }
     } else {
       setUserInfo((prev) => ({ ...prev, [name]: value }));
@@ -67,27 +69,12 @@ const Profile: NextPage<{
       await axios.patch('/api/user', userInfo);
       setIsLoading(false);
       setIsEditing(false);
-      setUserInfoBkp(userInfo)
+      setUserInfoBkp(userInfo);
     } catch (error: any) {
       const status = error?.request?.status;
-
-      switch (status) {
-        case 302:
-          setUserExists(true);
-          break;
-
-        case 400:
-          // disparar algo deu errado
-          break;
-        case 401:
-          // sem jwt
-          router.reload();
-          break;
-
-        default:
-          break;
+      if (status === 302) {
+        setUserExists(true);
       }
-
       // setError({ message: error.response.data.message, isError: true });
       setIsLoading(false);
     }
@@ -116,7 +103,7 @@ const Profile: NextPage<{
       textAreaRef.current.style.height = textAreaRef.current.scrollHeight + 'px';
     }
   }, [isEditing, userInfo]);
-  
+
   return (
     <>
       <Head>
@@ -241,6 +228,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   ];
   const genre = ['triller', 'action', 'comedy'];
 
+  await connect(MONGODB_URI).catch(err => console.log(err))
   const jwt = ctx.req.cookies.CinemizeJWT;
 
   const response = await jose.jwtVerify(

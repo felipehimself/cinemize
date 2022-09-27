@@ -135,6 +135,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   ];
   const genre = ['triller', 'action', 'comedy'];
 
+  // await connect(MONGODB_URI).catch(err => console.log(err))
+
   const posts = [
     {
       id: '1',
