@@ -1,16 +1,6 @@
 import { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
-
-import Header from '../../Components/Elements/Header';
-import OptionsContainer from '../../Components/Elements/OptionsContainer';
 import PostCard from '../../Components/Elements/PostCard';
-
-import TextArea from '../../Components/UI/TextArea';
-import Label from '../../Components/UI/Label';
-import Form from '../../Components/UI/Form';
-import FormControl from '../../Components/UI/FormControl';
-import CheckBox from '../../Components/UI/CheckBox';
-import Button from '../../Components/UI/Button';
 import CreatePost from '../../Components/Elements/CreatePost';
 
 const Home: NextPage<{ options: string[]; genre: string[]; posts: any }> = ({
@@ -26,9 +16,9 @@ const Home: NextPage<{ options: string[]; genre: string[]; posts: any }> = ({
         <link rel='icon' href='/favicon.ico' />
       </Head>
 
-      <Header />
+      {/* <Header /> */}
 
-      <section className='flex gap-1 py-14'>
+      <section className='flex gap-1'>
         <CreatePost options={options} genre={genre} />
         {/* <div className='hidden sm:block w-6/12 '>
           <Form className='fixed w-4/12 pt-8 gap-4'>

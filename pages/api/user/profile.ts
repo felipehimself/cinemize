@@ -35,7 +35,7 @@ export default async function handler(
       try {
         const response = await jose.jwtVerify(jwt!, new TextEncoder().encode(JWT_SECRET));
         const _id = await response.payload.userId;
-        const userNameExists = await User.findById({_id})
+        const userNameExists = await User.findOne({userName})
 
         if(userNameExists && (userNameExists?._id.toString() !== _id)){
           res.status(302).json({message: 'Nome de usuário já existe', success:false, })
@@ -43,8 +43,6 @@ export default async function handler(
           await User.findByIdAndUpdate(_id, { name, userName, description, location });
           res.status(201).json({message:'Atualizado com sucesso', success:true, })
         }
-
-       
 
       } catch (error) {
         res.status(400).json({ message: 'Algo deu errado', success: true,  });
