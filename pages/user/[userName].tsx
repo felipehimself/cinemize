@@ -3,7 +3,6 @@ import { GetServerSideProps } from 'next';
 import { MdLocationPin, MdVerified } from 'react-icons/md';
 import { UserProfile } from '../../ts/types/user';
 import User from '../../models/User';
-import { useRouter } from 'next/router';
 import { connect } from 'mongoose';
 import * as jose from 'jose';
 
@@ -12,15 +11,18 @@ import axios from 'axios';
 const MONGODB_URI = process.env.MONGODB_URI || '';
 const JWT_SECRET = process.env.JWT_SECRET;
 
-type CurrentUser = { name: string; userName: string; isVerified: boolean };
 
-const UserId = ({ user, followers, following, loggedUser}: { user: UserProfile, loggedUser:any, followers: any, following: any }): JSX.Element => {
+const UserId = ({ user, followers, following, loggedUser}: { user: UserProfile, loggedUser:UserProfile, followers: UserProfile[], following: UserProfile[] }): JSX.Element => {
   const [userInfo, setUserInfo] = useState(user);
   const [userFollowers, setUserFollowers] = useState(followers)
   const [userFollowing, setUserFollowing] = useState(following)
   const [isLoading, setIsLoading] = useState(false);
   
   
+  // COLOCAR TRATAMENTO PARA REDIRECIONAR PARA PROFILE CASO USUÁRIO TENTE VER SEU PRÓPRIO PERFIL
+  // TRATAR CAMPOS DE LOGIN, SIGNUP, TIPOS, TRIM ETC
+  // TRATAR UPDATE BIO, QTD CARACTERE E ETC, TRIM ETC
+  // PROTEGER ROTAS SÓ PARA LOGADO
   
   
 const handleFollow = async (type:string) => {
@@ -73,7 +75,7 @@ const handleFollow = async (type:string) => {
           </p>
         </div>
         <div>
-          {userFollowers.some((user:any) => user.userName === loggedUser.userName) ? (
+          {userFollowers.some((user) => user.userName === loggedUser.userName) ? (
             <button
               onClick={()=> handleFollow('unfollow')}
               disabled={isLoading}

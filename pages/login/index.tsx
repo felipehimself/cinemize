@@ -4,49 +4,51 @@ import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 
-import Input from '../../Components/UI/Input';
 import Form from '../../Components/UI/Form';
 import ColorMode from '../../Components/ColorMode/ColorMode';
 import Button from '../../Components/UI/Button';
 import IsLoading from '../../Components/UI/IsLoading';
 import Fieldset from '../../Components/UI/Fieldset';
+import ErrorMessage from '../../Components/Elements/ErrorMessage';
 
-import axios from 'axios'
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 
-const Login:NextPage = () => {
-  const [user, setUser] = useState({  email: '', password: '' });
+import axios from 'axios';
+
+import { loginValidation } from '../../lib/yup';
+import { Login as LoginType } from '../../ts/types/login';
+
+const Login: NextPage = () => {
   const [error, setError] = useState({ message: '', isError: false });
   const [isLoading, setIsLoading] = useState(false);
 
-  const router = useRouter()
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    clearErrors,
+  } = useForm<LoginType>({
+    resolver: yupResolver(loginValidation),
+  });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setUser((prev) => ({ ...prev, [name]: value }));
-  };
+  const router = useRouter();
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setIsLoading(true)
+  const onSubmit = async (data: LoginType) => {
+    const { email, password } = data;
+
+    setIsLoading(true);
     setError({ message: '', isError: false });
-
-    if (!user.email || !user.password) {
-      setError({ message: 'Todos campos são obrigatórios', isError: true });
-      setIsLoading(false)
-
-      return;
-    }
+    clearErrors();
 
     try {
-      await axios.post('/api/auth/login', user);
-      router.reload()
-      
+      await axios.post('/api/auth/login', { email, password });
+      router.reload();
     } catch (error: any) {
-      setIsLoading(false)
+      setIsLoading(false);
       setError({ message: error.response.data.message, isError: true });
     }
   };
-
 
   return (
     <>
@@ -63,37 +65,52 @@ const Login:NextPage = () => {
           <span className='text-indigo-600 dark:text-indigo-400'>z</span>e
         </h1>
         <div className='sm:w-6/12 md:w-80'>
-          <h2 className='text-2xl text-center '>login</h2>
-          <span className='text-sm block text-center my-2 min-h-[20px]'>
-            {error.isError && error.message}
-          </span>
-          <Form onSubmit={handleSubmit} className='w-full'>
-            <Fieldset disabled={isLoading} className='flex flex-col gap-4'>
-              <Input
-                type='text'
-                className='rounded-md w-full dark:border-dark'
-                placeHolder='E-mail'
-                name='email'
-                id='email'
-                value={user.email ?? ''}
-                onChange={handleChange}
-              />
-              <Input
-                type='password'
-                className='rounded-md w-full dark:border-dark'
-                placeHolder='Senha'
-                name='password'
-                id='password'
-                value={user.password || ''}
-                onChange={handleChange}
-              />
-              <Button type='submit' className='flex items-center justify-center min-h-[40px] bg-indigo-600 py-2 rounded-md'>
-                {isLoading? <IsLoading /> : 'Entrar' }
+          <h2 className='text-2xl text-center'>login</h2>
+
+          <ErrorMessage
+            className='text-sm block text-center '
+            show={error.isError}
+            message={error.message}
+          />
+
+          <Form onSubmit={handleSubmit(onSubmit)} className='w-full'>
+            <Fieldset disabled={isLoading} className='flex flex-col gap-1'>
+              <div>
+                <input
+                  type='text'
+                  className='rounded-md w-full dark:border-dark py-2 px-2 dark:focus:outline-none focus:outline-none border focus:border-indigo-600 border-gray-300'
+                  placeholder='E-mail'
+                  id='email'
+                  aria-label='Seu email'
+                  {...register('email')}
+                />
+                <small className='text- block min-h-[20px] pl-1'>
+                  {errors.email?.message}
+                </small>
+              </div>
+              <div>
+                <input
+                  type='password'
+                  className='rounded-md w-full dark:border-dark py-2 px-2 dark:focus:outline-none focus:outline-none border focus:border-indigo-600 border-gray-300'
+                  placeholder='Senha'
+                  id='password'
+                  {...register('password')}
+                  aria-label='Sua senha'
+                />
+                <small className='text-xs block min-h-[20px] pl-1'>
+                  {errors.password?.message}
+                </small>
+              </div>
+              <Button
+                type='submit'
+                className='flex items-center justify-center min-h-[40px] bg-indigo-600 py-2 rounded-md'
+              >
+                {isLoading ? <IsLoading /> : 'Entrar'}
               </Button>
             </Fieldset>
           </Form>
           <div className='flex items-center justify-center gap-2 text-md'>
-            <h3 className='text-center my-4 '>Não tem uma conta?</h3>
+            <h3 className='text-center my-4 text-base '>Não tem uma conta?</h3>
             <Link href='/'>
               <a className='block text-center text-md hover:text-gray-900 dark:hover:text-indigo-300 transition underline'>
                 Inscreva-se
