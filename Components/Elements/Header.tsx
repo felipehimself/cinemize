@@ -51,7 +51,7 @@ const Header = () => {
         </nav>
         <div className='hidden flex-1 md:block '>
             <Input
-              placeHolder='Search user...'
+              placeHolder='Buscar usuário...'
               type='text'
               className='w-full dark:border-darker  rounded-md py-1 px-2'
               name='user'

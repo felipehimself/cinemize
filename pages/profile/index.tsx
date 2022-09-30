@@ -43,7 +43,7 @@ const Profile: NextPage<{
           />
         </UserProfileContainer>
 
-        <div className='pt-3'>
+        <div className=''>
           <TabContent tab='posts' activeTab={tabs[tabIndex]}>
             {Array.from(Array(200).keys()).map((item) => {
               return <p key={item}>{item}</p>;

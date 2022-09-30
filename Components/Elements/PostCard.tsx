@@ -64,10 +64,10 @@ const PostCard = ({
             </div>
           </div>
           <footer className='flex items-end justify-end gap-1'>
-            <button className='active:scale-105 active:-rotate-3 transition'>
+            <button className='peer active:scale-105 active:-rotate-6 transition'>
               <AiOutlineLike size={20} /> 
             </button>
-            <span className='text-xs'>5</span>
+            <span className='text-xs peer-active:scale-110'>5</span>
           </footer>
         </div>
       </div>

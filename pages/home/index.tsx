@@ -35,7 +35,7 @@ const Home: NextPage<{ options: string[]; genre: string[]; posts: any }> = ({
       <section className=''>
         {/* TIMELINE */}
 
-        <div className='flex-1 flex flex-col gap-4 pt-2'>
+        <div className='flex-1 flex flex-col gap-4 pt-2 sm:pt-3'>
           <button
             onClick={() => setShowForm(true)}
             className='hidden sm:block ml-auto bg-indigo-600 dark:bg-darker py-1 px-3 rounded-md text-white'
