@@ -62,3 +62,9 @@ export type Fieldset = {
   disabled: boolean;
   className: string;
 };
+
+export type TabContent = {
+  activeTab: string;
+  tab: string;
+  children: React.ReactNode;
+};

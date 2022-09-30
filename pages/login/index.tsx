@@ -13,16 +13,22 @@ import ErrorMessage from '../../Components/Elements/ErrorMessage';
 
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { loginValidation } from '../../lib/yup';
+import { Login as LoginType } from '../../ts/types/login';
 
 import axios from 'axios';
 
-import { loginValidation } from '../../lib/yup';
-import { Login as LoginType } from '../../ts/types/login';
 
 const Login: NextPage = () => {
   const [error, setError] = useState({ message: '', isError: false });
   const [isLoading, setIsLoading] = useState(false);
 
+  // adicionar trim no loginValidation
+  // COLOCAR TRATAMENTO PARA REDIRECIONAR PARA PROFILE CASO USUÁRIO TENTE VER SEU PRÓPRIO PERFIL
+  // TRATAR CAMPOS DE LOGIN, SIGNUP, TIPOS, TRIM ETC
+  // TRATAR UPDATE BIO, QTD CARACTERE E ETC, TRIM ETC
+  // PROTEGER ROTAS SÓ PARA LOGADO
+  
   const {
     register,
     handleSubmit,
@@ -36,6 +42,7 @@ const Login: NextPage = () => {
 
   const onSubmit = async (data: LoginType) => {
     const { email, password } = data;
+
 
     setIsLoading(true);
     setError({ message: '', isError: false });
@@ -84,7 +91,7 @@ const Login: NextPage = () => {
                   aria-label='Seu email'
                   {...register('email')}
                 />
-                <small className='text- block min-h-[20px] pl-1'>
+                <small className='text-red-600 dark:text-slate-200 text-xs block min-h-[20px] pl-1'>
                   {errors.email?.message}
                 </small>
               </div>
@@ -97,7 +104,7 @@ const Login: NextPage = () => {
                   {...register('password')}
                   aria-label='Sua senha'
                 />
-                <small className='text-xs block min-h-[20px] pl-1'>
+                <small className='text-red-600 dark:text-slate-200 text-xs block min-h-[20px] pl-1'>
                   {errors.password?.message}
                 </small>
               </div>

@@ -31,7 +31,7 @@ const PostCard = ({
           <div className='text-sm'>
             <p>{comment}</p>
           </div>
-          <div className='flex flex-wrap gap-3'>
+          <div className='flex flex-col flex-wrap gap-3'>
             <div className='text-xs'>
               <p className='mb-1'>Watch on</p>
               <ul className='flex gap-2'>

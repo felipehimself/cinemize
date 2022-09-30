@@ -1,17 +1,29 @@
+import { useState } from 'react';
 import Head from 'next/head';
 import { GetServerSideProps, NextPage } from 'next';
 import User from '../../models/User';
 import { UserProfile } from '../../ts/types/user';
+import UserProfileContainer from '../../Components/Elements/UserProfileContainer';
 import UserProfileCard from '../../Components/Elements/UserProfileCard';
+import TabButtons from '../../Components/Elements/TabButtons';
+import TabContent from '../../Components/Elements/TabContent';
+import UserFollowerCard from '../../Components/Elements/UserFollowerCard';
+
+import { tabs } from '../../utils/constants';
 
 import { connect } from 'mongoose';
-import * as jose from 'jose';
-
 const MONGODB_URI = process.env.MONGODB_URI || '';
 const JWT_SECRET = process.env.JWT_SECRET;
 
-const Profile: NextPage<{  user: UserProfile}> = ({  user }) => {
- 
+import * as jose from 'jose';
+
+const Profile: NextPage<{
+  user: UserProfile;
+  followers: UserProfile[];
+  following: UserProfile[];
+}> = ({ user, followers, following }) => {
+  const [tabIndex, setTabIndex] = useState(0);
+
   return (
     <>
       <Head>
@@ -20,22 +32,34 @@ const Profile: NextPage<{  user: UserProfile}> = ({  user }) => {
         <link rel='icon' href='/favicon.ico' />
       </Head>
 
-      <section className='flex flex-col gap-1'>
-        <div className='bg-white dark:bg-dark fixed container left-1/2 -translate-x-2/4'>
+      <section>
+        <UserProfileContainer>
           <UserProfileCard user={user} />
-          <div className='pt-2 text-sm md:text-base flex justify-between sm:justify-start sm:gap-6'>
-            <button>Posts</button>
-            <button>{user?.followers?.length} seguidores</button>
-            <button>{user?.following?.length} seguindo </button>
-          </div>
-        </div>
-        
-        <div className='pt-48 '>
-            {Array.from(Array(200).keys()).map((item)=> {
-              return <p key={item}>{item}</p>
+          <TabButtons
+            followersQty={user.followers.length}
+            followingQty={user.following.length}
+            setTabIndex={setTabIndex}
+            index={tabIndex}
+          />
+        </UserProfileContainer>
+
+        <div className='pt-3'>
+          <TabContent tab='posts' activeTab={tabs[tabIndex]}>
+            {Array.from(Array(200).keys()).map((item) => {
+              return <p key={item}>{item}</p>;
             })}
-            </div>
-  
+          </TabContent>
+          <TabContent tab='followers' activeTab={tabs[tabIndex]}>
+            {followers.map((user) => {
+              return <UserFollowerCard key={user.userName} {...user} />;
+            })}
+          </TabContent>
+          <TabContent tab='following' activeTab={tabs[tabIndex]}>
+            {following.map((user) => {
+              return <UserFollowerCard key={user.userName} {...user} />;
+            })}
+          </TabContent>
+        </div>
       </section>
     </>
   );
@@ -44,7 +68,7 @@ export default Profile;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   await connect(MONGODB_URI).catch((err) => console.log(err));
-  
+
   const jwt = ctx.req.cookies.CinemizeJWT;
 
   const response = await jose.jwtVerify(
@@ -62,11 +86,46 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   });
   const userResponse = JSON.parse(JSON.stringify(user));
 
-  
+  // FOLLOWERS DO PERFIL VISITADO
+  const followers = await User.aggregate([
+    { $match: { userName: { $in: userResponse?.followers } } },
+    {
+      $project: {
+        _id: 0,
+        email: 0,
+        password: 0,
+        followers: 0,
+        following: 0,
+        _v: 0,
+        createdAt: 0,
+        updatedAt: 0,
+      },
+    },
+  ]);
+  //
+
+  // FOLLOWING DO PERFIL VISITADO
+  const following = await User.aggregate([
+    { $match: { userName: { $in: userResponse?.following } } },
+    {
+      $project: {
+        _id: 0,
+        email: 0,
+        password: 0,
+        followers: 0,
+        following: 0,
+        _v: 0,
+        createdAt: 0,
+        updatedAt: 0,
+      },
+    },
+  ]);
 
   return {
     props: {
       user: userResponse,
+      followers: JSON.parse(JSON.stringify(followers)),
+      following: JSON.parse(JSON.stringify(following)),
     },
   };
 };
