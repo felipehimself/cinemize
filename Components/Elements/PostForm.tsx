@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useCallback, useMemo  } from 'react';
 import Button from '../UI/Button';
 import Form from '../UI/Form';
 import FormControl from '../UI/FormControl';
@@ -8,25 +8,68 @@ import { Post } from '../../ts/types/post';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { postValidation } from '../../lib/yup';
-import { IoClose, IoStar } from 'react-icons/io5';
+import { IoClose } from 'react-icons/io5';
 import { overlayVariants, formVariants } from '../../lib/framer';
 import { Dispatch, SetStateAction } from 'react';
+import axios from 'axios';
+
+//@ts-ignore
+import ReactStars from 'react-rating-stars-component';
 
 const { motion } = require('framer-motion');
 
-const PostForm = ({ options, genre, setShowForm }: { options: string[]; genre: string[]; setShowForm: Dispatch<SetStateAction<boolean>>;
+const PostForm = ({
+  options,
+  genre,
+  setShowForm,
+}: {
+  options: string[];
+  genre: string[];
+  setShowForm: Dispatch<SetStateAction<boolean>>;
 }): JSX.Element => {
-  
-  const [rating, setRating] = useState(1)
-  const { register, handleSubmit, formState: { errors }, clearErrors, } = useForm<Post>({
+  const [rating, setRating] = useState(1);
+  const [ratingError, setRatingError] = useState(false)
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    formState,
+    clearErrors,
+  } = useForm<Post>({
     resolver: yupResolver(postValidation),
   });
 
-  const onSubmit = (data: Post) => {
-    console.log(data);
+  const onSubmit = async (data: Post) => { 
+    clearErrors()
+
+    if(!rating) {
+      setRatingError(true);
+      return
+    }
+    const body = { ...data, rating };
+    //console.log(body)
+    try {
+      await axios.post('/api/post', body)
+      setShowForm(false)
+    } catch (error) {
+      console.log(error)
+    }
   };
 
-  
+  const ratingChanged = (newRating: number) => {
+    setRating(newRating);
+    
+
+  };
+
+  useEffect(()=>{
+    if(formState.isSubmitting && !rating){
+      setRatingError(true);
+
+    }
+  },[formState, rating])
+
+  console.log(errors)
 
   return (
     <motion.div
@@ -44,26 +87,17 @@ const PostForm = ({ options, genre, setShowForm }: { options: string[]; genre: s
       >
         <button
           onClick={() => setShowForm(false)}
-          className='mb-1 block ml-auto transition hover:rotate-90 hover:scale-110'
+          className='group mb-1 block ml-auto transition hover:rotate-90 hover:scale-110'
         >
-          <IoClose size={22} />
+          <IoClose size={22} className='group-hover:text-indigo-600 dark:group-hover:text-white' />
         </button>
 
         <Form onSubmit={handleSubmit(onSubmit)} className='w-full gap-4'>
-          <FormControl>
-            <Label htmlFor='title' className='mb-2'>
-              Título
-            </Label>
-            <input
-              className='-mt-1  w-full dark:border-dark focus:outline-none focus:border-indigo-600 p-2   border rounded-md'
-              type='text'
-              id='title'
-              {...register('title')}
-            />
-          </FormControl>
-          <FormControl>
+        <FormControl className={`${errors.type ? 'animate-shake' : undefined}`}>
             <div className='flex gap-4'>
-              <div className='flex items-center gap-2'>
+              <div
+                className='flex items-center gap-2'
+              >
                 <input
                   className='-mt-1 accent-indigo-500'
                   type='radio'
@@ -73,7 +107,9 @@ const PostForm = ({ options, genre, setShowForm }: { options: string[]; genre: s
                 />
                 <Label htmlFor='movie'>Filme</Label>
               </div>
-              <div className='flex items-center gap-2'>
+              <div
+                className='flex items-center gap-2'
+              >
                 <input
                   className='-mt-1 accent-indigo-500'
                   type='radio'
@@ -85,34 +121,45 @@ const PostForm = ({ options, genre, setShowForm }: { options: string[]; genre: s
               </div>
             </div>
           </FormControl>
-          <FormControl>
-            <Label htmlFor='title' className='mb-1'>
+          <FormControl className={`${errors.title ? 'animate-shake' : undefined}`}>
+            <Label
+              htmlFor='title'
+              className='mb-2'
+            >
+              Título
+            </Label>
+            <input
+              className='-mt-1  w-full dark:border-dark focus:outline-none focus:border-indigo-600 p-2   border rounded-md'
+              type='text'
+              id='title'
+              {...register('title')}
+            />
+          </FormControl>
+          
+          <FormControl  className={`${ratingError ? 'animate-shake' : undefined}`}>
+            <Label htmlFor='title' className='mb-2'>
               Nota
             </Label>
             <div className='flex gap-1'>
-              {[...Array(5)].map((_, index) => {
-                index += 1;
-                return (
-                  <button
-                    type='button'
-                    key={index}
-                    onClick={() => setRating(index)}
-                  >
-                    <IoStar size={22} className={`${index <= rating ? 'text-yellow-500' : 'text-gray-200'}`} />
-                  </button>
-                );
-              })}
+              <ReactStars
+                onChange={ratingChanged}
+                isHalf={true}
+                size={32}
+                activeColor='#eab308'
+                value={1}
+              />
             </div>
           </FormControl>
-          <FormControl>
+          <FormControl className={`${errors.comment ? 'animate-shake' : undefined}`}>
             <textarea
-              id='description'
+              id='comment'
               placeholder='Comentários...'
-              className='h-32 dark:border-dark focus:outline-none focus:border-indigo-600 p-2  w-full border rounded-md resize-none'
-              {...register('description')}
+              className='h-32 dark:border-dark focus:outline-none focus:border-indigo-600 p-2  w-full border rounded-md resize-none
+              '
+              {...register('comment')}
             />
           </FormControl>
-          <FormControl>
+          <FormControl className={`${errors.whereToWatch ? 'animate-shake' : undefined}`}>
             <Label htmlFor='' className='mb-1'>
               Onde assistir?
             </Label>
@@ -138,7 +185,7 @@ const PostForm = ({ options, genre, setShowForm }: { options: string[]; genre: s
               })}
             </OptionsContainer>
           </FormControl>
-          <FormControl>
+          <FormControl className={`${errors.genre ? 'animate-shake' : undefined}`}>
             <Label htmlFor='' className='mb-1'>
               Gênero
             </Label>

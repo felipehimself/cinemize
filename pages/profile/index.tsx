@@ -87,8 +87,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const userResponse = JSON.parse(JSON.stringify(user));
 
   // FOLLOWERS DO PERFIL VISITADO
+  const followersIds = userResponse?.followers?.map((user:any) => user.userId)
   const followers = await User.aggregate([
-    { $match: { userName: { $in: userResponse?.followers } } },
+    { $match: { userName: { $in: followersIds } } },
     {
       $project: {
         _id: 0,
@@ -105,8 +106,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   //
 
   // FOLLOWING DO PERFIL VISITADO
+  const followingIds = userResponse?.following.map((user:any) => user.userId)
   const following = await User.aggregate([
-    { $match: { userName: { $in: userResponse?.following } } },
+    { $match: { userId: { $in: followingIds } } },
     {
       $project: {
         _id: 0,
@@ -120,6 +122,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       },
     },
   ]);
+  
 
   return {
     props: {

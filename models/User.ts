@@ -8,14 +8,15 @@ const userSchema = new Schema<User, UserModel>(
   {
     name: { type: String, required: true },
     userName: { type: String, required: true },
+    userId: { type: String, required: true },
     email: { type: String, required: true },
     password: { type: String, required: true },
     description: { type: String, required: false, default: '' },
     location: { type: String, required: false, default: '' },
     isVerified: { type: Boolean, required: false, default: false },
-    followers: [{ type: String, required:false, default: [] }],
-    following: [{ type: String, required:false, default: [] }],
-
+    followers: [{ userId: String}],
+    following: [{ userId: String}],
+    posts: [{ postId: String }],
   },
   {
     timestamps: true,

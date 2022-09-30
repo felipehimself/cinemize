@@ -1,8 +1,8 @@
 import React from "react"
 
-const FormControl = ({children}:{children:React.ReactNode}):JSX.Element => {
+const FormControl = ({children, className}:{children:React.ReactNode, className?:string}):JSX.Element => {
   return (
-    <div>{children}</div>
+    <div className={className}>{children}</div>
   )
 }
 export default FormControl

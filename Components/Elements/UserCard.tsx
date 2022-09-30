@@ -19,7 +19,7 @@ const UserCard = ({ user, followers, following, loggedUser, setUserFollowers }: 
 
     try {
       await axios.patch('/api/user/user', {
-        userName: user.userName,
+        userId: user.userId,
         type: type,
       });
       if (type === 'follow') {
@@ -66,7 +66,7 @@ const UserCard = ({ user, followers, following, loggedUser, setUserFollowers }: 
           </p>
         </div>
         <div>
-          {followers.some((user) => user.userName === loggedUser.userName) ? (
+          {followers.some((user) => user.userId === loggedUser.userId) ? (
             <button
               onClick={() => handleFollow('unfollow')}
               disabled={isLoading}

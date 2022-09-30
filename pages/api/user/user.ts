@@ -20,9 +20,9 @@ export default async function handler(
   );
 
   if (req.method === 'PATCH') {
-    const { userName, type } = req.body;
+    const { userId, type } = req.body;
 
-    if (!userName) {
+    if (!userId) {
       res
         .status(400)
         .json({ message: 'Todos os campos são obrigatórios', success: false });
@@ -46,10 +46,10 @@ export default async function handler(
             try {
               
               // update profile followers
-              await User.updateOne({ userName }, { $push: { followers:  currentUser?.userName } });
+              await User.updateOne({ userId }, { $push: { followers:  {userId: currentUser?.userId} } });
               
               // update logged user following
-              await User.updateOne({ _id }, { $push: { following:  userName } });
+              await User.updateOne({ _id }, { $push: { following:  {userId: userId} } });
 
               res.status(200).json({ message: 'Atualizado', success: true });
             } catch (error) {
@@ -63,10 +63,10 @@ export default async function handler(
             try {
 
               // update followed user followers
-              await User.updateOne({ userName },{ $pull: { followers: currentUser?.userName } });
+              await User.updateOne({ userId },{ $pull: { followers:  {userId: currentUser?.userId} } });
 
               // update logged user following
-              await User.updateOne({ _id },{ $pull: { following: userName  } });
+              await User.updateOne({ _id },{ $pull: { following: {userId: userId}  } });
 
               res.status(200).json({ message: 'Atualizado', success: true });
             } catch (error) {

@@ -1,19 +1,30 @@
 export type User = {
   name: string;
   userName: string;
+  userId: string;
   email: string;
   password: string;
   description: string;
   location: string;
   isVerified: boolean;
-  followers: string[]
-  following: string[]
+  followers: UserId[]
+  following: UserId[]
+  posts: UserPosts[]
 };
+
+type UserId = {
+  userId: string
+}
+
+export type UserPosts = {
+  postId: string
+}
 
 export type Follow = {
   userName: string
   name: string
   isVerified: boolean
+  userId: string
 }
 
 export type UserFollowers = {

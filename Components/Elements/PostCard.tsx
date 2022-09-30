@@ -92,13 +92,13 @@ const rating = 3
         </div>
         <footer className='flex items-end justify-end gap-3'>
           <div className='flex items-end justify-end gap-1'>
-            <button className='peer active:scale-105 active:-rotate-6 transition'>
+            <button className='peer hover:scale-110 hover:-rotate-6 transition'>
               <AiOutlineLike size={20} />
             </button>
-            <span className='text-xs peer-active:scale-110'>5</span>
+            <span className='text-xs peer-hover:scale-110'>5</span>
           </div>
           <div className='flex items-end justify-end gap-1'>
-            <button className='peer active:scale-105 transition'>
+            <button className='peer hover:scale-105 transition'>
               <IoBookmarkOutline size={18} />
             </button>
           </div>

@@ -37,12 +37,14 @@ export default async function handler(
           .json({ message: 'Usuário já cadastrado', success: false });
       } else {
         try {
+          const id = uuid()
           const hashed = bcrypt.hashSync(password, 10);
           const user = await User.create({
             name: name,
             password: hashed,
             email: email,
-            userName: name + uuid()
+            userName: name + id,
+            userId: id,
           });
 
           const jwtToken = await new jose.SignJWT({ userId: user._id })
