@@ -30,8 +30,8 @@ module.exports = {
       }, keyframes: {
         shake: {
           '0%': { marginLeft: '0rem' },
-          '25%': { marginLeft: '0.5rem' },
-          '75%' : { marginLeft: '-0.5rem'},
+          '25%': { marginLeft: '2px' },
+          '75%' : { marginLeft: '-2px'},
           '100%' : { marginLeft: '0rem'}
           }
         },

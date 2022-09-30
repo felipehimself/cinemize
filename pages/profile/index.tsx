@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import Head from 'next/head';
 import { GetServerSideProps, NextPage } from 'next';
-import User from '../../models/User';
 import { UserProfile } from '../../ts/types/user';
 import UserProfileContainer from '../../Components/Elements/UserProfileContainer';
 import UserProfileCard from '../../Components/Elements/UserProfileCard';
@@ -11,10 +10,10 @@ import UserFollowerCard from '../../Components/Elements/UserFollowerCard';
 
 import { tabs } from '../../utils/constants';
 
+import User from '../../models/User';
 import { connect } from 'mongoose';
 const MONGODB_URI = process.env.MONGODB_URI || '';
 const JWT_SECRET = process.env.JWT_SECRET;
-
 import * as jose from 'jose';
 
 const Profile: NextPage<{

@@ -16,7 +16,7 @@ type Response = {
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Response>
+  res: NextApiResponse
 ) {
   await connect(MONGODB_URI).catch((err) =>
     res
@@ -47,8 +47,9 @@ export default async function handler(
           const postId = uuid()
           const post = {...req.body, userId: userPosting?.userId, postId: postId}
           await Post.create(post)
-          await User.updateOne({ _id }, { $push: { posts:  { postId: postId } } });   
-          res.status(201).json({message: 'Dado salvo', success:true})
+          await User.updateOne({ _id }, { $push: { posts:  { postId: postId } } });
+
+          res.status(201).json({...post, userName: userPosting?.userName, isVerified:userPosting?.isVerified})
         } catch (error) {
           res.status(400).json({ message: 'Algo deu errado ao criar post', success: false,  });
         }

@@ -6,15 +6,33 @@ import PostCard from '../../Components/Elements/PostCard';
 import PostForm from '../../Components/Elements/PostForm';
 import PostButton from '../../Components/Elements/PostButton';
 
+import { UserPost } from '../../ts/types/user';
+import { Post as PostType , PostCard as PC} from './../../ts/types/post';
+
+import { connect } from 'mongoose';
+const MONGODB_URI = process.env.MONGODB_URI || '';
+const JWT_SECRET = process.env.JWT_SECRET;
+import * as jose from 'jose';
+import Post from '../../models/Post';
+import User from './../../models/User';
+
 const { AnimatePresence } = require('framer-motion');
 
-const Home: NextPage<{ options: string[]; genre: string[]; posts: any }> = ({
-  options,
-  genre,
-  posts,
-}) => {
+const Home: NextPage<{
+  options: string[];
+  genre: string[];
+  posts: PC[];
+}> = ({ options, genre, posts }) => {
   const [showForm, setShowForm] = useState(false);
+  const [allPosts, setAllPosts] = useState(posts);
 
+  // COLOCAR DISABLED NO FORM
+  // POPULAR /PROFILE COM O POSTS DO USUÁRIO
+  // POPULAR TIMELINE TAMBEM COM POSTS DOS SEGUINDO
+  // COLOCAR OPÇÃO DE EXCLUIR POST NO POSTCARD
+  // COLOCAR HORA NO POSTCARD
+  // REVER TIPOS E ORGANIZAR O CÓDIGO
+  
   return (
     <>
       <Head>
@@ -24,11 +42,7 @@ const Home: NextPage<{ options: string[]; genre: string[]; posts: any }> = ({
       </Head>
       <AnimatePresence>
         {showForm && (
-          <PostForm
-            setShowForm={setShowForm}
-            options={options}
-            genre={genre}
-          />
+          <PostForm setShowForm={setShowForm} setAllPosts={setAllPosts} options={options} genre={genre} />
         )}
       </AnimatePresence>
 
@@ -40,10 +54,10 @@ const Home: NextPage<{ options: string[]; genre: string[]; posts: any }> = ({
             onClick={() => setShowForm(true)}
             className='hidden sm:block ml-auto bg-indigo-600 dark:bg-darker py-1 px-3 rounded-md text-white'
           >
-            Post
+            Postar
           </button>
-          {posts.map((post: any) => {
-            return <PostCard key={post.id} {...post} />;
+          {allPosts.map((post: any) => {
+            return <PostCard key={post.postId} {...post} />;
           })}
         </div>
       </section>
@@ -54,6 +68,38 @@ const Home: NextPage<{ options: string[]; genre: string[]; posts: any }> = ({
 export default Home;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  
+  await connect(MONGODB_URI).catch((err) => console.log(err));
+
+  const jwt = ctx.req.cookies.CinemizeJWT;
+
+  const response = await jose.jwtVerify(
+    jwt!,
+    new TextEncoder().encode(JWT_SECRET)
+  );
+  const _id = await response.payload.userId;
+  const user = await User.findById(_id, {
+    password: 0,
+    createdAt: 0,
+    _id: 0,
+    email: 0,
+    updatedAt: 0,
+    __v: 0,
+  });
+  const userResponse = JSON.parse(JSON.stringify(user));
+
+  const postsIds = userResponse.posts.map((post: UserPost) => post.postId);
+
+  const userPosts = await Post.aggregate([
+    { $match: { postId: { $in: postsIds } } },
+  ]);
+
+  const postsComplete = userPosts.map(post => ({...post, userName: userResponse.userName, isVerified: userResponse?.isVerified}))
+
+  // const userFollowingPosts = await Post.aggregate([
+  //   { $match: { postId: { $in: postsIds } } },
+  // ])
+
   const options = [
     'netflix',
     'amazon',
@@ -64,58 +110,11 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   ];
   const genre = ['triller', 'action', 'comedy'];
 
-  // await connect(MONGODB_URI).catch(err => console.log(err))
-
-  const posts = [
-    {
-      id: '1',
-      verified: true,
-      user: 'cinemize',
-      title: 'O segredo dos seus olhos',
-      genres: ['triller', 'action'],
-      comment: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged`,
-      whereToWatch: ['netflix', 'amazon'],
-      type: 'movie',
-      likes: {
-        total: 5,
-        likedBy: [],
-      },
-    },
-    {
-      id: '2',
-      verified: true,
-      user: 'cinemize',
-      title: 'O segredo dos seus olhos',
-      genres: ['triller', 'action'],
-      comment: 'this is an amazing movie',
-      whereToWatch: ['netflix', 'amazon'],
-      type: 'movie',
-      likes: {
-        total: 5,
-        likedBy: [],
-      },
-    },
-    {
-      id: '3',
-      verified: false,
-      user: 'cinemize',
-      title: 'O segredo dos seus olhos',
-      genres: ['triller', 'action'],
-      comment: 'this is an amazing movie',
-      whereToWatch: ['netflix', 'amazon'],
-      type: 'movie',
-      likes: {
-        total: 5,
-        likedBy: [],
-      },
-    },
-  ];
-
   return {
     props: {
       options,
       genre,
-      posts,
+      posts: JSON.parse(JSON.stringify(postsComplete)),
     },
   };
 };

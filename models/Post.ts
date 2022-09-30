@@ -6,9 +6,9 @@ type PostModel = Model<Post>;
 
 const postSchema = new Schema<Post, PostModel>(
   {
-    uuid: { type: String, required: true },
+    postId: { type: String, required: true },
+    userId: { type: String, required: true },
     type: { type: String, required: true },
-    userName: { type: String, required: true },
     title: { type: String, required: true },
     rating: { type: Number, required: true },
     comment: { type: String, required: true },
@@ -16,16 +16,12 @@ const postSchema = new Schema<Post, PostModel>(
     genre: [{ type: String, required: true }],
     likedBy: [
       {
-        userName: { type: String , required:false},
-        name: { type: String, required:false },
-        isVerified: { type: Boolean, required:false },
+        userId: { type: String, required: false },
       },
     ],
     favoritedBy: [
       {
-        userName: { type: String },
-        name: { type: String },
-        isVerified: { type: Boolean },
+        userId: { type: String },
       },
     ],
   },

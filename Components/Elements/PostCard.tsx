@@ -1,31 +1,38 @@
-import { IPost } from './../../ts/interfaces/post';
+import { Post as PostType } from './../../ts/types/post';
 import { AiFillLike, AiOutlineLike } from 'react-icons/ai';
-import { IoBookmark, IoBookmarkOutline, IoStar } from 'react-icons/io5';
+import { IoBookmark, IoBookmarkOutline } from 'react-icons/io5';
 import { MdVerified } from 'react-icons/md';
 
+import Link from 'next/link';
+
+//@ts-ignore
+import ReactStars from 'react-rating-stars-component';
+
+type PCard = PostType & { userName: string; isVerified: boolean };
+
 const PostCard = ({
-  id,
+  postId,
+  rating,
   type,
-  user,
+  userName,
   title,
   comment,
   whereToWatch,
-  genres,
-  verified,
-}: IPost): JSX.Element => {
-
-const rating = 3
-
+  genre,
+  isVerified,
+}: PCard): JSX.Element => {
   return (
     <article
-      key={id}
+      key={postId}
       className='min-h-[126px] rounded-md w-full border bg-lightWhite dark:bg-lightDark '
     >
       <div className='py-2 px-3'>
-        <div className='flex items-center gap-1'>
-          <span className='text-sm font-bold'>@{user}</span>
-          <span> {verified ? <MdVerified /> : undefined} </span>
-        </div>
+        <Link href={`/user/${userName}`}>
+          <a className='flex items-center gap-1'>
+            <span className='text-sm font-bold'>@{userName}</span>
+            <span> {isVerified ? <MdVerified /> : undefined} </span>
+          </a>
+        </Link>
 
         {/* content container */}
         <div className='mt-2 flex flex-col md:flex-row gap-3'>
@@ -62,13 +69,13 @@ const rating = 3
               <div className='text-xs'>
                 <span className='mb-1 block'>Gênero</span>
                 <ul className='flex gap-2'>
-                  {genres.map((platform: any) => {
+                  {genre.map((gen: any) => {
                     return (
                       <li
                         className='py-1 capitalize px-2 dark:bg-dark bg-slate-200 rounded-lg text-xs'
-                        key={platform}
+                        key={gen}
                       >
-                        {platform}
+                        {gen}
                       </li>
                     );
                   })}
@@ -76,17 +83,16 @@ const rating = 3
               </div>
             </div>
 
-            <div className='flex flex-col gap-1 text-xs'>
-              <span>Nota</span>
-            <div className='flex gap-2'>
-              {[...Array(5)].map((_, index) => {
-                  index += 1;
-                  return (
-                      <IoStar key={index} size={22} className={`${index <= rating? 'text-yellow-400' : 'text-slate-200'}`} />
-              
-                  );
-                })}
-            </div>
+            <div className='flex flex-col'>
+              <span className='text-xs -mb-2'>Nota</span>
+
+              <ReactStars
+                edit={false}
+                isHalf={true}
+                size={28}
+                activeColor='#eab308'
+                value={rating}
+              />
             </div>
           </div>
         </div>

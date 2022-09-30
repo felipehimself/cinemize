@@ -1,4 +1,4 @@
-import { Follow } from './user';
+import { UserId } from './user';
 
 export type Post = {
   postId: string;
@@ -9,6 +9,8 @@ export type Post = {
   comment: string;
   whereToWatch: string[];
   genre: string[];
-  likedBy: Follow[];
-  favoritedBy: Follow[];
+  likedBy: UserId[];
+  favoritedBy: UserId[];
 };
+
+export type PostCard = Post & { userName: string; isVerified: boolean };

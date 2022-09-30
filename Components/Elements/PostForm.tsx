@@ -4,7 +4,7 @@ import Form from '../UI/Form';
 import FormControl from '../UI/FormControl';
 import Label from '../UI/Label';
 import OptionsContainer from './OptionsContainer';
-import { Post } from '../../ts/types/post';
+import { Post, PostCard } from '../../ts/types/post';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { postValidation } from '../../lib/yup';
@@ -18,17 +18,13 @@ import ReactStars from 'react-rating-stars-component';
 
 const { motion } = require('framer-motion');
 
-const PostForm = ({
-  options,
-  genre,
-  setShowForm,
-}: {
-  options: string[];
-  genre: string[];
-  setShowForm: Dispatch<SetStateAction<boolean>>;
+const PostForm = ({ options, genre,setShowForm,setAllPosts}: { options: string[]; genre: string[]; setShowForm: Dispatch<SetStateAction<boolean>>;
+  setAllPosts: Dispatch<SetStateAction<PostCard[]>>
 }): JSX.Element => {
+
   const [rating, setRating] = useState(1);
-  const [ratingError, setRatingError] = useState(false)
+  const [ratingError, setRatingError] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -49,7 +45,9 @@ const PostForm = ({
     const body = { ...data, rating };
     //console.log(body)
     try {
-      await axios.post('/api/post', body)
+     const res =  await axios.post('/api/post', body)
+     setAllPosts((prev:any) => [...prev, res.data])
+
       setShowForm(false)
     } catch (error) {
       console.log(error)
@@ -58,8 +56,6 @@ const PostForm = ({
 
   const ratingChanged = (newRating: number) => {
     setRating(newRating);
-    
-
   };
 
   useEffect(()=>{
@@ -69,7 +65,7 @@ const PostForm = ({
     }
   },[formState, rating])
 
-  console.log(errors)
+  
 
   return (
     <motion.div

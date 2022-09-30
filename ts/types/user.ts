@@ -9,23 +9,17 @@ export type User = {
   isVerified: boolean;
   followers: UserId[]
   following: UserId[]
-  posts: UserPosts[]
+  posts: UserPost[]
 };
 
-type UserId = {
+export type UserId = {
   userId: string
 }
 
-export type UserPosts = {
+export type UserPost = {
   postId: string
 }
 
-export type Follow = {
-  userName: string
-  name: string
-  isVerified: boolean
-  userId: string
-}
 
 export type UserFollowers = {
   name:string
