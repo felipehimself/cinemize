@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import Button from '../UI/Button';
 import Form from '../UI/Form';
 import FormControl from '../UI/FormControl';
@@ -7,23 +8,17 @@ import { Post } from '../../ts/types/post';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { postValidation } from '../../lib/yup';
-import { IoArrowBack } from 'react-icons/io5';
+import { IoClose, IoStar } from 'react-icons/io5';
 import { overlayVariants, formVariants } from '../../lib/framer';
 import { Dispatch, SetStateAction } from 'react';
 
 const { motion } = require('framer-motion');
 
-const PostForm = ({ options, genre, setShowForm,}: {
-  options: string[];
-  genre: string[];
-  setShowForm: Dispatch<SetStateAction<boolean>>;
+const PostForm = ({ options, genre, setShowForm }: { options: string[]; genre: string[]; setShowForm: Dispatch<SetStateAction<boolean>>;
 }): JSX.Element => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    clearErrors,
-  } = useForm<Post>({
+  
+  const [rating, setRating] = useState(1)
+  const { register, handleSubmit, formState: { errors }, clearErrors, } = useForm<Post>({
     resolver: yupResolver(postValidation),
   });
 
@@ -31,7 +26,7 @@ const PostForm = ({ options, genre, setShowForm,}: {
     console.log(data);
   };
 
-  console.log(errors);
+  
 
   return (
     <motion.div
@@ -39,19 +34,19 @@ const PostForm = ({ options, genre, setShowForm,}: {
       initial='hidden'
       animate='visible'
       exit='exit'
-      className='fixed z-30 top-0 left-0 bg-[rgba(0,0,0,0.2)] w-full h-full backdrop-blur-[2px]'
-      onClick={()=>setShowForm(false)}
+      className='fixed text-sm z-30 inset-0 flex justify-center bg-[rgba(0,0,0,0.2)] w-full h-full backdrop-blur-[2px]'
+      onClick={() => setShowForm(false)}
     >
       <motion.div
         variants={formVariants}
         className='md:w-6/12 xl:w-5/12 h-full p-6   bg-white dark:bg-dark'
-        onClick={(e:any)=>e.stopPropagation()}
+        onClick={(e: Event) => e.stopPropagation()}
       >
         <button
           onClick={() => setShowForm(false)}
-          className='mb-1 block ml-auto transition hover:scale-105'
+          className='mb-1 block ml-auto transition hover:rotate-90 hover:scale-110'
         >
-          <IoArrowBack size={22} />
+          <IoClose size={22} />
         </button>
 
         <Form onSubmit={handleSubmit(onSubmit)} className='w-full gap-4'>
@@ -91,9 +86,28 @@ const PostForm = ({ options, genre, setShowForm,}: {
             </div>
           </FormControl>
           <FormControl>
+            <Label htmlFor='title' className='mb-1'>
+              Nota
+            </Label>
+            <div className='flex gap-1'>
+              {[...Array(5)].map((_, index) => {
+                index += 1;
+                return (
+                  <button
+                    type='button'
+                    key={index}
+                    onClick={() => setRating(index)}
+                  >
+                    <IoStar size={22} className={`${index <= rating ? 'text-yellow-500' : 'text-gray-200'}`} />
+                  </button>
+                );
+              })}
+            </div>
+          </FormControl>
+          <FormControl>
             <textarea
               id='description'
-              placeholder='Escreva aqui...'
+              placeholder='Comentários...'
               className='h-32 dark:border-dark focus:outline-none focus:border-indigo-600 p-2  w-full border rounded-md resize-none'
               {...register('description')}
             />

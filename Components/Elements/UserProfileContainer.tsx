@@ -6,7 +6,7 @@ const UserProfileContainer = ({
   children: React.ReactNode;
 }): JSX.Element => {
   return (
-    <div className='bg-white dark:bg-dark fixed container -mt-2 left-1/2 -translate-x-2/4'>
+    <div className='bg-white dark:bg-dark sticky mx-auto  -mt-2 top-12 '>
       {children}
     </div>
   );

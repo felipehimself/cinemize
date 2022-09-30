@@ -48,7 +48,7 @@ const UserId = ({
           index={tabIndex}
         />
       </UserProfileContainer>
-      <div className='pt-6'>
+      <div>
         <TabContent tab='posts' activeTab={tabs[tabIndex]}>
           {Array.from(Array(200).keys()).map((item) => {
             return <p key={item}>{item}</p>;

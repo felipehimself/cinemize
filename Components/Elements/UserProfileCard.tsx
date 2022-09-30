@@ -104,8 +104,8 @@ const UserProfileCard = ({
   }, [isEditing, userInfo]);
 
   return (
-    <header className='   flex-1 flex flex-col gap-4 pt-6'>
-      <div className='relative flex flex-col gap-2 border p-3 rounded bg-lightWhite dark:bg-lightDark'>
+    <header className=' w-full  flex-1 flex flex-col gap-4 pt-6'>
+      <div className='relative w-full flex flex-col gap-2 border p-3 rounded bg-lightWhite dark:bg-lightDark'>
         {/* BUTTONS */}
         <div className='absolute right-2 top-2'>
           {isEditing ? (

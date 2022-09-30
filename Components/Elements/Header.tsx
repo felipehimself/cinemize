@@ -2,7 +2,7 @@ import Link from 'next/link';
 import Logout from './Logout';
 import  Input  from '../UI/Input';
 import ColorMode from '../ColorMode/ColorMode';
-
+import {MdHome} from 'react-icons/md'
 import { IoHome, IoBookmark, IoPerson, IoNotifications } from 'react-icons/io5';
 
 
@@ -30,13 +30,6 @@ const Header = () => {
                 </a>
               </Link>
             </li>
-            {/* <li className='py-3 '>
-              <Link href='/home'>
-                <a>
-                  <IoPeople className=' fill-white dark:fill-white' size={24} />
-                </a>
-              </Link>
-            </li> */}
             <li className='py-3 '>
               <Link href='/home'>
                 <a>

@@ -18,11 +18,11 @@ export const overlayVariants = {
 export const formVariants = {
   hidden: {
     opacity: 0,
-    x: '-100vw',
+    y: '100vw',
   },
   visible: {
     opacity: 1,
-    x: 0,
+    y: 0,
     transition: {
       duration: 0.3,
      
@@ -30,6 +30,6 @@ export const formVariants = {
   },
   exit: {
     opacity: 0,
-    x: '-100vw',
+    y: '100vw',
   },
 };

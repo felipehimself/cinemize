@@ -32,7 +32,7 @@ const Home: NextPage<{ options: string[]; genre: string[]; posts: any }> = ({
         )}
       </AnimatePresence>
 
-      <section className=''>
+      <section>
         {/* TIMELINE */}
 
         <div className='flex-1 flex flex-col gap-4 pt-2 sm:pt-3'>
@@ -73,7 +73,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       user: 'cinemize',
       title: 'O segredo dos seus olhos',
       genres: ['triller', 'action'],
-      comment: 'this is an amazing movie',
+      comment: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged`,
       whereToWatch: ['netflix', 'amazon'],
       type: 'movie',
       likes: {
