@@ -164,7 +164,7 @@ const UserProfileCard = ({
         {/* NAME */}
         <div className='flex items-center justify-between'>
           <input
-            className='text-sm  focus:outline-none bg-lightWhite dark:bg-lightDark'
+            className='text-sm w-full focus:outline-none bg-lightWhite dark:bg-lightDark'
             onChange={handleChange}
             value={userInfo.name ?? ''}
             disabled={!isEditing || isLoading}

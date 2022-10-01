@@ -17,11 +17,14 @@ const postSchema = new Schema<Post, PostModel>(
     likedBy: [
       {
         userId: { type: String, required: false },
+        id: { type: String, required: false },
+        
       },
     ],
     favoritedBy: [
       {
         userId: { type: String },
+        id: { type: String, required: false },
       },
     ],
   },

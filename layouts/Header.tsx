@@ -8,7 +8,7 @@ import Navbar from './Navbar';
 
 const Header = () => {
   return (
-    <header className='fixed flex items-center min-h-[48px] z-50 shadow-md  shadow-indigo-500/40 dark:shadow-dark  py-1  left-0 right-0 w-full bg-indigo-600 dark:bg-darker'>
+    <header className='fixed flex items-center min-h-[48px] z-40 shadow-md  shadow-indigo-500/40 dark:shadow-dark  py-1  left-0 right-0 w-full bg-indigo-600 dark:bg-darker'>
       <div className='flex items-center gap-4 justify-between container mx-auto'>
         <h3 className='text-xl text-white'>
           cine<span className='dark:text-indigo-600'>.</span>mize

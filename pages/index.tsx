@@ -10,7 +10,7 @@ import axios from 'axios';
 import ColorSwitch from '../components/ColorSwitch';
 import Form from '../components/Form';
 import Button from '../components/Button';
-import IsLoading from '../components/IsLoading';
+import IconLoading from '../components/IconLoading';
 import ErrorMessage from '../components/ErrorMessage';
 import Fieldset from '../components/Fieldset';
 import InputError from '../components/InputError';
@@ -110,7 +110,7 @@ const Home: NextPage = () => {
                 type='submit'
                 className='min-h-[40px] bg-indigo-600 py-2 rounded-md flex items-center justify-center'
               >
-                {isLoading ? <IsLoading /> : 'Criar conta'}
+                {isLoading ? <IconLoading /> : 'Criar conta'}
               </Button>
             </Fieldset>
           </Form>

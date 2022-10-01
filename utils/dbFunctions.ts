@@ -1,7 +1,7 @@
 import User from '../models/User';
 import Post from '../models/Post';
 
-import { Post as PostType , PostCard } from './../ts/types/post';
+import { Post as PostType , PostCard } from '../ts/types/post';
 import { UserId, UserPost , User as UserType, UserProfile} from '../ts/types/user';
 
 import * as jose from 'jose';

@@ -12,6 +12,7 @@ export type User = {
   posts: UserPost[]
 };
 
+
 export type UserId = {
   userId: string
 }

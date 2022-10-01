@@ -15,6 +15,7 @@ import axios from 'axios';
 
 //@ts-ignore
 import ReactStars from 'react-rating-stars-component';
+import IconLoading from './IconLoading';
 
 const { motion } = require('framer-motion');
 
@@ -24,6 +25,7 @@ const PostForm = ({ options, genre,setShowForm,setAllPosts}: { options: string[]
 
   const [rating, setRating] = useState(1);
   const [ratingError, setRatingError] = useState(false);
+  const [isSubmiting, setIsSubmiting] = useState(false)
 
   const {
     register,
@@ -45,11 +47,15 @@ const PostForm = ({ options, genre,setShowForm,setAllPosts}: { options: string[]
     const body = { ...data, rating };
 
     try {
+    setIsSubmiting(true)
      const res =  await axios.post('/api/post', body)
-     setAllPosts((prev:any) => [...prev, res.data])
-
+     setAllPosts((prev) => {
+      return [...prev, res.data]
+     } )
       setShowForm(false)
+      setIsSubmiting(false)
     } catch (error) {
+      setIsSubmiting(false)
       console.log(error)
     }
   };
@@ -73,7 +79,7 @@ const PostForm = ({ options, genre,setShowForm,setAllPosts}: { options: string[]
       initial='hidden'
       animate='visible'
       exit='exit'
-      className='fixed text-sm z-30 inset-0 flex justify-center bg-[rgba(0,0,0,0.2)] w-full h-full backdrop-blur-[2px]'
+      className='fixed text-sm z-50 inset-0 flex justify-center bg-[rgba(0,0,0,0.2)] w-full h-full backdrop-blur-[2px]'
       onClick={() => setShowForm(false)}
     >
       <motion.div
@@ -207,8 +213,8 @@ const PostForm = ({ options, genre,setShowForm,setAllPosts}: { options: string[]
               })}
             </OptionsContainer>
           </FormControl>
-          <Button type='submit' className='p-2 rounded-md mt-2'>
-            Enviar
+          <Button disabled={isSubmiting} type='submit' className='p-2 rounded-md mt-2 flex justify-center'>
+           {isSubmiting? <IconLoading /> : 'Enviar' }  
           </Button>
         </Form>
       </motion.div>

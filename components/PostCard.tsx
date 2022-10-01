@@ -1,43 +1,82 @@
-import { Post as PostType } from '../ts/types/post';
-import { AiFillLike, AiOutlineLike } from 'react-icons/ai';
-import { IoBookmark, IoBookmarkOutline } from 'react-icons/io5';
-import { MdVerified } from 'react-icons/md';
+import { useState } from 'react';
+import { Post as PostType, PostCardType } from '../ts/types/post';
 
+import axios from 'axios';
+
+import { AiFillLike, AiOutlineLike } from 'react-icons/ai';
+import { IoBookmark, IoBookmarkOutline, IoTrash } from 'react-icons/io5';
+import { MdVerified } from 'react-icons/md';
+import { formatDate } from '../utils/generalFunctions';
 import Link from 'next/link';
 
 //@ts-ignore
 import ReactStars from 'react-rating-stars-component';
 
-type PCard = PostType & { userName: string; isVerified: boolean };
+type Props = PostType & {
+  userName: string;
+  isVerified: boolean;
+  loggedUserId: string;
+};
 
-const PostCard = ({
-  postId,
-  rating,
-  type,
-  userName,
-  title,
-  comment,
-  whereToWatch,
-  genre,
-  isVerified,
-}: PCard): JSX.Element => {
+const PostCard = ({ postId, rating, type, userName, title, comment, whereToWatch, genre, isVerified, createdAt, likedBy, favoritedBy,
+  loggedUserId,
+  userId
+}: Props): JSX.Element => {
+  const [likes, setLikes] = useState(likedBy);
+  const postDate = formatDate(createdAt);
+  const [isSubmiting, setIsSubmiting] = useState(false)
+
+  const handleLike = async (isLiking: boolean, type:string) => {
+
+    setIsSubmiting(true)
+    try {
+      const res = await axios.put('/api/post/like', {
+        postId: postId,
+        isLiking: isLiking,
+        type:type
+      });
+      setLikes(res.data)      
+      setIsSubmiting(false)
+    } catch (error) {
+      setIsSubmiting(false)
+    }
+  };
+
+  const handleDelete = async () => {
+
+    try {
+      
+    } catch (error) {
+      
+    }
+
+
+  }
+
+
   return (
     <article
       key={postId}
       className='min-h-[126px] rounded-md w-full border bg-lightWhite dark:bg-lightDark '
     >
       <div className='py-2 px-3'>
-        <Link href={`/user/${userName}`}>
-          <a className='flex items-center gap-1'>
-            <span className='text-sm font-bold'>@{userName}</span>
-            <span> {isVerified ? <MdVerified /> : undefined} </span>
-          </a>
-        </Link>
+        <div className='flex items-center justify-between'>
+          <Link href={`/user/${userName}`}>
+            <a className='flex items-center gap-1'>
+              <span className='text-sm font-bold'>@{userName}</span>
+              <span> {isVerified ? <MdVerified /> : undefined} </span>
+            </a>
+          </Link>
+          <div className='flex items-center gap-2'>
+            
+            {loggedUserId === userId && <button disabled={isSubmiting} className='hover:scale-110'><IoTrash/></button>}
+          </div>
+        </div>
 
         {/* content container */}
         <div className='mt-2 flex flex-col md:flex-row gap-3'>
           {/* COL 1 */}
-          <div className='flex-[1.8] flex flex-col gap-1'>
+          <div className='flex-[2] flex flex-col gap-1'>
             <div className='flex items-center gap-2'>
               <h3 className='text-sm'>{title}</h3>
               <span>•</span>
@@ -53,11 +92,11 @@ const PostCard = ({
             <div className='flex  md:flex-col gap-3'>
               <div className='text-xs'>
                 <span className='mb-1 block'>Onde assistir</span>
-                <ul className='flex gap-2'>
+                <ul className='flex flex-wrap items-start gap-2'>
                   {whereToWatch.map((platform: any) => {
                     return (
                       <li
-                        className='py-1 capitalize px-2 dark:bg-dark bg-slate-200 rounded-lg text-xs'
+                        className='py-1 min-w-fit capitalize px-2 dark:bg-dark bg-slate-200 rounded-lg text-xs'
                         key={platform}
                       >
                         {platform}
@@ -69,7 +108,7 @@ const PostCard = ({
               <div className='text-xs'>
                 <span className='mb-1 block'>Gênero</span>
                 <ul className='flex gap-2'>
-                  {genre.map((gen: any) => {
+                  {genre.map((gen) => {
                     return (
                       <li
                         className='py-1 capitalize px-2 dark:bg-dark bg-slate-200 rounded-lg text-xs'
@@ -84,7 +123,9 @@ const PostCard = ({
             </div>
 
             <div className='flex flex-col '>
-              <span className='text-xs -mb-2'>Nota</span>
+              <span className='text-xs -mb-2'>
+                Nota <span className='ml-1'>{rating}</span>
+              </span>
 
               <ReactStars
                 edit={false}
@@ -96,17 +137,38 @@ const PostCard = ({
             </div>
           </div>
         </div>
-        <footer className='flex items-end justify-end gap-3'>
-          <div className='flex items-end justify-end gap-1'>
-            <button className='peer hover:scale-110 hover:-rotate-6 transition'>
-              <AiOutlineLike size={20} />
-            </button>
-            <span className='text-xs peer-hover:scale-110'>5</span>
-          </div>
-          <div className='flex items-end justify-end gap-1'>
-            <button className='peer hover:scale-105 transition'>
-              <IoBookmarkOutline size={18} />
-            </button>
+        <footer className='flex items-end justify-between gap-3'>
+        <span className='text-[10px]'>{postDate}</span>
+          <div className='flex gap-3'>
+            <div className='flex items-end justify-end gap-1'>
+              {likes.some((lik) => lik.userId === loggedUserId) ? (
+                <>
+                  <button disabled={isSubmiting} onClick={()=>handleLike(false, 'like')} className='peer hover:scale-110 hover:-rotate-6 transition'>
+                    <AiFillLike size={20} />
+                  </button>
+                  <span className='text-xs peer-hover:scale-110'>
+                    {likes.length}
+                  </span>
+                </>
+              ) : (
+                <>
+                  <button disabled={isSubmiting} onClick={()=>handleLike(true, 'like')}  className='peer hover:scale-110 hover:-rotate-6 transition'>
+                    <AiOutlineLike size={20} />
+                  </button>
+                  <span className='text-xs peer-hover:scale-110'>
+                    {likes.length}
+                  </span>
+                </>
+              )}
+            </div>
+            <div className='flex items-end justify-end gap-1'>
+              <button className='peer hover:scale-105 transition'>
+                <IoBookmarkOutline size={18} />
+              </button>
+              <span className='text-xs peer-hover:scale-110'>
+                {favoritedBy.length}
+              </span>
+            </div>
           </div>
         </footer>
       </div>

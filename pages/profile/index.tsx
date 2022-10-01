@@ -17,7 +17,7 @@ import User from '../../models/User';
 import { connect } from 'mongoose';
 const MONGODB_URI = process.env.MONGODB_URI || '';
 
-import { getUserId, getUserPosts, getFollowersAndFollowing } from '../../utils/functions';
+import { getUserId, getUserPosts, getFollowersAndFollowing } from '../../utils/dbFunctions';
 
 import { PostCard as PC } from '../../ts/types/post';
 
@@ -26,8 +26,9 @@ const Profile: NextPage<{
   user: UserProfile;
   followers: UserProfile[];
   following: UserProfile[];
-  posts:PC[]
-}> = ({ user, followers, following, posts }) => {
+  posts:PC[];
+  loggedUserId:string
+}> = ({ user, followers, following, posts, loggedUserId }) => {
   const [tabIndex, setTabIndex] = useState(0);
 
   return (
@@ -50,7 +51,7 @@ const Profile: NextPage<{
         </UserProfileContainer>
           <TabContent tab='posts' activeTab={tabs[tabIndex]}>
             {posts.map((post) => {
-              return <PostCard key={post.postId} {...post} />;
+              return <PostCard loggedUserId={loggedUserId} key={post.postId} {...post} />;
             })}
           </TabContent>
           <TabContent tab='followers' activeTab={tabs[tabIndex]}>
@@ -90,7 +91,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       user: userResponse,
       followers: followers,
       following: following,
-      posts: loggedUserPosts
+      posts: loggedUserPosts,
+      loggedUserId: userResponse?.userId
     },
   };
 };

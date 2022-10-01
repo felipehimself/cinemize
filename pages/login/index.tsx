@@ -7,7 +7,7 @@ import { useState } from 'react';
 import Form from '../../components/Form';
 import ColorSwitch from '../../components/ColorSwitch';
 import Button from '../../components/Button';
-import IsLoading from '../../components/IsLoading';
+import IconLoading from '../../components/IconLoading';
 import Fieldset from '../../components/Fieldset';
 import ErrorMessage from '../../components/ErrorMessage';
 import InputError from '../../components/InputError';
@@ -101,7 +101,7 @@ const Login: NextPage = () => {
                 type='submit'
                 className='flex items-center justify-center min-h-[40px] bg-indigo-600 py-2 rounded-md'
               >
-                {isLoading ? <IsLoading /> : 'Entrar'}
+                {isLoading ? <IconLoading /> : 'Entrar'}
               </Button>
             </Fieldset>
           </Form>

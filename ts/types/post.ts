@@ -1,5 +1,3 @@
-import { UserId } from './user';
-
 export type Post = {
   postId: string;
   type: string;
@@ -9,8 +7,20 @@ export type Post = {
   comment: string;
   whereToWatch: string[];
   genre: string[];
-  likedBy: UserId[];
-  favoritedBy: UserId[];
+  likedBy: Status[];
+  favoritedBy: Status[];
+  createdAt:string
 };
 
-export type PostCard = Post & { userName: string; isVerified: boolean };
+export type Status = {
+    userId: string
+    id: string
+}
+
+export type PostCardType = Post & {
+  userName: string;
+  isVerified: boolean;
+  loggedUserId: string;
+};
+
+export type PostCard = Post & { userName: string; isVerified: boolean ;};

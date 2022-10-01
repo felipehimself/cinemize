@@ -12,7 +12,7 @@ import UserFollowerCard from '../../components/UserFollowerCard';
 import TabButtons from '../../components/TabButtons';
 import PostCard from '../../components/PostCard';
 
-import { getUserPosts, getUserId, getFollowersAndFollowing } from '../../utils/functions';
+import { getUserPosts, getUserId, getFollowersAndFollowing } from '../../utils/dbFunctions';
 
 import { UserProfile } from '../../ts/types/user';
 import { PostCard as PC} from './../../ts/types/post';
@@ -55,7 +55,7 @@ const UserId = ({ user, followers, following, loggedUser, posts }: {
       <div>
         <TabContent tab='posts' activeTab={tabs[tabIndex]}>
           {posts.map((post) => {
-            return <PostCard key={post.postId} {...post} />;
+            return <PostCard loggedUserId={loggedUser.userId} key={post.postId} {...post} />;
           })}
         </TabContent>
         <TabContent tab='followers' activeTab={tabs[tabIndex]}>
