@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import Header from './Elements/Header';
+import Header from './Header';
 import { useRouter } from 'next/router';
-import BottonTab from './Elements/BottonTab';
+import BottonTab from './BottonTab';
 
 const Layout = ({ children }: { children: React.ReactNode }): JSX.Element => {
   const router = useRouter();

@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { UserProfile } from '../../ts/types/user';
+import { UserProfile } from '../ts/types/user';
 import { MdVerified , MdLocationPin} from 'react-icons/md';
 
 const UserFollowerCard = ({ name, userName, description, location, isVerified }: Omit<UserProfile, 'followers' | 'following'>): JSX.Element => {

@@ -1,15 +1,15 @@
 import { useState, useEffect, useCallback, useMemo  } from 'react';
-import Button from '../UI/Button';
-import Form from '../UI/Form';
-import FormControl from '../UI/FormControl';
-import Label from '../UI/Label';
+import Button from './Button';
+import Form from './Form';
+import FormControl from './FormControl';
+import Label from './Label';
 import OptionsContainer from './OptionsContainer';
-import { Post, PostCard } from '../../ts/types/post';
+import { Post, PostCard } from '../ts/types/post';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { postValidation } from '../../lib/yup';
+import { postValidation } from '../lib/yup';
 import { IoClose } from 'react-icons/io5';
-import { overlayVariants, formVariants } from '../../lib/framer';
+import { overlayVariants, formVariants } from '../lib/framer';
 import { Dispatch, SetStateAction } from 'react';
 import axios from 'axios';
 
@@ -43,7 +43,7 @@ const PostForm = ({ options, genre,setShowForm,setAllPosts}: { options: string[]
       return
     }
     const body = { ...data, rating };
-    //console.log(body)
+
     try {
      const res =  await axios.post('/api/post', body)
      setAllPosts((prev:any) => [...prev, res.data])
@@ -98,7 +98,7 @@ const PostForm = ({ options, genre,setShowForm,setAllPosts}: { options: string[]
                   className='-mt-1 accent-indigo-500'
                   type='radio'
                   id='movie'
-                  value='movie'
+                  value='filme'
                   {...register('type')}
                 />
                 <Label htmlFor='movie'>Filme</Label>
@@ -110,7 +110,7 @@ const PostForm = ({ options, genre,setShowForm,setAllPosts}: { options: string[]
                   className='-mt-1 accent-indigo-500'
                   type='radio'
                   id='serie'
-                  value='series'
+                  value='série'
                   {...register('type')}
                 />
                 <Label htmlFor='serie'>Série</Label>

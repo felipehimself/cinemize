@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form as TypeForm } from '../../ts/types/ui';
+import { Form as TypeForm } from '../ts/types/ui';
 
 const Form = ({ children, className, onSubmit }: TypeForm): JSX.Element => {
   return (

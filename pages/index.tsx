@@ -1,32 +1,30 @@
-import axios from 'axios';
+import React, { useState } from 'react';
+
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
-import React, { useState } from 'react';
-import ColorMode from '../Components/ColorMode/ColorMode';
-import Input from '../Components/UI/Input';
-import Form from '../Components/UI/Form';
-import Button from '../Components/UI/Button';
-import IsLoading from '../Components/UI/IsLoading';
 import { useRouter } from 'next/router';
+
+import axios from 'axios';
+
+import ColorSwitch from '../components/ColorSwitch';
+import Form from '../components/Form';
+import Button from '../components/Button';
+import IsLoading from '../components/IsLoading';
+import ErrorMessage from '../components/ErrorMessage';
+import Fieldset from '../components/Fieldset';
+import InputError from '../components/InputError';
 
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { signupValidation } from '../lib/yup';
 import { SignUp } from '../ts/types/login';
-import ErrorMessage from '../Components/Elements/ErrorMessage';
-import Fieldset from '../Components/UI/Fieldset';
 
 const Home: NextPage = () => {
   const [error, setError] = useState({ message: '', isError: false });
   const [isLoading, setIsLoading] = useState(false);
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    clearErrors,
-  } = useForm<SignUp>({
+  const { register, handleSubmit, formState: { errors }, clearErrors } = useForm<SignUp>({
     resolver: yupResolver(signupValidation),
   });
 
@@ -80,9 +78,9 @@ const Home: NextPage = () => {
                   id='name'
                   {...register('name')}
                 />
-                <small className='text-xs text-red-600 dark:text-slate-200 block min-h-[20px] pl-1'>
+                <InputError >
                   {errors.name?.message}
-                </small>
+                </InputError>
               </div>
               <div>
                 <input
@@ -92,9 +90,9 @@ const Home: NextPage = () => {
                   id='email'
                   {...register('email')}
                 />
-                <small className='text-xs text-red-600 dark:text-slate-200 block min-h-[20px] pl-1'>
+                <InputError >
                   {errors.email?.message}
-                </small>
+                </InputError>
               </div>
               <div>
                 <input
@@ -104,9 +102,9 @@ const Home: NextPage = () => {
                   id='password'
                   {...register('password')}
                 />
-                <small className='text-red-600 dark:text-slate-200 text-xs block min-h-[20px] pl-1'>
+                <InputError>
                   {errors.password?.message}
-                </small>
+                </InputError>
               </div>
               <Button
                 type='submit'
@@ -127,7 +125,7 @@ const Home: NextPage = () => {
         </div>
       </div>
       <div className='fixed top-8 right-8 flex mt-auto mb-10 justify-left'>
-        <ColorMode size={22} />
+        <ColorSwitch size={22} />
       </div>
     </>
   );

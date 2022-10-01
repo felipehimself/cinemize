@@ -1,4 +1,4 @@
-import { TextArea as TA } from '../../ts/types/ui';
+import { TextArea as TA } from '../ts/types/ui';
 
 const TextArea = ({ className, id, name, placeholder }: TA): JSX.Element => {
   return (

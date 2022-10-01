@@ -1,5 +1,5 @@
 import { IoLogOut } from 'react-icons/io5';
-import { Logout as LO } from '../../ts/types/ui';
+import { Logout as LO } from '../ts/types/ui';
 import axios from 'axios'
 import { useRouter } from 'next/router';
 

@@ -1,34 +1,37 @@
 import { useState } from 'react';
 import { GetServerSideProps } from 'next';
-import { UserProfile } from '../../ts/types/user';
 import User from '../../models/User';
+
 import { connect } from 'mongoose';
-import * as jose from 'jose';
 import { tabs } from '../../utils/constants';
-import UserCard from '../../Components/Elements/UserCard';
-import UserProfileContainer from '../../Components/Elements/UserProfileContainer';
-import TabContent from '../../Components/Elements/TabContent';
-import UserFollowerCard from '../../Components/Elements/UserFollowerCard';
-import TabButtons from '../../Components/Elements/TabButtons';
+
+import UserCard from '../../components/UserCard';
+import UserProfileContainer from '../../components/UserProfileContainer';
+import TabContent from '../../components/TabContent';
+import UserFollowerCard from '../../components/UserFollowerCard';
+import TabButtons from '../../components/TabButtons';
+import PostCard from '../../components/PostCard';
+
+import { getUserPosts, getUserId, getFollowersAndFollowing } from '../../utils/functions';
+
+import { UserProfile } from '../../ts/types/user';
+import { PostCard as PC} from './../../ts/types/post';
 
 const MONGODB_URI = process.env.MONGODB_URI || '';
-const JWT_SECRET = process.env.JWT_SECRET;
 
-const UserId = ({
-  user,
-  followers,
-  following,
-  loggedUser,
-}: {
+
+const UserId = ({ user, followers, following, loggedUser, posts }: {
   user: UserProfile;
   loggedUser: UserProfile;
   followers: UserProfile[];
   following: UserProfile[];
+  posts:PC[]
 }): JSX.Element => {
   const [userInfo, setUserInfo] = useState(user);
   const [userFollowers, setUserFollowers] = useState(followers);
   const [userFollowing, setUserFollowing] = useState(following);
-
+  
+  
   const [tabIndex, setTabIndex] = useState(0);
 
   return (
@@ -40,6 +43,7 @@ const UserId = ({
           following={userFollowing}
           loggedUser={loggedUser}
           setUserFollowers={setUserFollowers}
+          
         />
         <TabButtons
           followersQty={userFollowers.length}
@@ -50,17 +54,17 @@ const UserId = ({
       </UserProfileContainer>
       <div>
         <TabContent tab='posts' activeTab={tabs[tabIndex]}>
-          {Array.from(Array(200).keys()).map((item) => {
-            return <p key={item}>{item}</p>;
+          {posts.map((post) => {
+            return <PostCard key={post.postId} {...post} />;
           })}
         </TabContent>
         <TabContent tab='followers' activeTab={tabs[tabIndex]}>
-          {followers.map((user) => {
+          {userFollowers.map((user) => {
             return <UserFollowerCard key={user.userName} {...user} />;
           })}
         </TabContent>
         <TabContent tab='following' activeTab={tabs[tabIndex]}>
-          {following.map((user) => {
+          {userFollowing.map((user) => {
             return <UserFollowerCard key={user.userName} {...user} />;
           })}
         </TabContent>
@@ -75,8 +79,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   const userName = ctx?.params?.userName!;
 
-  // INFO DO PERFIL DO USUÁRIO
-  const userNameExists = await User.findOne(
+  // INFO DO PERFIL VISITADO
+  const userExists = await User.findOne(
     { userName },
     {
       password: 0,
@@ -84,78 +88,38 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       _id: 0,
       email: 0,
       updatedAt: 0,
-      __v: 0,
     }
   );
 
   // SE USUÁRIO MUDAR URL REDIRECIONA PARA HOME
-  if (userNameExists === null) {
+  if (userExists === null) {
     ctx.res.writeHead(301, { Location: '/' });
     ctx.res.end();
   }
-
-  const userResponse = await JSON.parse(JSON.stringify(userNameExists));
   //
 
-  // USUÁRIO VISITANTE
-  const jwt = ctx.req.cookies.CinemizeJWT;
+  const userData = await JSON.parse(JSON.stringify(userExists));
   
-  const payloadId = await jose.jwtVerify(
-    jwt!,
-    new TextEncoder().encode(JWT_SECRET)
-  );
-  const _id = await payloadId.payload.userId;
+  // USUÁRIO VISITANTE/LOGADO
+  const jwt = ctx.req.cookies.CinemizeJWT;
+  const _id: string = await getUserId(jwt);
   const loggedUser = await User.findById({ _id });
   //
 
   // Redireciona se usuario tentar acessar seu próprio perfil mudando a URL
-  if(userName === loggedUser?.userName){
+  if (userName === loggedUser?.userName) {
     ctx.res.writeHead(301, { Location: '/profile' });
     ctx.res.end();
   }
-  // 
-
-  // FOLLOWERS DO PERFIL VISITADO
-  const followersIds = userResponse?.followers?.map((user:any) => user.userId)
-
-  const followers = await User.aggregate([
-    { $match: { userId: { $in: followersIds } } },
-    {
-      $project: {
-        _id: 0,
-        email: 0,
-        password: 0,
-        followers: 0,
-        following: 0,
-        _v: 0,
-        createdAt: 0,
-        updatedAt: 0,
-      },
-    },
-  ]);
   //
 
-  // FOLLOWING DO PERFIL VISITADO
-  const followingIds = userResponse?.following?.map((user:any) => user.userId)
-  const following = await User.aggregate([
-    { $match: { userId: { $in: followingIds } } },
-    {
-      $project: {
-        _id: 0,
-        email: 0,
-        password: 0,
-        followers: 0,
-        following: 0,
-        _v: 0,
-        createdAt: 0,
-        updatedAt: 0,
-      },
-    },
-  ]);
+  const { followers, following } = await getFollowersAndFollowing(userData)
+
+  const userPosts = await getUserPosts(userExists?.userId!);
 
   return {
     props: {
-      user: userResponse,
+      user: userData,
       loggedUser: {
         userName: loggedUser?.userName,
         userId: loggedUser?.userId,
@@ -164,8 +128,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         isVerified: loggedUser?.isVerified,
         description: loggedUser?.description,
       },
-      followers: JSON.parse(JSON.stringify(followers)),
-      following: JSON.parse(JSON.stringify(following)),
+      followers: followers,
+      following: following,
+      posts: userPosts
     },
   };
 };

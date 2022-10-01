@@ -1,4 +1,4 @@
-import { Input as InpType } from '../../ts/types/ui';
+import { Input as InpType } from '../ts/types/ui';
 
 const Input = ({ type, className, placeHolder, name,id, value, onChange }: InpType): JSX.Element => {
   return (

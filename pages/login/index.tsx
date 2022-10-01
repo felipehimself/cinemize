@@ -4,12 +4,13 @@ import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 
-import Form from '../../Components/UI/Form';
-import ColorMode from '../../Components/ColorMode/ColorMode';
-import Button from '../../Components/UI/Button';
-import IsLoading from '../../Components/UI/IsLoading';
-import Fieldset from '../../Components/UI/Fieldset';
-import ErrorMessage from '../../Components/Elements/ErrorMessage';
+import Form from '../../components/Form';
+import ColorSwitch from '../../components/ColorSwitch';
+import Button from '../../components/Button';
+import IsLoading from '../../components/IsLoading';
+import Fieldset from '../../components/Fieldset';
+import ErrorMessage from '../../components/ErrorMessage';
+import InputError from '../../components/InputError';
 
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -18,23 +19,11 @@ import { Login as LoginType } from '../../ts/types/login';
 
 import axios from 'axios';
 
-
 const Login: NextPage = () => {
   const [error, setError] = useState({ message: '', isError: false });
   const [isLoading, setIsLoading] = useState(false);
-
-  // adicionar trim no loginValidation
-  // COLOCAR TRATAMENTO PARA REDIRECIONAR PARA PROFILE CASO USUÁRIO TENTE VER SEU PRÓPRIO PERFIL
-  // TRATAR CAMPOS DE LOGIN, SIGNUP, TIPOS, TRIM ETC
-  // TRATAR UPDATE BIO, QTD CARACTERE E ETC, TRIM ETC
-  // PROTEGER ROTAS SÓ PARA LOGADO
   
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    clearErrors,
-  } = useForm<LoginType>({
+  const { register, handleSubmit, formState: { errors }, clearErrors } = useForm<LoginType>({
     resolver: yupResolver(loginValidation),
   });
 
@@ -75,7 +64,7 @@ const Login: NextPage = () => {
           <h2 className='text-2xl text-center'>login</h2>
 
           <ErrorMessage
-            className='text-sm block text-center '
+            className='text-sm block text-center'
             show={error.isError}
             message={error.message}
           />
@@ -91,9 +80,9 @@ const Login: NextPage = () => {
                   aria-label='Seu email'
                   {...register('email')}
                 />
-                <small className='text-red-600 dark:text-slate-200 text-xs block min-h-[20px] pl-1'>
+                <InputError >
                   {errors.email?.message}
-                </small>
+                </InputError>
               </div>
               <div>
                 <input
@@ -104,9 +93,9 @@ const Login: NextPage = () => {
                   {...register('password')}
                   aria-label='Sua senha'
                 />
-                <small className='text-red-600 dark:text-slate-200 text-xs block min-h-[20px] pl-1'>
+                <InputError >
                   {errors.password?.message}
-                </small>
+                </InputError>
               </div>
               <Button
                 type='submit'
@@ -127,7 +116,7 @@ const Login: NextPage = () => {
         </div>
       </div>
       <div className='fixed top-8 right-8 flex mt-auto mb-10 justify-left'>
-        <ColorMode size={22} />
+        <ColorSwitch size={22} />
       </div>
     </>
   );

@@ -1,4 +1,4 @@
-import { Post as PostType } from './../../ts/types/post';
+import { Post as PostType } from '../ts/types/post';
 import { AiFillLike, AiOutlineLike } from 'react-icons/ai';
 import { IoBookmark, IoBookmarkOutline } from 'react-icons/io5';
 import { MdVerified } from 'react-icons/md';
@@ -83,7 +83,7 @@ const PostCard = ({
               </div>
             </div>
 
-            <div className='flex flex-col'>
+            <div className='flex flex-col '>
               <span className='text-xs -mb-2'>Nota</span>
 
               <ReactStars

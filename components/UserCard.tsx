@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useState } from 'react';
 import { MdLocationPin, MdVerified } from 'react-icons/md';
-import { UserProfile } from '../../ts/types/user';
+import { UserProfile } from '../ts/types/user';
 import axios from 'axios';
 
 type UserCard = {
@@ -9,6 +9,7 @@ type UserCard = {
   followers: UserProfile[];
   following: UserProfile[];
   setUserFollowers: Dispatch<SetStateAction<UserProfile[]>>;
+  
 };
 
 const UserCard = ({ user, followers, following, loggedUser, setUserFollowers }: UserCard): JSX.Element => {

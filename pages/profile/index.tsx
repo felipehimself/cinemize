@@ -1,26 +1,33 @@
 import { useState } from 'react';
+
 import Head from 'next/head';
 import { GetServerSideProps, NextPage } from 'next';
 import { UserProfile } from '../../ts/types/user';
-import UserProfileContainer from '../../Components/Elements/UserProfileContainer';
-import UserProfileCard from '../../Components/Elements/UserProfileCard';
-import TabButtons from '../../Components/Elements/TabButtons';
-import TabContent from '../../Components/Elements/TabContent';
-import UserFollowerCard from '../../Components/Elements/UserFollowerCard';
+
+import UserProfileContainer from '../../components/UserProfileContainer';
+import UserProfileCard from '../../components/UserProfileCard';
+import TabButtons from '../../components/TabButtons';
+import TabContent from '../../components/TabContent';
+import UserFollowerCard from '../../components/UserFollowerCard';
+import PostCard from '../../components/PostCard';
 
 import { tabs } from '../../utils/constants';
 
 import User from '../../models/User';
 import { connect } from 'mongoose';
 const MONGODB_URI = process.env.MONGODB_URI || '';
-const JWT_SECRET = process.env.JWT_SECRET;
-import * as jose from 'jose';
+
+import { getUserId, getUserPosts, getFollowersAndFollowing } from '../../utils/functions';
+
+import { PostCard as PC } from '../../ts/types/post';
+
 
 const Profile: NextPage<{
   user: UserProfile;
   followers: UserProfile[];
   following: UserProfile[];
-}> = ({ user, followers, following }) => {
+  posts:PC[]
+}> = ({ user, followers, following, posts }) => {
   const [tabIndex, setTabIndex] = useState(0);
 
   return (
@@ -41,24 +48,21 @@ const Profile: NextPage<{
             index={tabIndex}
           />
         </UserProfileContainer>
-
-        <div className=''>
           <TabContent tab='posts' activeTab={tabs[tabIndex]}>
-            {Array.from(Array(200).keys()).map((item) => {
-              return <p key={item}>{item}</p>;
+            {posts.map((post) => {
+              return <PostCard key={post.postId} {...post} />;
             })}
           </TabContent>
           <TabContent tab='followers' activeTab={tabs[tabIndex]}>
             {followers.map((user) => {
-              return <UserFollowerCard key={user.userName} {...user} />;
+              return <UserFollowerCard key={user.userId} {...user} />;
             })}
           </TabContent>
           <TabContent tab='following' activeTab={tabs[tabIndex]}>
             {following.map((user) => {
-              return <UserFollowerCard key={user.userName} {...user} />;
+              return <UserFollowerCard key={user.userId} {...user} />;
             })}
           </TabContent>
-        </div>
       </section>
     </>
   );
@@ -70,64 +74,23 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   const jwt = ctx.req.cookies.CinemizeJWT;
 
-  const response = await jose.jwtVerify(
-    jwt!,
-    new TextEncoder().encode(JWT_SECRET)
-  );
-  const _id = await response.payload.userId;
-  const user = await User.findById(_id, {
-    password: 0,
-    createdAt: 0,
-    _id: 0,
-    email: 0,
-    updatedAt: 0,
-    __v: 0,
-  });
-  const userResponse = JSON.parse(JSON.stringify(user));
-
-  // FOLLOWERS DO PERFIL VISITADO
-  const followersIds = userResponse?.followers?.map((user:any) => user.userId)
-  const followers = await User.aggregate([
-    { $match: { userName: { $in: followersIds } } },
-    {
-      $project: {
-        _id: 0,
-        email: 0,
-        password: 0,
-        followers: 0,
-        following: 0,
-        _v: 0,
-        createdAt: 0,
-        updatedAt: 0,
-      },
-    },
-  ]);
-  //
-
-  // FOLLOWING DO PERFIL VISITADO
-  const followingIds = userResponse?.following.map((user:any) => user.userId)
-  const following = await User.aggregate([
-    { $match: { userId: { $in: followingIds } } },
-    {
-      $project: {
-        _id: 0,
-        email: 0,
-        password: 0,
-        followers: 0,
-        following: 0,
-        _v: 0,
-        createdAt: 0,
-        updatedAt: 0,
-      },
-    },
-  ]);
+  const _id = await getUserId(jwt);
   
+  const user = await User.findOne({_id}, { password: 0, createdAt: 0, _id: 0, email: 0, updatedAt: 0 });
+  
+  const userResponse = await JSON.parse(JSON.stringify(user));
+
+  const loggedUserPosts = await getUserPosts(userResponse?.userId!)
+
+  const {followers, following} = await getFollowersAndFollowing(userResponse)
+
 
   return {
     props: {
       user: userResponse,
-      followers: JSON.parse(JSON.stringify(followers)),
-      following: JSON.parse(JSON.stringify(following)),
+      followers: followers,
+      following: following,
+      posts: loggedUserPosts
     },
   };
 };

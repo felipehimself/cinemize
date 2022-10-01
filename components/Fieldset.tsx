@@ -1,4 +1,4 @@
-import { Fieldset } from '../../ts/types/ui';
+import { Fieldset } from '../ts/types/ui';
 
 const Fieldset = ({
   children,

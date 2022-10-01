@@ -33,5 +33,3 @@ export type UserFollowing = {
 }
 
 export type UserProfile =   Omit<User, 'email' | 'password'> ;
-
-//export type UserProfile =  Pick<User, 'name' | 'userName' | 'description' | 'isVerified' | 'location'> & UserFollowers[] & UserFollowing[];

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useTheme } from 'next-themes';
 import { IoMoon, IoSunny } from 'react-icons/io5';
 
-const ColorMode = ({size, className}:{size:number, className?:string}) :JSX.Element=> {
+const ColorSwitch = ({size, className}:{size:number, className?:string}) :JSX.Element=> {
   const [mount, setMount] = useState(false);
 
   const { theme, systemTheme, setTheme } = useTheme();
@@ -29,4 +29,4 @@ const ColorMode = ({size, className}:{size:number, className?:string}) :JSX.Elem
     </button>
   );
 };
-export default ColorMode;
+export default ColorSwitch;

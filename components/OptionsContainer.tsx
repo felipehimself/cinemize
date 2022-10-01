@@ -1,4 +1,4 @@
-import { OptionsContainer as OC } from '../../ts/types/ui';
+import { OptionsContainer as OC } from '../ts/types/ui';
 
 const OptionsContainer = ({ children, className }: OC): JSX.Element => {
   return (
