@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import User from './../../../models/User';
+import Follow from '../../../models/Follow';
 import { connect } from 'mongoose';
 import bcrypt from 'bcryptjs';
 import { serialize } from 'cookie';
@@ -46,6 +47,7 @@ export default async function handler(
             userName: name + id,
             userId: id,
           });
+          await Follow.create({userId: id})
 
           const jwtToken = await new jose.SignJWT({ userId: user._id })
             .setProtectedHeader({ alg: 'HS256' })

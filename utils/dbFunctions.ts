@@ -5,6 +5,7 @@ import { Post as PostType , PostCard } from '../ts/types/post';
 import { UserId, UserPost , User as UserType, UserProfile} from '../ts/types/user';
 
 import * as jose from 'jose';
+import Follow from '../models/Follow';
 const JWT_SECRET = process.env.JWT_SECRET;
 
 export const getUserId = async (jwt: string | undefined) : Promise<string> => {
@@ -24,23 +25,22 @@ export const getAllPosts = async (_id:string) => {
   const user = await User.findById(_id, { password: 0, createdAt: 0, _id: 0, email: 0, updatedAt: 0, });
   const userResponse = JSON.parse(JSON.stringify(user));
 
-  const postsIds = userResponse.posts.map((post: UserPost) => post.postId);
+  // const postsIds = userResponse.posts.map((post: UserPost) => post.postId);
 
-  const loggedUserPosts = await Post.aggregate([
-    { $match: { postId: { $in: postsIds } } },
+  const userPosts = await Post.aggregate([
+    {$match : {userId: user?.userId}},
     { $addFields: {
-      userName:userResponse.userName,
+      userName:userResponse?.userName,
       isVerified: userResponse?.isVerified
     }}
-  ]);
+  ])
 
-  const loggedUserPostsParsed = JSON.parse(JSON.stringify(loggedUserPosts))
-
+  const loggedUserPosts = JSON.parse(JSON.stringify(userPosts))
 
   const followingIds = user?.following.map(user => user.userId)
-  const followingPosts = await Post.find({userId: {$in:followingIds }})
-  
   const userFollowing = await User.find({userId: {$in: followingIds}})
+
+  const followingPosts = await Post.find({userId: {$in:followingIds }})
   const followingPostsParsed:PostType[] = await JSON.parse(JSON.stringify(followingPosts))
 
   const followingPostsWithUserName:PostCard[] = [];
@@ -55,19 +55,17 @@ export const getAllPosts = async (_id:string) => {
   })
 
 
-  return [...loggedUserPostsParsed, ...followingPostsWithUserName ]
+  return [...loggedUserPosts, ...followingPostsWithUserName ]
 }
 
 export const getUserPosts = async (_id:string) => {
   const user = await User.findOne({userId: _id}, { password: 0, createdAt: 0, _id: 0, email: 0, updatedAt: 0, });
   const userResponse = JSON.parse(JSON.stringify(user));
 
-  const postsIds = userResponse.posts.map((post: UserPost) => post.postId);
-
   const loggedUserPosts = await Post.aggregate([
-    { $match: { postId: { $in: postsIds } } },
+    { $match: { userId: userResponse?.userId } },
     { $addFields: {
-      userName:userResponse.userName,
+      userName:userResponse?.userName,
       isVerified: userResponse?.isVerified
     }}
   ]);
@@ -116,4 +114,17 @@ export const getFollowersAndFollowing = async (userResponse:UserType) : Promise<
 
   return {followers: [...JSON.parse(JSON.stringify(followers))], following: [...JSON.parse(JSON.stringify(following))]}
 
+}
+
+export const getUserFollow = async (id:string) => {
+
+    const followDocument = await Follow.find({userId: id})
+
+    const followersIds = followDocument[0]?.followers.map(follow => follow.followId)
+    const followersProfile = await User.find({userId: {$in: followersIds}},{password: 0,email:0,createdAt:0,updatedAt:0,_id:0})
+
+    const followingIds = followDocument[0]?.following.map(follow => follow.followId)
+    const followingProfile = await User.find({userId: {$in: followingIds}},{password: 0,email:0,createdAt:0,updatedAt:0,_id:0})
+
+    return {followers: JSON.parse(JSON.stringify(followersProfile)), following:JSON.parse(JSON.stringify(followingProfile))}
 }

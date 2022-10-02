@@ -17,10 +17,9 @@ import User from '../../models/User';
 import { connect } from 'mongoose';
 const MONGODB_URI = process.env.MONGODB_URI || '';
 
-import { getUserId, getUserPosts, getFollowersAndFollowing } from '../../utils/dbFunctions';
+import { getUserId, getUserPosts, getFollowersAndFollowing, getUserFollow } from '../../utils/dbFunctions';
 
 import { PostCard as PC } from '../../ts/types/post';
-
 
 const Profile: NextPage<{
   user: UserProfile;
@@ -43,8 +42,8 @@ const Profile: NextPage<{
         <UserProfileContainer>
           <UserProfileCard user={user} />
           <TabButtons
-            followersQty={user.followers.length}
-            followingQty={user.following.length}
+            followersQty={followers.length}
+            followingQty={following.length}
             setTabIndex={setTabIndex}
             index={tabIndex}
           />
@@ -83,9 +82,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   const loggedUserPosts = await getUserPosts(userResponse?.userId!)
 
-  const {followers, following} = await getFollowersAndFollowing(userResponse)
+  const { followers, following } = await getUserFollow(userResponse?.userId)
 
-
+  
   return {
     props: {
       user: userResponse,

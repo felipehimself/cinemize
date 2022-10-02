@@ -15,27 +15,41 @@ type UserCard = {
 const UserCard = ({ user, followers, following, loggedUser, setUserFollowers }: UserCard): JSX.Element => {
   const [isLoading, setIsLoading] = useState(false);
   
-  const handleFollow = async (type: string) => {
+    // APÓS AJUSTES, REMOVER USUÁRIOS E AJUSTAR MODEL E TYPE QUE TEM ARRAY DE FOLLOWERS/FOLLOWING
+
+
+  const handleFollow = async () => {
     setIsLoading(true);
 
     try {
-      await axios.patch('/api/user/user', {
-        userId: user.userId,
-        type: type,
-      });
-      if (type === 'follow') {
-        setUserFollowers((prev) => [...prev, loggedUser]);
-      } else if (type === 'unfollow') {
-        setUserFollowers((prev) =>
-          prev.filter((followers) => followers.userName !== loggedUser.userName)
-        );
-      }
-      setIsLoading(false);
+     const res = await axios.post('/api/follow', {userId: user.userId})
+      console.log(res)
+      setIsLoading(false)
+      // RESPOSTA TEM QUE SER TODOS OS FOLLOWS DO USUARIO PARA setUserFollowers
+      // resposta tem que vir sem senha, email, etc, como na função do dbFunctions
     } catch (error) {
-      console.log(error);
-      setIsLoading(false);
+      console.log(error)
+      setIsLoading(false)
     }
   };
+
+  const handleUnFollow = async () => {
+    setIsLoading(true);
+
+    try {
+      // METHOD = PUT
+     const res = await axios.post('/api/follow', { userId: user.userId })
+      console.log(res)
+      setIsLoading(false)
+      // RESPOSTA TEM QUE SER TODOS OS FOLLOWS DO USUARIO PARA setUserFollowers
+
+    } catch (error) {
+      console.log(error)
+      setIsLoading(false)
+    }
+  };
+
+
 
   return (
     <header className='flex-1 flex flex-col gap-4 pt-6'>
@@ -67,9 +81,10 @@ const UserCard = ({ user, followers, following, loggedUser, setUserFollowers }: 
           </p>
         </div>
         <div>
+
           {followers.some((user) => user.userId === loggedUser.userId) ? (
             <button
-              onClick={() => handleFollow('unfollow')}
+              onClick={handleUnFollow}
               disabled={isLoading}
               className='bg-indigo-600 px-2 py-1 text-white rounded-md text-xs'
             >
@@ -77,7 +92,7 @@ const UserCard = ({ user, followers, following, loggedUser, setUserFollowers }: 
             </button>
           ) : (
             <button
-              onClick={() => handleFollow('follow')}
+              onClick={handleFollow}
               disabled={isLoading}
               className='bg-indigo-600 px-2 py-1 text-white rounded-md text-xs'
             >

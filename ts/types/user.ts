@@ -9,7 +9,7 @@ export type User = {
   isVerified: boolean;
   followers: UserId[]
   following: UserId[]
-  posts: UserPost[]
+  
 };
 
 

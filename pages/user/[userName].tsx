@@ -12,7 +12,7 @@ import UserFollowerCard from '../../components/UserFollowerCard';
 import TabButtons from '../../components/TabButtons';
 import PostCard from '../../components/PostCard';
 
-import { getUserPosts, getUserId, getFollowersAndFollowing } from '../../utils/dbFunctions';
+import { getUserPosts, getUserId, getFollowersAndFollowing, getUserFollow } from '../../utils/dbFunctions';
 
 import { UserProfile } from '../../ts/types/user';
 import { PostCard as PC} from './../../ts/types/post';
@@ -93,6 +93,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   // SE USUÁRIO MUDAR URL REDIRECIONA PARA HOME
   if (userExists === null) {
+    
     ctx.res.writeHead(301, { Location: '/' });
     ctx.res.end();
   }
@@ -108,14 +109,17 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   // Redireciona se usuario tentar acessar seu próprio perfil mudando a URL
   if (userName === loggedUser?.userName) {
+    
     ctx.res.writeHead(301, { Location: '/profile' });
     ctx.res.end();
   }
   //
 
-  const { followers, following } = await getFollowersAndFollowing(userData)
-
   const userPosts = await getUserPosts(userExists?.userId!);
+
+  const { followers, following } = await getUserFollow(userData?.userId)
+
+ 
 
   return {
     props: {

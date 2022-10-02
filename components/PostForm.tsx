@@ -11,6 +11,8 @@ import { postValidation } from '../lib/yup';
 import { IoClose } from 'react-icons/io5';
 import { overlayVariants, formVariants } from '../lib/framer';
 import { Dispatch, SetStateAction } from 'react';
+import { useAppDispatch } from '../store/store';
+import { addPost } from '../features/postsSlice';
 import axios from 'axios';
 
 //@ts-ignore
@@ -25,14 +27,11 @@ const PostForm = ({ options, genre,setShowForm,setAllPosts}: { options: string[]
 
   const [rating, setRating] = useState(1);
   const [ratingError, setRatingError] = useState(false);
-  const [isSubmiting, setIsSubmiting] = useState(false)
+  const [isSubmiting, setIsSubmiting] = useState(false);
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    formState,
-    clearErrors,
+  const dispatch = useAppDispatch()
+
+  const { register, handleSubmit, formState: { errors }, formState, clearErrors,
   } = useForm<Post>({
     resolver: yupResolver(postValidation),
   });
@@ -48,10 +47,11 @@ const PostForm = ({ options, genre,setShowForm,setAllPosts}: { options: string[]
 
     try {
     setIsSubmiting(true)
-     const res =  await axios.post('/api/post', body)
-     setAllPosts((prev) => {
-      return [...prev, res.data]
-     } )
+     const res =  await axios.post('/api/post', body);
+     dispatch(addPost(res.data))
+    //  setAllPosts((prev) => {
+    //   return [...prev, res.data]
+    //  } )
       setShowForm(false)
       setIsSubmiting(false)
     } catch (error) {

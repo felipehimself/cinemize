@@ -16,7 +16,7 @@ const userSchema = new Schema<User, UserModel>(
     isVerified: { type: Boolean, required: false, default: false },
     followers: [{ userId: String}],
     following: [{ userId: String}],
-    posts: [{ postId: String }],
+    
   },
   {
     timestamps: true,
