@@ -10,6 +10,7 @@ export type Post = {
   likedBy: Status[];
   favoritedBy: Status[];
   createdAt:string
+  userName: string; isVerified: boolean
 };
 
 export type Status = {

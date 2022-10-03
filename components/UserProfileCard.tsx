@@ -194,27 +194,29 @@ const UserProfileCard = ({
           ) : (
             <p className='break-all text-sm '>
               {userInfo.description || (
-                <span className='text-[#9CA3AF] text-sm '>
-                  Bio
-                </span>
+                <span className='text-[#9CA3AF] text-sm '>Bio</span>
               )}
             </p>
           )}
         </div>
 
         {/* LOCATION */}
-        <div className='flex gap-1  items-center'>
+        <div className='flex gap-1 text-sm items-center'>
           <MdLocationPin size={15} />
-          <input
-            placeholder='Localização'
-            type='text'
-            className='w-full text-sm  focus:outline-none bg-lightWhite dark:bg-transparent'
-            disabled={!isEditing || isLoading}
-            name='location'
-            value={userInfo.location ?? ''}
-            onChange={handleChange}
-            maxLength={30}
-          />
+          {isEditing ? (
+            <input
+              placeholder='Localização'
+              type='text'
+              className='w-full text-sm  focus:outline-none bg-lightWhite dark:bg-transparent'
+              disabled={!isEditing || isLoading}
+              name='location'
+              value={userInfo.location ?? ''}
+              onChange={handleChange}
+              maxLength={30}
+            />
+          ) : (
+            <p>{userInfo.location}</p>
+          )}
         </div>
       </div>
     </header>

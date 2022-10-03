@@ -14,8 +14,6 @@ const userSchema = new Schema<User, UserModel>(
     description: { type: String, required: false, default: '' },
     location: { type: String, required: false, default: '' },
     isVerified: { type: Boolean, required: false, default: false },
-    followers: [{ userId: String}],
-    following: [{ userId: String}],
     
   },
   {

@@ -5,15 +5,20 @@ import Head from 'next/head';
 import PostCard from '../../components/PostCard';
 import PostForm from '../../components/PostForm';
 import PostButton from '../../components/PostButton';
+
+
 import { RootState, useAppDispatch } from '../../store/store';
 import { savePosts } from '../../features/postsSlice';
+import { toggleForm } from '../../features/formSlice';
 import { useSelector } from 'react-redux';
-import { PostCard as PC } from './../../ts/types/post';
+
+import { PostCard as PC, Post as PPP } from './../../ts/types/post';
 
 import { getAllPosts, getUserId } from '../../utils/dbFunctions';
 
 import { connect } from 'mongoose';
 import User from '../../models/User';
+import NoPostsMsg from '../../components/NoPostsMsg';
 const MONGODB_URI = process.env.MONGODB_URI || '';
 
 const { AnimatePresence } = require('framer-motion');
@@ -21,31 +26,32 @@ const { AnimatePresence } = require('framer-motion');
 const Home: NextPage<{
   options: string[];
   genre: string[];
-  posts: PC[];
+  posts: PPP[];
   loggedUserId: string;
 }> = ({ options, genre, posts, loggedUserId }) => {
-  const [showForm, setShowForm] = useState(false);
-  const [allPosts, setAllPosts] = useState(posts);
-  const [isPageLoading, setIsPageLoading] = useState(true)
+  const [showForaam, setShowForm] = useState(false);
+  const [isPageLoading, setIsPageLoading] = useState(true);
 
-  const dispatch = useAppDispatch()
-  // POPULAR /PROFILE COM O POSTS DO USUÁRIO
-  // POPULAR TIMELINE TAMBEM COM POSTS DOS SEGUINDO
+  const dispatch = useAppDispatch();
+
   // COLOCAR OPÇÃO DE EXCLUIR POST NO POSTCARD
   // COLOCAR HORA NO POSTCARD
   // REVER TIPOS E ORGANIZAR O CÓDIGO
 
-  const {posts:ps} = useSelector((state:RootState)=> state.posts)
-  
-  useEffect(()=> {
-    dispatch(savePosts(posts))
-    setIsPageLoading(false)
-  },[posts, dispatch])
+  const { posts: allPosts } = useSelector((state: RootState) => state.posts);
+  const { showForm } = useSelector((state: RootState) => state.showForm);
 
-  
+  const toggleShowForm = () => {
+    dispatch(toggleForm(true))
+  }
 
-  if(isPageLoading) return <p>Carregando...</p>
-  
+  useEffect(() => {
+    dispatch(savePosts(posts));
+    setIsPageLoading(false);
+  }, [posts, dispatch]);
+
+  if (isPageLoading) return <p>Carregando...</p>;
+
   return (
     <>
       <Head>
@@ -55,28 +61,24 @@ const Home: NextPage<{
       </Head>
       <AnimatePresence>
         {showForm && (
-          <PostForm
-            setShowForm={setShowForm}
-            setAllPosts={setAllPosts}
-            options={options}
-            genre={genre}
-          />
+          <PostForm options={options} genre={genre} />
         )}
       </AnimatePresence>
 
       <div className='hidden container left-1/2 -translate-x-2/4  sm:flex fixed mt-2  justify-end'>
         <button
-          onClick={() => setShowForm(true)}
+          onClick={toggleShowForm}
           className='block transition hover:bg-indigo-800  bg-indigo-600  py-1 px-3 rounded-md text-white'
         >
           Postar
         </button>
       </div>
 
+      {allPosts.length === 0 && <NoPostsMsg />}
       <section className='sm:pt-10'>
         {/* TIMELINE */}
         <div className='flex-1 flex flex-col gap-4 pt-2 sm:pt-3'>
-          {ps.map((post) => {
+          {allPosts.map((post) => {
             return (
               <PostCard
                 loggedUserId={loggedUserId}
@@ -87,7 +89,7 @@ const Home: NextPage<{
           })}
         </div>
       </section>
-      <PostButton setShowForm={setShowForm} />
+      <PostButton  />
     </>
   );
 };

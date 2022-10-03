@@ -1,18 +1,23 @@
 import { Dispatch, SetStateAction } from 'react';
 import { IoAdd } from 'react-icons/io5';
+import { toggleForm } from '../features/formSlice';
+import { useAppDispatch } from '../store/store';
 
 
-type Props = {
-  setShowForm: Dispatch<SetStateAction<boolean>>
-}
+const PostButton = (): JSX.Element => {
 
-const PostButton = ({ setShowForm,}: Props): JSX.Element => {
+  const dispatch = useAppDispatch()
+
+const toggleShowForm = () => {
+    dispatch(toggleForm(true))
+  }
+
   return (
     <button
-      onClick={() => setShowForm(true)}
-      className='sm:hidden rounded-full bg-indigo-600  p-3 fixed bottom-14 right-6 hover:rotate-90 transition'
+      onClick={toggleShowForm}
+      className='group sm:hidden rounded-full bg-indigo-600  p-3 fixed bottom-14 right-6 '
     >
-      <IoAdd size={22} color='white' />
+      <IoAdd size={22} color='white' className='group-hover:rotate-90 transition' />
     </button>
   );
 };

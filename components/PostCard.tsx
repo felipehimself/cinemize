@@ -1,13 +1,15 @@
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { Post as PostType, PostCardType } from '../ts/types/post';
+import Link from 'next/link';
 
-import axios from 'axios';
+import { deletePost } from '../features/postsSlice';
 
+import { useAppDispatch } from '../store/store';
 import { AiFillLike, AiOutlineLike } from 'react-icons/ai';
 import { IoBookmark, IoBookmarkOutline, IoTrash } from 'react-icons/io5';
 import { MdVerified } from 'react-icons/md';
 import { formatDate } from '../utils/generalFunctions';
-import Link from 'next/link';
+import axios from 'axios';
 
 //@ts-ignore
 import ReactStars from 'react-rating-stars-component';
@@ -16,15 +18,19 @@ type Props = PostType & {
   userName: string;
   isVerified: boolean;
   loggedUserId: string;
+  setProfilePosts?: Dispatch<SetStateAction<PostType[]>>
 };
 
 const PostCard = ({ postId, rating, type, userName, title, comment, whereToWatch, genre, isVerified, createdAt, likedBy, favoritedBy,
   loggedUserId,
-  userId
+  userId,
+  setProfilePosts
 }: Props): JSX.Element => {
   const [likes, setLikes] = useState(likedBy);
   const postDate = formatDate(createdAt);
   const [isSubmiting, setIsSubmiting] = useState(false)
+
+  const dispatch = useAppDispatch()
 
   const handleLike = async (isLiking: boolean, type:string) => {
 
@@ -35,22 +41,30 @@ const PostCard = ({ postId, rating, type, userName, title, comment, whereToWatch
         isLiking: isLiking,
         type:type
       });
-      setLikes(res.data)      
+      setLikes(res.data)    
       setIsSubmiting(false)
     } catch (error) {
+      console.log(error)
       setIsSubmiting(false)
     }
   };
 
   const handleDelete = async () => {
+    setIsSubmiting(true)
 
     try {
-      
+    await axios.delete(`/api/post/${postId}`)
+    dispatch(deletePost({ postId: postId }))
+    if (setProfilePosts) {
+      setProfilePosts(prev => [...prev.filter(post => post.postId !== postId)] )
+
+    } 
+    setIsSubmiting(false)
+    
     } catch (error) {
-      
+      console.log(error);
+      setIsSubmiting(false)      
     }
-
-
   }
 
 
@@ -69,7 +83,7 @@ const PostCard = ({ postId, rating, type, userName, title, comment, whereToWatch
           </Link>
           <div className='flex items-center gap-2'>
             
-            {loggedUserId === userId && <button disabled={isSubmiting} className='hover:scale-110'><IoTrash/></button>}
+            {loggedUserId === userId && <button onClick={handleDelete} disabled={isSubmiting} className='hover:scale-110'><IoTrash/></button>}
           </div>
         </div>
 

@@ -12,7 +12,7 @@ import UserFollowerCard from '../../components/UserFollowerCard';
 import TabButtons from '../../components/TabButtons';
 import PostCard from '../../components/PostCard';
 
-import { getUserPosts, getUserId, getFollowersAndFollowing, getUserFollow } from '../../utils/dbFunctions';
+import { getUserPosts, getUserId,  getUserFollow } from '../../utils/dbFunctions';
 
 import { UserProfile } from '../../ts/types/user';
 import { PostCard as PC} from './../../ts/types/post';

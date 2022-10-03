@@ -7,8 +7,8 @@ export type User = {
   description: string;
   location: string;
   isVerified: boolean;
-  followers: UserId[]
-  following: UserId[]
+  // followers: UserId[]
+  // following: UserId[]
   
 };
 

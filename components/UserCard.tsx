@@ -23,7 +23,7 @@ const UserCard = ({ user, followers, following, loggedUser, setUserFollowers }: 
 
     try {
      const res = await axios.post('/api/follow', {userId: user.userId})
-      console.log(res)
+     setUserFollowers(res.data.followers)
       setIsLoading(false)
       // RESPOSTA TEM QUE SER TODOS OS FOLLOWS DO USUARIO PARA setUserFollowers
       // resposta tem que vir sem senha, email, etc, como na função do dbFunctions
@@ -38,8 +38,8 @@ const UserCard = ({ user, followers, following, loggedUser, setUserFollowers }: 
 
     try {
       // METHOD = PUT
-     const res = await axios.post('/api/follow', { userId: user.userId })
-      console.log(res)
+     const res = await axios.put('/api/follow', { userId: user.userId })
+     setUserFollowers(res.data.followers)
       setIsLoading(false)
       // RESPOSTA TEM QUE SER TODOS OS FOLLOWS DO USUARIO PARA setUserFollowers
 

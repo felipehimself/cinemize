@@ -4,13 +4,12 @@ import Form from './Form';
 import FormControl from './FormControl';
 import Label from './Label';
 import OptionsContainer from './OptionsContainer';
-import { Post, PostCard } from '../ts/types/post';
+import { Post } from '../ts/types/post';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { postValidation } from '../lib/yup';
 import { IoClose } from 'react-icons/io5';
 import { overlayVariants, formVariants } from '../lib/framer';
-import { Dispatch, SetStateAction } from 'react';
 import { useAppDispatch } from '../store/store';
 import { addPost } from '../features/postsSlice';
 import axios from 'axios';
@@ -18,12 +17,11 @@ import axios from 'axios';
 //@ts-ignore
 import ReactStars from 'react-rating-stars-component';
 import IconLoading from './IconLoading';
+import { toggleForm } from '../features/formSlice';
 
 const { motion } = require('framer-motion');
 
-const PostForm = ({ options, genre,setShowForm,setAllPosts}: { options: string[]; genre: string[]; setShowForm: Dispatch<SetStateAction<boolean>>;
-  setAllPosts: Dispatch<SetStateAction<PostCard[]>>
-}): JSX.Element => {
+const PostForm = ({ options, genre}: { options: string[]; genre: string[] }): JSX.Element => {
 
   const [rating, setRating] = useState(1);
   const [ratingError, setRatingError] = useState(false);
@@ -35,6 +33,11 @@ const PostForm = ({ options, genre,setShowForm,setAllPosts}: { options: string[]
   } = useForm<Post>({
     resolver: yupResolver(postValidation),
   });
+
+  const toggleShowForm = () => {
+    dispatch(toggleForm(false))
+  }
+
 
   const onSubmit = async (data: Post) => { 
     clearErrors()
@@ -48,11 +51,8 @@ const PostForm = ({ options, genre,setShowForm,setAllPosts}: { options: string[]
     try {
     setIsSubmiting(true)
      const res =  await axios.post('/api/post', body);
-     dispatch(addPost(res.data))
-    //  setAllPosts((prev) => {
-    //   return [...prev, res.data]
-    //  } )
-      setShowForm(false)
+      dispatch(addPost(res.data))
+      toggleShowForm()
       setIsSubmiting(false)
     } catch (error) {
       setIsSubmiting(false)
@@ -80,7 +80,7 @@ const PostForm = ({ options, genre,setShowForm,setAllPosts}: { options: string[]
       animate='visible'
       exit='exit'
       className='fixed text-sm z-50 inset-0 flex justify-center bg-[rgba(0,0,0,0.2)] w-full h-full backdrop-blur-[2px]'
-      onClick={() => setShowForm(false)}
+      onClick={toggleShowForm}
     >
       <motion.div
         variants={formVariants}
@@ -88,10 +88,10 @@ const PostForm = ({ options, genre,setShowForm,setAllPosts}: { options: string[]
         onClick={(e: Event) => e.stopPropagation()}
       >
         <button
-          onClick={() => setShowForm(false)}
-          className='group mb-1 block ml-auto transition hover:rotate-90 hover:scale-110'
+          onClick={toggleShowForm}
+          className='group mb-1 block ml-auto transition '
         >
-          <IoClose size={22} className='group-hover:text-indigo-600 dark:group-hover:text-white' />
+          <IoClose size={22} className='group-hover:text-indigo-600 group-hover:rotate-90  group-hover:scale-110 dark:group-hover:text-white transition' />
         </button>
 
         <Form onSubmit={handleSubmit(onSubmit)} className='w-full gap-4'>

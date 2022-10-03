@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { tabs } from '../../utils/constants';
 
 import Head from 'next/head';
 import { GetServerSideProps, NextPage } from 'next';
@@ -10,25 +11,32 @@ import TabButtons from '../../components/TabButtons';
 import TabContent from '../../components/TabContent';
 import UserFollowerCard from '../../components/UserFollowerCard';
 import PostCard from '../../components/PostCard';
-
-import { tabs } from '../../utils/constants';
+import NoPostsMsg from '../../components/NoPostsMsg';
+import NoFollowMessage from '../../components/NoFollowMessage';
+import PostForm from '../../components/PostForm';
 
 import User from '../../models/User';
 import { connect } from 'mongoose';
 const MONGODB_URI = process.env.MONGODB_URI || '';
 
-import { getUserId, getUserPosts, getFollowersAndFollowing, getUserFollow } from '../../utils/dbFunctions';
+import { getUserId, getUserFollow, getAllPosts } from '../../utils/dbFunctions';
 
 import { PostCard as PC } from '../../ts/types/post';
+import PostButton from '../../components/PostButton';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store/store';
 
-const Profile: NextPage<{
-  user: UserProfile;
-  followers: UserProfile[];
-  following: UserProfile[];
-  posts:PC[];
-  loggedUserId:string
-}> = ({ user, followers, following, posts, loggedUserId }) => {
+const Profile: NextPage<{ user: UserProfile; followers: UserProfile[]; following: UserProfile[]; posts:PC[]; loggedUserId:string, genre:string[], options:string[] }> = ({ user, followers, following, posts, loggedUserId,options,genre }) => {
+  
   const [tabIndex, setTabIndex] = useState(0);
+  const [profilePosts, setProfilePosts] = useState(posts)
+
+  // AQUI QUE RENDERIZA O POST DO PROFILE, POR ISSO NAO MUDA O STATE, PQ VEM DIRETO DO DB
+  
+
+  const {showForm} = useSelector((state:RootState)=> state.showForm)
+
+
 
   return (
     <>
@@ -48,21 +56,33 @@ const Profile: NextPage<{
             index={tabIndex}
           />
         </UserProfileContainer>
+
+
+
           <TabContent tab='posts' activeTab={tabs[tabIndex]}>
-            {posts.map((post) => {
-              return <PostCard loggedUserId={loggedUserId} key={post.postId} {...post} />;
+          {profilePosts.filter(post =>post.userId === loggedUserId).length === 0 && <NoPostsMsg />}
+
+            {profilePosts.filter(post =>post.userId === loggedUserId).map((post) => {
+              return <PostCard setProfilePosts={setProfilePosts} loggedUserId={loggedUserId} key={post.postId} {...post} />;
             })}
           </TabContent>
           <TabContent tab='followers' activeTab={tabs[tabIndex]}>
+          {followers.length === 0 && <NoFollowMessage message='Você ainda não possui seguidores' />}
+
             {followers.map((user) => {
               return <UserFollowerCard key={user.userId} {...user} />;
             })}
           </TabContent>
           <TabContent tab='following' activeTab={tabs[tabIndex]}>
+          {following.length === 0 && <NoFollowMessage message='Você ainda está seguindo ninguém' />}
+
             {following.map((user) => {
               return <UserFollowerCard key={user.userId} {...user} />;
             })}
           </TabContent>
+
+          <PostButton  />
+          {showForm &&  <PostForm options={options} genre={genre} />}
       </section>
     </>
   );
@@ -80,9 +100,28 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   
   const userResponse = await JSON.parse(JSON.stringify(user));
 
-  const loggedUserPosts = await getUserPosts(userResponse?.userId!)
+  // const loggedUserPosts = await getUserPosts(userResponse?.userId!)
+  const posts = await getAllPosts(_id!)
 
   const { followers, following } = await getUserFollow(userResponse?.userId)
+
+  const options = [
+    'netflix',
+    'amazon',
+    'star+',
+    'hbo max',
+    'youtube',
+    'disney+',
+  ];
+  const genre = [
+    'suspense',
+    'terror',
+    'horror',
+    'ação',
+    'comédia',
+    'drama',
+    'guerra',
+  ];
 
   
   return {
@@ -90,8 +129,10 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       user: userResponse,
       followers: followers,
       following: following,
-      posts: loggedUserPosts,
-      loggedUserId: userResponse?.userId
+      posts: posts,
+      loggedUserId: userResponse?.userId,
+      options:options,
+      genre:genre
     },
   };
 };

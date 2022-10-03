@@ -3,7 +3,7 @@ import { connect } from 'mongoose';
 import User from '../../../models/User';
 import Follow from '../../../models/Follow';
 import * as jose from 'jose';
-import { getUserId } from '../../../utils/dbFunctions';
+import { getUserFollow, getUserId } from '../../../utils/dbFunctions';
 
 const MONGODB_URI = process.env.MONGODB_URI || '';
 const JWT_SECRET = process.env.JWT_SECRET;
@@ -15,7 +15,7 @@ type Response = {
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Response>
+  res: NextApiResponse
 ) {
 
   await connect(MONGODB_URI).catch((err) =>
@@ -41,7 +41,8 @@ export default async function handler(
       const loggedUser = await User.findById(_id)
       await Follow.updateOne({userId: loggedUser?.userId }, { $push: { following: { followId: userId } } })
       await Follow.updateOne({userId: userId }, { $push: { followers: { followId: loggedUser?.userId } } })
-      res.status(201).json({message:'Dados enviados', success:true})
+      const followedUserFollowers = await getUserFollow(userId)
+      res.status(201).json({followers:followedUserFollowers.followers })
     }
   }
 
@@ -56,7 +57,8 @@ export default async function handler(
       const loggedUser = await User.findById(_id)
       await Follow.updateOne({userId: loggedUser?.userId }, { $pull: { following: { followId: userId } } })
       await Follow.updateOne({userId: userId }, { $pull: { followers: { followId: loggedUser?.userId } } })
-      res.status(201).json({message:'Dados enviados', success:true})
+      const followedUserFollowers = await getUserFollow(userId)
+      res.status(201).json({followers:followedUserFollowers.followers })
 
     }
   }
