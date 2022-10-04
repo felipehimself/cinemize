@@ -94,8 +94,16 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   // SE USUÁRIO MUDAR URL REDIRECIONA PARA HOME
   if (userExists === null) {
     
-    ctx.res.writeHead(301, { Location: '/' });
-    ctx.res.end();
+    // ctx.res.writeHead(301, { Location: '/' });
+    // ctx.res.end();
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/",
+      },
+      props:{},
+    };
+
   }
   //
 
@@ -109,10 +117,19 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   // Redireciona se usuario tentar acessar seu próprio perfil mudando a URL
   if (userName === loggedUser?.userName) {
+    // ctx.res.writeHead(301, { Location: '/profile' });
+    // ctx.res.end();
+    console.log('aqui')
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/profile",
+      },
+      props:{},
+    };
     
-    ctx.res.writeHead(301, { Location: '/profile' });
-    ctx.res.end();
   }
+  console.log('passou')
   //
 
   const userPosts = await getUserPosts(userExists?.userId!);

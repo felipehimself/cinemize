@@ -1,10 +1,11 @@
-import { Dispatch, SetStateAction, useState } from 'react';
+import { useState } from 'react';
 import { Post as PostType, PostCardType } from '../ts/types/post';
 import Link from 'next/link';
 
 import { deletePost } from '../features/postsSlice';
 
 import { useAppDispatch } from '../store/store';
+import { deleteProfilePost, saveProfilePosts } from '../features/profilePostsSlice';
 import { AiFillLike, AiOutlineLike } from 'react-icons/ai';
 import { IoBookmark, IoBookmarkOutline, IoTrash } from 'react-icons/io5';
 import { MdVerified } from 'react-icons/md';
@@ -18,29 +19,30 @@ type Props = PostType & {
   userName: string;
   isVerified: boolean;
   loggedUserId: string;
-  setProfilePosts?: Dispatch<SetStateAction<PostType[]>>
+  
 };
 
 const PostCard = ({ postId, rating, type, userName, title, comment, whereToWatch, genre, isVerified, createdAt, likedBy, favoritedBy,
   loggedUserId,
   userId,
-  setProfilePosts
+  
 }: Props): JSX.Element => {
   const [likes, setLikes] = useState(likedBy);
   const postDate = formatDate(createdAt);
   const [isSubmiting, setIsSubmiting] = useState(false)
 
+  
   const dispatch = useAppDispatch()
 
-  const handleLike = async (isLiking: boolean, type:string) => {
+  const handleLike = async (isLiking: boolean) => {
 
     setIsSubmiting(true)
     try {
       const res = await axios.put('/api/post/like', {
         postId: postId,
         isLiking: isLiking,
-        type:type
-      });
+        
+      });      
       setLikes(res.data)    
       setIsSubmiting(false)
     } catch (error) {
@@ -55,10 +57,7 @@ const PostCard = ({ postId, rating, type, userName, title, comment, whereToWatch
     try {
     await axios.delete(`/api/post/${postId}`)
     dispatch(deletePost({ postId: postId }))
-    if (setProfilePosts) {
-      setProfilePosts(prev => [...prev.filter(post => post.postId !== postId)] )
-
-    } 
+    dispatch(deleteProfilePost({ postId: postId }))
     setIsSubmiting(false)
     
     } catch (error) {
@@ -157,7 +156,7 @@ const PostCard = ({ postId, rating, type, userName, title, comment, whereToWatch
             <div className='flex items-end justify-end gap-1'>
               {likes.some((lik) => lik.userId === loggedUserId) ? (
                 <>
-                  <button disabled={isSubmiting} onClick={()=>handleLike(false, 'like')} className='peer hover:scale-110 hover:-rotate-6 transition'>
+                  <button disabled={isSubmiting} onClick={()=>handleLike(false)} className='peer hover:scale-110 hover:-rotate-6 transition'>
                     <AiFillLike size={20} />
                   </button>
                   <span className='text-xs peer-hover:scale-110'>
@@ -166,7 +165,7 @@ const PostCard = ({ postId, rating, type, userName, title, comment, whereToWatch
                 </>
               ) : (
                 <>
-                  <button disabled={isSubmiting} onClick={()=>handleLike(true, 'like')}  className='peer hover:scale-110 hover:-rotate-6 transition'>
+                  <button disabled={isSubmiting} onClick={()=>handleLike(true)}  className='peer hover:scale-110 hover:-rotate-6 transition'>
                     <AiOutlineLike size={20} />
                   </button>
                   <span className='text-xs peer-hover:scale-110'>

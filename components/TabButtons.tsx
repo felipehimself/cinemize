@@ -2,14 +2,15 @@ import { Dispatch, SetStateAction } from 'react';
 import { toggleForm } from '../features/formSlice';
 import { useAppDispatch } from '../store/store';
 
-type TabBtns = {
+type Props = {
   followersQty: number;
   followingQty: number;
   setTabIndex: Dispatch<SetStateAction<number>>;
-  index:number
+  index:number;
+  isPostAllowed?: boolean
 };
 
-const TabButtons = ({ followersQty, followingQty, setTabIndex, index }: TabBtns): JSX.Element => {
+const TabButtons = ({ followersQty, followingQty, setTabIndex, index, isPostAllowed }: Props): JSX.Element => {
   const dispatch = useAppDispatch()
 
   const toggleShowForm = () => {
@@ -26,7 +27,8 @@ const TabButtons = ({ followersQty, followingQty, setTabIndex, index }: TabBtns)
 
         <button className={`${index === 2 ? 'dark:text-indigo-400 text-indigo-600': undefined }`} onClick={()=>setTabIndex(2)}>{followingQty} seguindo </button>
       </div>
-      <button onClick={toggleShowForm} className='transition hover:bg-indigo-800 bg-indigo-600 text-white py-1 px-2 rounded-md hidden sm:block'>Postar</button>
+      {isPostAllowed && <button onClick={toggleShowForm} className='transition hover:bg-indigo-800 bg-indigo-600 text-white py-1 px-2 rounded-md hidden sm:block'>Postar</button>}
+      
     </div>
   );
 };

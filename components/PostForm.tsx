@@ -12,6 +12,7 @@ import { IoClose } from 'react-icons/io5';
 import { overlayVariants, formVariants } from '../lib/framer';
 import { useAppDispatch } from '../store/store';
 import { addPost } from '../features/postsSlice';
+import { addProfilePost } from '../features/profilePostsSlice';
 import axios from 'axios';
 
 //@ts-ignore
@@ -52,6 +53,7 @@ const PostForm = ({ options, genre}: { options: string[]; genre: string[] }): JS
     setIsSubmiting(true)
      const res =  await axios.post('/api/post', body);
       dispatch(addPost(res.data))
+      dispatch(addProfilePost(res.data))
       toggleShowForm()
       setIsSubmiting(false)
     } catch (error) {
@@ -67,7 +69,6 @@ const PostForm = ({ options, genre}: { options: string[]; genre: string[] }): JS
   useEffect(()=>{
     if(formState.isSubmitting && !rating){
       setRatingError(true);
-
     }
   },[formState, rating])
 

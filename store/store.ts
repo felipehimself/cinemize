@@ -2,11 +2,12 @@ import { configureStore } from '@reduxjs/toolkit';
 import { useDispatch } from 'react-redux';
 import postsSlice from '../features/postsSlice';
 import formSlice from '../features/formSlice';
-
+import userPostsSlice from '../features/profilePostsSlice';
 const store = configureStore({
   reducer: {
     posts: postsSlice,
-    showForm: formSlice
+    showForm: formSlice,
+    profilePosts: userPostsSlice
   },
 });
 

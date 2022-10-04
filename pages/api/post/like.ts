@@ -26,7 +26,7 @@ export default async function handler(
   if (req.method === 'PUT') {
     const { postId, isLiking, type } = req.body;
 
-    if (!postId || !type) {
+    if (!postId) {
       res.status(400).json({ message: 'Dados insuficientes', success: false });
     } else {
       if (isLiking) {
@@ -38,9 +38,7 @@ export default async function handler(
             { $push: { likedBy: { userId: userLiking?.userId, id: likeId } } }
           );
           const updatedDocument = await Post.find({ postId });
-          const updatedLikes = JSON.parse(
-            JSON.stringify(updatedDocument[0]?.likedBy)
-          );
+          const updatedLikes = JSON.parse(JSON.stringify(updatedDocument[0]?.likedBy));
           res.status(201).json(updatedLikes);
         } catch (error) {
           res

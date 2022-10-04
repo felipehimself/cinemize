@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { tabs } from '../../utils/constants';
 
 import Head from 'next/head';
@@ -14,7 +14,8 @@ import PostCard from '../../components/PostCard';
 import NoPostsMsg from '../../components/NoPostsMsg';
 import NoFollowMessage from '../../components/NoFollowMessage';
 import PostForm from '../../components/PostForm';
-
+import { useAppDispatch } from '../../store/store';
+import { saveProfilePosts } from '../../features/profilePostsSlice';
 import User from '../../models/User';
 import { connect } from 'mongoose';
 const MONGODB_URI = process.env.MONGODB_URI || '';
@@ -29,13 +30,15 @@ import { RootState } from '../../store/store';
 const Profile: NextPage<{ user: UserProfile; followers: UserProfile[]; following: UserProfile[]; posts:PC[]; loggedUserId:string, genre:string[], options:string[] }> = ({ user, followers, following, posts, loggedUserId,options,genre }) => {
   
   const [tabIndex, setTabIndex] = useState(0);
-  const [profilePosts, setProfilePosts] = useState(posts)
+  const dispatch = useAppDispatch()
 
-  // AQUI QUE RENDERIZA O POST DO PROFILE, POR ISSO NAO MUDA O STATE, PQ VEM DIRETO DO DB
-  
+  const { showForm } = useSelector((state:RootState)=> state.showForm)
+  const { profilePosts } = useSelector((state:RootState)=> state.profilePosts)
 
-  const {showForm} = useSelector((state:RootState)=> state.showForm)
-
+  useEffect(()=> {
+    const userProfilePosts = posts.filter(post =>post.userId === loggedUserId)
+    dispatch(saveProfilePosts(userProfilePosts))
+  },[posts, loggedUserId, dispatch])
 
 
   return (
@@ -54,16 +57,15 @@ const Profile: NextPage<{ user: UserProfile; followers: UserProfile[]; following
             followingQty={following.length}
             setTabIndex={setTabIndex}
             index={tabIndex}
+            isPostAllowed
           />
         </UserProfileContainer>
-
-
 
           <TabContent tab='posts' activeTab={tabs[tabIndex]}>
           {profilePosts.filter(post =>post.userId === loggedUserId).length === 0 && <NoPostsMsg />}
 
             {profilePosts.filter(post =>post.userId === loggedUserId).map((post) => {
-              return <PostCard setProfilePosts={setProfilePosts} loggedUserId={loggedUserId} key={post.postId} {...post} />;
+              return <PostCard loggedUserId={loggedUserId} key={post.postId} {...post} />;
             })}
           </TabContent>
           <TabContent tab='followers' activeTab={tabs[tabIndex]}>

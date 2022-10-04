@@ -34,10 +34,6 @@ const Home: NextPage<{
 
   const dispatch = useAppDispatch();
 
-  // COLOCAR OPÇÃO DE EXCLUIR POST NO POSTCARD
-  // COLOCAR HORA NO POSTCARD
-  // REVER TIPOS E ORGANIZAR O CÓDIGO
-
   const { posts: allPosts } = useSelector((state: RootState) => state.posts);
   const { showForm } = useSelector((state: RootState) => state.showForm);
 
