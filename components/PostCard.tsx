@@ -6,7 +6,11 @@ import { useRouter } from 'next/router';
 import { AiFillLike, AiOutlineLike } from 'react-icons/ai';
 import { IoBookmark, IoBookmarkOutline, IoTrash } from 'react-icons/io5';
 import { MdVerified } from 'react-icons/md';
-import { formatDate } from '../utils/generalFunctions';
+
+import { parseISO, format } from 'date-fns';
+
+
+
 import axios from 'axios';
 
 //@ts-ignore
@@ -24,8 +28,13 @@ const PostCard = ({ postId, rating, type, userName, title, comment, whereToWatch
   userId,
   
 }: Props): JSX.Element => {
-  const postDate = formatDate(createdAt);
   const [isSubmiting, setIsSubmiting] = useState(false)
+
+  const postDate = format(
+    parseISO(createdAt), 
+    "dd/MM/yyyy '•' HH'h'mm"
+  );
+  
 
   const router = useRouter()
   const refreshProps = () => router.replace(router.asPath);
@@ -226,10 +235,9 @@ const PostCard = ({ postId, rating, type, userName, title, comment, whereToWatch
             </div>
             <div className='flex items-end justify-end gap-1'>
 
-
             {favoritedBy.some((fav) => fav?.userId === loggedUserId) ? (
                 <>
-                  <button disabled={isSubmiting} onClick={handleUnfavorite} className='peer hover:scale-110 hover:-rotate-6 transition'>
+                  <button disabled={isSubmiting} onClick={handleUnfavorite} className='peer hover:scale-110 transition'>
                     <IoBookmark size={20} />
                   </button>
                   <span className='text-xs peer-hover:scale-110'>
@@ -238,7 +246,7 @@ const PostCard = ({ postId, rating, type, userName, title, comment, whereToWatch
                 </>
               ) : (
                 <>
-                  <button disabled={isSubmiting} onClick={handleFavorite}  className='peer hover:scale-110 hover:-rotate-6 transition'>
+                  <button disabled={isSubmiting} onClick={handleFavorite}  className='peer hover:scale-110 transition'>
                     <IoBookmarkOutline size={20} />
                   </button>
                   <span className='text-xs peer-hover:scale-110'>

@@ -11,8 +11,7 @@ import TabButtons from '../../components/TabButtons';
 import TabContent from '../../components/TabContent';
 import UserFollowerCard from '../../components/UserFollowerCard';
 import PostCard from '../../components/PostCard';
-import NoPostsMsg from '../../components/NoPostsMsg';
-import NoFollowMessage from '../../components/NoFollowMessage';
+import NoDataMsg from '../../components/NoDataMsg';
 import PostForm from '../../components/PostForm';
 
 import User from '../../models/User';
@@ -53,21 +52,21 @@ const Profile: NextPage<{ user: UserProfile; followers: UserProfile[]; following
         </UserProfileContainer>
 
           <TabContent tab='posts' activeTab={tabs[tabIndex]}>
-          {posts?.filter(post =>post.userId === loggedUserId).length === 0 && <NoPostsMsg />}
+          {posts?.filter(post =>post.userId === loggedUserId).length === 0 && <NoDataMsg message='Você ainda não criou posts' />}
 
             {posts?.filter(post =>post.userId === loggedUserId).map((post) => {
               return <PostCard loggedUserId={loggedUserId} key={post.postId} {...post} />;
             })}
           </TabContent>
           <TabContent tab='followers' activeTab={tabs[tabIndex]}>
-          {followers?.length === 0 && <NoFollowMessage message='Você ainda não possui seguidores' />}
+          {followers?.length === 0 && <NoDataMsg message='Você ainda não possui seguidores' />}
 
             {followers?.map((user) => {
               return <UserFollowerCard key={user.userId} {...user} />;
             })}
           </TabContent>
           <TabContent tab='following' activeTab={tabs[tabIndex]}>
-          {following?.length === 0 && <NoFollowMessage message='Você ainda está seguindo ninguém' />}
+          {following?.length === 0 && <NoDataMsg message='Você ainda está seguindo ninguém' />}
 
             {following?.map((user) => {
               return <UserFollowerCard key={user.userId} {...user} />;

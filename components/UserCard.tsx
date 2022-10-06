@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useState } from 'react';
+import {  useState } from 'react';
 import { MdLocationPin, MdVerified } from 'react-icons/md';
 import { UserProfile } from '../ts/types/user';
 import axios from 'axios';

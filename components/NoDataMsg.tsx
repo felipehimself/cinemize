@@ -6,7 +6,7 @@ type Props = {
   message: string;
 };
 
-const NoFollowMessage = ({ message }: Props): JSX.Element => {
+const NoDataMsg = ({ message }: Props): JSX.Element => {
   return (
     <motion.div
       initial={{ y: 100, opacity: 0 }}
@@ -17,4 +17,4 @@ const NoFollowMessage = ({ message }: Props): JSX.Element => {
     </motion.div>
   );
 };
-export default NoFollowMessage;
+export default NoDataMsg;

@@ -16,6 +16,7 @@ import { getUserPosts, getUserId,  getUserFollow } from '../../utils/dbFunctions
 
 import { UserProfile } from '../../ts/types/user';
 import { PostCard as PC} from './../../ts/types/post';
+import NoDataMsg from '../../components/NoDataMsg';
 
 const MONGODB_URI = process.env.MONGODB_URI || '';
 
@@ -46,6 +47,8 @@ const UserId = ({ user, followers, following, loggedUser, posts }: {
       </UserProfileContainer>
       <div>
         <TabContent tab='posts' activeTab={tabs[tabIndex]}>
+        {posts.length ===0 && <NoDataMsg message='Este usuário ainda não publicou' />}
+
           {posts.filter(post =>post.userId === user.userId).map((post) => {
             return <PostCard loggedUserId={loggedUser.userId} key={post.postId} {...post} />;
           })}

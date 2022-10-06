@@ -4,8 +4,7 @@ import Head from 'next/head';
 import PostCard from '../../components/PostCard';
 import PostForm from '../../components/PostForm';
 import PostButton from '../../components/PostButton';
-import NoPostsMsg from '../../components/NoPostsMsg';
-
+import NoDataMsg from '../../components/NoDataMsg';
 
 import { RootState, useAppDispatch } from '../../store/store';
 import { toggleForm } from '../../features/formSlice';
@@ -59,7 +58,7 @@ const Home: NextPage<{
         </button>
       </div>
 
-      {posts.length === 0 && <NoPostsMsg />}
+      {posts.length === 0 && <NoDataMsg message='Você ainda não criou posts' />}
       <section className='sm:pt-10'>
         {/* TIMELINE */}
         <div className='flex-1 flex flex-col gap-4 pt-2 sm:pt-3'>

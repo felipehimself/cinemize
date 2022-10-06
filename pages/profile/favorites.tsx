@@ -6,6 +6,7 @@ import Post from '../../models/Post';
 import PostCard from '../../components/PostCard';
 const MONGODB_URI = process.env.MONGODB_URI || '';
 import { Post as AllPosts } from '../../ts/types/post';
+import NoDataMsg from '../../components/NoDataMsg';
 
 const Favorites: NextPage<{
   favoritedPosts: AllPosts[];
@@ -14,6 +15,10 @@ const Favorites: NextPage<{
   
   return (
     <main className='mt-3 flex flex-col gap-4'>
+
+      {favoritedPosts.length === 0 && <NoDataMsg message='Você ainda não adicionou favoritos' />}
+
+
       {favoritedPosts.map((post) => {
         return (
           <PostCard loggedUserId={loggedUserId} key={post.postId} {...post} />
