@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Post as PostType } from '../ts/types/post';
 import Link from 'next/link';
-
+import { useRouter } from 'next/router';
 import { deletePost, likePost, dislikePost, favoritePost, unfavoritePost } from '../features/postsSlice';
 
 import { useAppDispatch } from '../store/store';
@@ -30,6 +30,9 @@ const PostCard = ({ postId, rating, type, userName, title, comment, whereToWatch
 }: Props): JSX.Element => {
   const postDate = formatDate(createdAt);
   const [isSubmiting, setIsSubmiting] = useState(false)
+
+  const router = useRouter()
+  const refreshData = () => router.replace(router.asPath);
 
   const dispatch = useAppDispatch()
 
@@ -79,10 +82,10 @@ const PostCard = ({ postId, rating, type, userName, title, comment, whereToWatch
         postId: postId,
         isFavoriting: true,
       });
+      refreshData()
       
       dispatch(favoriteProfilePost({ postId: postId, newFavorite: res.data }))  
       dispatch(favoritePost({ postId: postId, newFavorite: res.data }))  
-
       setIsSubmiting(false)
     } catch (error) {
       console.log(error)
@@ -99,7 +102,8 @@ const PostCard = ({ postId, rating, type, userName, title, comment, whereToWatch
         isFavoriting: false,
         
       });
-      
+      refreshData()
+
       dispatch(unfavoriteProfilePost({postId: postId, userId: res.data}))  
       dispatch(unfavoritePost({postId: postId, userId: res.data}))  
 
