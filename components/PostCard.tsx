@@ -256,14 +256,6 @@ const PostCard = ({ postId, rating, type, userName, title, comment, whereToWatch
                   </span>
                 </>
               )}
-
-
-              {/* <button className='peer hover:scale-105 transition'>
-                <IoBookmarkOutline size={18} />
-              </button>
-              <span className='text-xs peer-hover:scale-110'>
-                {favoritedBy.length}
-              </span> */}
             </div>
           </div>
         </footer>

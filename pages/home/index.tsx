@@ -12,7 +12,7 @@ import { savePosts } from '../../features/postsSlice';
 import { toggleForm } from '../../features/formSlice';
 import { useSelector } from 'react-redux';
 
-import { PostCard as PC, Post as PPP } from './../../ts/types/post';
+import { Post as AllPosts } from './../../ts/types/post';
 
 import { getAllPosts, getUserId } from '../../utils/dbFunctions';
 
@@ -26,10 +26,9 @@ const { AnimatePresence } = require('framer-motion');
 const Home: NextPage<{
   options: string[];
   genre: string[];
-  posts: PPP[];
+  posts: AllPosts[];
   loggedUserId: string;
 }> = ({ options, genre, posts, loggedUserId }) => {
-  const [showForaam, setShowForm] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
 
   const dispatch = useAppDispatch();

@@ -1,7 +1,6 @@
 import { IoHome, IoBookmark, IoPerson, IoNotifications, IoSearch } from 'react-icons/io5';
 import Link from 'next/link';
 
-
 const Navbar = ({className}:{className:string}):JSX.Element => {
   return (
     <nav className={` ${className}  `}>
@@ -21,7 +20,7 @@ const Navbar = ({className}:{className:string}):JSX.Element => {
               </Link>
             </li>
             <li className='py-3 '>
-              <Link href='/home'>
+              <Link href='/profile/favorites'>
                 <a>
                   <IoBookmark
                     className=' fill-white dark:fill-white'

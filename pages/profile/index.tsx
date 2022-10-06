@@ -62,23 +62,23 @@ const Profile: NextPage<{ user: UserProfile; followers: UserProfile[]; following
         </UserProfileContainer>
 
           <TabContent tab='posts' activeTab={tabs[tabIndex]}>
-          {profilePosts.filter(post =>post.userId === loggedUserId).length === 0 && <NoPostsMsg />}
+          {profilePosts?.filter(post =>post.userId === loggedUserId).length === 0 && <NoPostsMsg />}
 
-            {profilePosts.filter(post =>post.userId === loggedUserId).map((post) => {
+            {profilePosts?.filter(post =>post.userId === loggedUserId).map((post) => {
               return <PostCard loggedUserId={loggedUserId} key={post.postId} {...post} />;
             })}
           </TabContent>
           <TabContent tab='followers' activeTab={tabs[tabIndex]}>
-          {followers.length === 0 && <NoFollowMessage message='Você ainda não possui seguidores' />}
+          {followers?.length === 0 && <NoFollowMessage message='Você ainda não possui seguidores' />}
 
-            {followers.map((user) => {
+            {followers?.map((user) => {
               return <UserFollowerCard key={user.userId} {...user} />;
             })}
           </TabContent>
           <TabContent tab='following' activeTab={tabs[tabIndex]}>
-          {following.length === 0 && <NoFollowMessage message='Você ainda está seguindo ninguém' />}
+          {following?.length === 0 && <NoFollowMessage message='Você ainda está seguindo ninguém' />}
 
-            {following.map((user) => {
+            {following?.map((user) => {
               return <UserFollowerCard key={user.userId} {...user} />;
             })}
           </TabContent>
