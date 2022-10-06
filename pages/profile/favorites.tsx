@@ -14,7 +14,7 @@ const Favorites: NextPage<{
 }> = ({ favoritedPosts, loggedUserId }) => {
   
   return (
-    <main className='mt-3 flex flex-col gap-4'>
+    <main className='mt-2 flex flex-col gap-4'>
 
       {favoritedPosts.length === 0 && <NoDataMsg message='Você ainda não adicionou favoritos' />}
 

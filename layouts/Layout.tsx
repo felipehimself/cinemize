@@ -2,42 +2,49 @@ import React, { useState, useEffect } from 'react';
 import Header from './Header';
 import { useRouter } from 'next/router';
 import BottonTab from './BottonTab';
+import { useSelector } from 'react-redux';
+import { RootState } from '../store/store';
+import SearchModal from '../components/SearchModal';
+const { AnimatePresence } = require('framer-motion');
 
 const Layout = ({ children }: { children: React.ReactNode }): JSX.Element => {
   const router = useRouter();
   const [hasComponent, setHasComponent] = useState(false);
   const { pathname } = router;
 
-  useEffect(()=> {
+  const { showSearch } = useSelector((state: RootState) => state.showSearch);
 
+  useEffect(() => {
     const checkPathame = () => {
       const { pathname } = router;
-  
+
       switch (pathname) {
         case '/':
-          setHasComponent(false)
+          setHasComponent(false);
           break;
-  
+
         case '/login':
-          setHasComponent(false)
+          setHasComponent(false);
           break;
-  
+
         default:
           setHasComponent(true);
       }
     };
 
-    checkPathame()
-
-  },[pathname, router])
-
-  
+    checkPathame();
+  }, [pathname, router]);
 
   return (
     <>
       {hasComponent && <Header />}
-      <main className={`container mx-auto ${hasComponent? 'py-14' : undefined }`}>{children}</main>
-      {hasComponent && <BottonTab/>}
+      <main
+        className={`container mx-auto ${hasComponent ? 'py-14' : undefined}`}
+      >
+        {children}
+      </main>
+      {hasComponent && <BottonTab />}
+      <AnimatePresence>{showSearch && <SearchModal />}</AnimatePresence>
     </>
   );
 };

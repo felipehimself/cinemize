@@ -1,5 +1,5 @@
+import Searchbar from '../components/Searchbar';
 import Logout from '../components/Logout';
-import Input from '../components/Input';
 import ColorSwitch from '../components/ColorSwitch';
 import { IoNotifications } from 'react-icons/io5';
 import Navbar from './Navbar';
@@ -15,15 +15,7 @@ const Header = () => {
         <Navbar className='hidden md:flex justify-center flex-1' />
 
         <div className='hidden flex-1 md:block '>
-          <Input
-            placeHolder='Buscar usuário...'
-            type='text'
-            className='w-full dark:border-darker  rounded-md py-1 px-2'
-            name='user'
-            id='user'
-            onChange={() => {}}
-            value=''
-          />
+         <Searchbar />
         </div>
         <div className='flex items-center  gap-4 '>
           <div className='text-white md:block'>

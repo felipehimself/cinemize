@@ -140,8 +140,8 @@ const PostCard = ({ postId, rating, type, userName, title, comment, whereToWatch
             </a>
           </Link>
           <div className='flex items-center gap-2'>
-            
-            {loggedUserId === userId && <button onClick={handleDelete} disabled={isSubmiting} className='hover:scale-110'><IoTrash/></button>}
+            {loggedUserId === userId && <button onClick={handleDelete} disabled={isSubmiting} 
+            className='hover:scale-110 hover:text-red-500 transition'><IoTrash/></button>}
           </div>
         </div>
 
