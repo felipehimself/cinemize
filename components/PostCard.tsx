@@ -1,11 +1,12 @@
 import { useState } from 'react';
-import { Post as PostType, PostCardType } from '../ts/types/post';
+import { Post as PostType } from '../ts/types/post';
 import Link from 'next/link';
 
-import { deletePost } from '../features/postsSlice';
+import { deletePost, likePost, dislikePost, favoritePost, unfavoritePost } from '../features/postsSlice';
 
 import { useAppDispatch } from '../store/store';
-import { deleteProfilePost, saveProfilePosts } from '../features/profilePostsSlice';
+import { deleteProfilePost, likeProfilePost, dislikeProfilePost, favoriteProfilePost,  unfavoriteProfilePost } from '../features/profilePostsSlice';
+
 import { AiFillLike, AiOutlineLike } from 'react-icons/ai';
 import { IoBookmark, IoBookmarkOutline, IoTrash } from 'react-icons/io5';
 import { MdVerified } from 'react-icons/md';
@@ -27,29 +28,88 @@ const PostCard = ({ postId, rating, type, userName, title, comment, whereToWatch
   userId,
   
 }: Props): JSX.Element => {
-  const [likes, setLikes] = useState(likedBy);
   const postDate = formatDate(createdAt);
   const [isSubmiting, setIsSubmiting] = useState(false)
 
-  
   const dispatch = useAppDispatch()
 
-  const handleLike = async (isLiking: boolean) => {
+  const handleLike = async () => {
 
     setIsSubmiting(true)
     try {
       const res = await axios.put('/api/post/like', {
         postId: postId,
-        isLiking: isLiking,
-        
-      });      
-      setLikes(res.data)    
+        isLiking: true,
+      });
+      
+      dispatch(likeProfilePost({postId: postId, newLike: res.data}))  
+      dispatch(likePost({postId: postId, newLike: res.data}))  
+
       setIsSubmiting(false)
     } catch (error) {
       console.log(error)
       setIsSubmiting(false)
     }
   };
+
+
+  const handleDislike = async () => {
+    setIsSubmiting(true)
+    try {
+      const res = await axios.put('/api/post/like', {
+        postId: postId,
+        isLiking: false,
+        
+      });
+      
+      dispatch(dislikeProfilePost({postId: postId, userId: res.data}))  
+      dispatch(dislikePost({postId: postId, userId: res.data}))  
+
+      setIsSubmiting(false)
+    } catch (error) {
+      console.log(error)
+      setIsSubmiting(false)
+    }
+  }
+
+  const handleFavorite = async () => {
+    setIsSubmiting(true)
+    try {
+      const res = await axios.put('/api/post/favorite', {
+        postId: postId,
+        isFavoriting: true,
+      });
+      
+      dispatch(favoriteProfilePost({ postId: postId, newFavorite: res.data }))  
+      dispatch(favoritePost({ postId: postId, newFavorite: res.data }))  
+
+      setIsSubmiting(false)
+    } catch (error) {
+      console.log(error)
+      setIsSubmiting(false)
+    }
+  }
+
+
+  const handleUnfavorite = async () => {
+    setIsSubmiting(true)
+    try {
+      const res = await axios.put('/api/post/favorite', {
+        postId: postId,
+        isFavoriting: false,
+        
+      });
+      
+      dispatch(unfavoriteProfilePost({postId: postId, userId: res.data}))  
+      dispatch(unfavoritePost({postId: postId, userId: res.data}))  
+
+      setIsSubmiting(false)
+    } catch (error) {
+      console.log(error)
+      setIsSubmiting(false)
+    }
+  }
+
 
   const handleDelete = async () => {
     setIsSubmiting(true)
@@ -154,33 +214,56 @@ const PostCard = ({ postId, rating, type, userName, title, comment, whereToWatch
         <span className='text-[10px]'>{postDate}</span>
           <div className='flex gap-3'>
             <div className='flex items-end justify-end gap-1'>
-              {likes.some((lik) => lik.userId === loggedUserId) ? (
+              {likedBy.some((lik) => lik?.userId === loggedUserId) ? (
                 <>
-                  <button disabled={isSubmiting} onClick={()=>handleLike(false)} className='peer hover:scale-110 hover:-rotate-6 transition'>
+                  <button disabled={isSubmiting} onClick={handleDislike} className='peer hover:scale-110 hover:-rotate-6 transition'>
                     <AiFillLike size={20} />
                   </button>
                   <span className='text-xs peer-hover:scale-110'>
-                    {likes.length}
+                    {likedBy.length}
                   </span>
                 </>
               ) : (
                 <>
-                  <button disabled={isSubmiting} onClick={()=>handleLike(true)}  className='peer hover:scale-110 hover:-rotate-6 transition'>
+                  <button disabled={isSubmiting} onClick={handleLike}  className='peer hover:scale-110 hover:-rotate-6 transition'>
                     <AiOutlineLike size={20} />
                   </button>
                   <span className='text-xs peer-hover:scale-110'>
-                    {likes.length}
+                    {likedBy.length}
                   </span>
                 </>
               )}
             </div>
             <div className='flex items-end justify-end gap-1'>
-              <button className='peer hover:scale-105 transition'>
+
+
+            {favoritedBy.some((fav) => fav?.userId === loggedUserId) ? (
+                <>
+                  <button disabled={isSubmiting} onClick={handleUnfavorite} className='peer hover:scale-110 hover:-rotate-6 transition'>
+                    <IoBookmark size={20} />
+                  </button>
+                  <span className='text-xs peer-hover:scale-110'>
+                    {favoritedBy.length}
+                  </span>
+                </>
+              ) : (
+                <>
+                  <button disabled={isSubmiting} onClick={handleFavorite}  className='peer hover:scale-110 hover:-rotate-6 transition'>
+                    <IoBookmarkOutline size={20} />
+                  </button>
+                  <span className='text-xs peer-hover:scale-110'>
+                    {favoritedBy.length}
+                  </span>
+                </>
+              )}
+
+
+              {/* <button className='peer hover:scale-105 transition'>
                 <IoBookmarkOutline size={18} />
               </button>
               <span className='text-xs peer-hover:scale-110'>
                 {favoritedBy.length}
-              </span>
+              </span> */}
             </div>
           </div>
         </footer>

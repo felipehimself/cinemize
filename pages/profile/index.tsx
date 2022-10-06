@@ -36,7 +36,7 @@ const Profile: NextPage<{ user: UserProfile; followers: UserProfile[]; following
   const { profilePosts } = useSelector((state:RootState)=> state.profilePosts)
 
   useEffect(()=> {
-    const userProfilePosts = posts.filter(post =>post.userId === loggedUserId)
+    const userProfilePosts = posts.filter(post => post.userId === loggedUserId)
     dispatch(saveProfilePosts(userProfilePosts))
   },[posts, loggedUserId, dispatch])
 

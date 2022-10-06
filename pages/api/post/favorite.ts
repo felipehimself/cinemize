@@ -24,25 +24,25 @@ export default async function handler(
   const _id = await getUserId(jwt);
 
   if (req.method === 'PUT') {
-    const { postId, isLiking, type } = req.body;
+    const { postId, isFavoriting } = req.body;
 
     if (!postId) {
       res.status(400).json({ message: 'Dados insuficientes', success: false });
     } else {
-      if (isLiking) {
+      if (isFavoriting) {
         try {
-          const userLiking = await User.findById({ _id });
+          const userFavoriting = await User.findById({ _id });
           
-          const likeId = uuid();
-          await Post.updateOne({ postId }, { $push: { likedBy: { userId: userLiking?.userId, id: likeId } } } );
+          const favoriteId = uuid();
+          await Post.updateOne({ postId }, { $push: { favoritedBy: { userId: userFavoriting?.userId, id: favoriteId } } } );
          
           const findPost = await Post.aggregate([
               { $match: { postId: postId } },
-              { $unwind:'$likedBy'},
-              { $match: {'likedBy.id': likeId }},
-              { $project: {_id: 0, userId:0, postId:0, type:0, title:0, rating:0, comment:0,whereToWatch:0, genre:0, favoritedBy:0, createdAt:0, updatedAt:0}},
-              { $replaceRoot: { newRoot: { $mergeObjects: [ "$likedBy" , "$$ROOT" ] } } },
-              {$project: { likedBy:0 }}
+              { $unwind:'$favoritedBy'},
+              { $match: {'favoritedBy.id': favoriteId }},
+              { $project: {_id: 0, userId:0, postId:0, type:0, title:0, rating:0, comment:0,whereToWatch:0, genre:0, likedBy:0, createdAt:0, updatedAt:0}},
+              { $replaceRoot: { newRoot: { $mergeObjects: [ "$favoritedBy" , "$$ROOT" ] } } },
+              {$project: { favoritedBy:0 }}
           ])
 
           const postRes = JSON.parse(JSON.stringify(findPost))
@@ -56,14 +56,14 @@ export default async function handler(
         }
       } else {
         try {
-          const userLiking = await User.findById({ _id });
+          const userFavoriting = await User.findById({ _id });
           await Post.updateOne(
             { postId },
-            { $pull: { likedBy: { userId: userLiking?.userId } } }
+            { $pull: { favoritedBy: { userId: userFavoriting?.userId } } }
           );
-          const userDislikedId = userLiking?.userId
+          const userUnfavoriteId = userFavoriting?.userId
 
-          res.status(201).json(userDislikedId);
+          res.status(201).json(userUnfavoriteId);
         } catch (error) {
           res
             .status(400)

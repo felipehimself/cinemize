@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { GetServerSideProps } from 'next';
 import User from '../../models/User';
 
@@ -11,11 +11,14 @@ import TabContent from '../../components/TabContent';
 import UserFollowerCard from '../../components/UserFollowerCard';
 import TabButtons from '../../components/TabButtons';
 import PostCard from '../../components/PostCard';
+import { saveProfilePosts } from '../../features/profilePostsSlice';
 
 import { getUserPosts, getUserId,  getUserFollow } from '../../utils/dbFunctions';
 
 import { UserProfile } from '../../ts/types/user';
 import { PostCard as PC} from './../../ts/types/post';
+import { useSelector } from 'react-redux';
+import { RootState, useAppDispatch } from '../../store/store';
 
 const MONGODB_URI = process.env.MONGODB_URI || '';
 
@@ -31,6 +34,17 @@ const UserId = ({ user, followers, following, loggedUser, posts }: {
   const [userFollowers, setUserFollowers] = useState(followers);
   const [userFollowing, setUserFollowing] = useState(following);
   
+  const dispatch = useAppDispatch()
+
+  const { profilePosts } = useSelector((state:RootState)=>state.profilePosts)
+
+  useEffect(() => {
+   dispatch(saveProfilePosts(posts))
+
+  }, [posts, dispatch])
+  
+
+
   
   const [tabIndex, setTabIndex] = useState(0);
 
@@ -54,7 +68,7 @@ const UserId = ({ user, followers, following, loggedUser, posts }: {
       </UserProfileContainer>
       <div>
         <TabContent tab='posts' activeTab={tabs[tabIndex]}>
-          {posts.map((post) => {
+          {profilePosts.filter(post =>post.userId === user.userId).map((post) => {
             return <PostCard loggedUserId={loggedUser.userId} key={post.postId} {...post} />;
           })}
         </TabContent>
@@ -119,7 +133,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   if (userName === loggedUser?.userName) {
     // ctx.res.writeHead(301, { Location: '/profile' });
     // ctx.res.end();
-    console.log('aqui')
     return {
       redirect: {
         permanent: false,
@@ -129,7 +142,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     };
     
   }
-  console.log('passou')
   //
 
   const userPosts = await getUserPosts(userExists?.userId!);
