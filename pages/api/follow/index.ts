@@ -2,16 +2,9 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { connect } from 'mongoose';
 import User from '../../../models/User';
 import Follow from '../../../models/Follow';
-import * as jose from 'jose';
 import { getUserFollow, getUserId } from '../../../utils/dbFunctions';
 
 const MONGODB_URI = process.env.MONGODB_URI || '';
-const JWT_SECRET = process.env.JWT_SECRET;
-
-type Response = {
-  message: string;
-  success: boolean;
-};
 
 export default async function handler(
   req: NextApiRequest,

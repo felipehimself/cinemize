@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { GetServerSideProps } from 'next';
 import User from '../../models/User';
 
@@ -11,17 +11,13 @@ import TabContent from '../../components/TabContent';
 import UserFollowerCard from '../../components/UserFollowerCard';
 import TabButtons from '../../components/TabButtons';
 import PostCard from '../../components/PostCard';
-import { saveProfilePosts } from '../../features/profilePostsSlice';
 
 import { getUserPosts, getUserId,  getUserFollow } from '../../utils/dbFunctions';
 
 import { UserProfile } from '../../ts/types/user';
 import { PostCard as PC} from './../../ts/types/post';
-import { useSelector } from 'react-redux';
-import { RootState, useAppDispatch } from '../../store/store';
 
 const MONGODB_URI = process.env.MONGODB_URI || '';
-
 
 const UserId = ({ user, followers, following, loggedUser, posts }: {
   user: UserProfile;
@@ -30,55 +26,37 @@ const UserId = ({ user, followers, following, loggedUser, posts }: {
   following: UserProfile[];
   posts:PC[]
 }): JSX.Element => {
-  const [userInfo, setUserInfo] = useState(user);
-  const [userFollowers, setUserFollowers] = useState(followers);
-  const [userFollowing, setUserFollowing] = useState(following);
-  
-  const dispatch = useAppDispatch()
-
-  const { profilePosts } = useSelector((state:RootState)=>state.profilePosts)
-
-  useEffect(() => {
-   dispatch(saveProfilePosts(posts))
-
-  }, [posts, dispatch])
-  
-
-
-  
   const [tabIndex, setTabIndex] = useState(0);
 
   return (
     <section>
       <UserProfileContainer>
         <UserCard
-          user={userInfo}
-          followers={userFollowers}
-          following={userFollowing}
-          loggedUser={loggedUser}
-          setUserFollowers={setUserFollowers}
-          
+          user={user}
+          followers={followers}
+          following={following}
+          loggedUser={loggedUser}          
         />
         <TabButtons
-          followersQty={userFollowers.length}
-          followingQty={userFollowing.length}
+          followersQty={followers.length}
+          followingQty={following.length}
           setTabIndex={setTabIndex}
           index={tabIndex}
         />
       </UserProfileContainer>
       <div>
         <TabContent tab='posts' activeTab={tabs[tabIndex]}>
-          {profilePosts.filter(post =>post.userId === user.userId).map((post) => {
+          {posts.filter(post =>post.userId === user.userId).map((post) => {
             return <PostCard loggedUserId={loggedUser.userId} key={post.postId} {...post} />;
           })}
         </TabContent>
         <TabContent tab='followers' activeTab={tabs[tabIndex]}>
-          {userFollowers.map((user) => {
+          {followers.map((user) => {
             return <UserFollowerCard key={user.userName} {...user} />;
           })}
         </TabContent>
         <TabContent tab='following' activeTab={tabs[tabIndex]}>
-          {userFollowing.map((user) => {
+          {following.map((user) => {
             return <UserFollowerCard key={user.userName} {...user} />;
           })}
         </TabContent>

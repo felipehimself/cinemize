@@ -2,6 +2,7 @@ import { MdLocationPin, MdVerified } from 'react-icons/md';
 import { UserProfile } from '../ts/types/user';
 import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
+import { useRouter } from 'next/router';
 
 const UserProfileCard = ({
   user,
@@ -22,6 +23,9 @@ const UserProfileCard = ({
 
   const inputRef = useRef<HTMLInputElement>(null);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
+
+  const router = useRouter()
+  const refreshProps = () => router.replace(router.asPath);
 
   const handleChange = (
     e:
@@ -66,6 +70,7 @@ const UserProfileCard = ({
 
     try {
       await axios.patch('/api/user/profile', userInfo);
+      refreshProps()
       setIsLoading(false);
       setIsEditing(false);
       setUserInfoBkp(userInfo);

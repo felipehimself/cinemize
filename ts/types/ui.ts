@@ -36,11 +36,7 @@ export type TextArea = {
   placeholder: string;
 };
 
-export type CheckBox = {
-  className: string;
-  name: string;
-  id: string;
-};
+
 
 export type OptionsContainer = {
   children: React.ReactNode;

@@ -11,14 +11,13 @@ import { postValidation } from '../lib/yup';
 import { IoClose } from 'react-icons/io5';
 import { overlayVariants, formVariants } from '../lib/framer';
 import { useAppDispatch } from '../store/store';
-import { addPost } from '../features/postsSlice';
-import { addProfilePost } from '../features/profilePostsSlice';
 import axios from 'axios';
 
 //@ts-ignore
 import ReactStars from 'react-rating-stars-component';
 import IconLoading from './IconLoading';
 import { toggleForm } from '../features/formSlice';
+import { useRouter } from 'next/router';
 
 const { motion } = require('framer-motion');
 
@@ -35,10 +34,12 @@ const PostForm = ({ options, genre}: { options: string[]; genre: string[] }): JS
     resolver: yupResolver(postValidation),
   });
 
+  const router = useRouter()
+  const refreshProps = () => router.replace(router.asPath);
+
   const toggleShowForm = () => {
     dispatch(toggleForm(false))
   }
-
 
   const onSubmit = async (data: Post) => { 
     clearErrors()
@@ -51,9 +52,8 @@ const PostForm = ({ options, genre}: { options: string[]; genre: string[] }): JS
 
     try {
     setIsSubmiting(true)
-     const res =  await axios.post('/api/post', body);
-      dispatch(addPost(res.data))
-      dispatch(addProfilePost(res.data))
+     await axios.post('/api/post', body);
+      refreshProps()
       toggleShowForm()
       setIsSubmiting(false)
     } catch (error) {

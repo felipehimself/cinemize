@@ -2,10 +2,6 @@ import { useState } from 'react';
 import { Post as PostType } from '../ts/types/post';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { deletePost, likePost, dislikePost, favoritePost, unfavoritePost } from '../features/postsSlice';
-
-import { useAppDispatch } from '../store/store';
-import { deleteProfilePost, likeProfilePost, dislikeProfilePost, favoriteProfilePost,  unfavoriteProfilePost } from '../features/profilePostsSlice';
 
 import { AiFillLike, AiOutlineLike } from 'react-icons/ai';
 import { IoBookmark, IoBookmarkOutline, IoTrash } from 'react-icons/io5';
@@ -32,21 +28,18 @@ const PostCard = ({ postId, rating, type, userName, title, comment, whereToWatch
   const [isSubmiting, setIsSubmiting] = useState(false)
 
   const router = useRouter()
-  const refreshData = () => router.replace(router.asPath);
-
-  const dispatch = useAppDispatch()
+  const refreshProps = () => router.replace(router.asPath);
 
   const handleLike = async () => {
 
     setIsSubmiting(true)
     try {
-      const res = await axios.put('/api/post/like', {
+      await axios.put('/api/post/like', {
         postId: postId,
         isLiking: true,
       });
-      
-      dispatch(likeProfilePost({postId: postId, newLike: res.data}))  
-      dispatch(likePost({postId: postId, newLike: res.data}))  
+      refreshProps()
+  
 
       setIsSubmiting(false)
     } catch (error) {
@@ -59,14 +52,13 @@ const PostCard = ({ postId, rating, type, userName, title, comment, whereToWatch
   const handleDislike = async () => {
     setIsSubmiting(true)
     try {
-      const res = await axios.put('/api/post/like', {
+      await axios.put('/api/post/like', {
         postId: postId,
         isLiking: false,
         
       });
-      
-      dispatch(dislikeProfilePost({postId: postId, userId: res.data}))  
-      dispatch(dislikePost({postId: postId, userId: res.data}))  
+      refreshProps()
+     
 
       setIsSubmiting(false)
     } catch (error) {
@@ -78,14 +70,12 @@ const PostCard = ({ postId, rating, type, userName, title, comment, whereToWatch
   const handleFavorite = async () => {
     setIsSubmiting(true)
     try {
-      const res = await axios.put('/api/post/favorite', {
+      await axios.put('/api/post/favorite', {
         postId: postId,
         isFavoriting: true,
       });
-      refreshData()
+      refreshProps()
       
-      dispatch(favoriteProfilePost({ postId: postId, newFavorite: res.data }))  
-      dispatch(favoritePost({ postId: postId, newFavorite: res.data }))  
       setIsSubmiting(false)
     } catch (error) {
       console.log(error)
@@ -97,16 +87,12 @@ const PostCard = ({ postId, rating, type, userName, title, comment, whereToWatch
   const handleUnfavorite = async () => {
     setIsSubmiting(true)
     try {
-      const res = await axios.put('/api/post/favorite', {
+     await axios.put('/api/post/favorite', {
         postId: postId,
         isFavoriting: false,
         
       });
-      refreshData()
-
-      dispatch(unfavoriteProfilePost({postId: postId, userId: res.data}))  
-      dispatch(unfavoritePost({postId: postId, userId: res.data}))  
-
+      refreshProps()
       setIsSubmiting(false)
     } catch (error) {
       console.log(error)
@@ -120,8 +106,8 @@ const PostCard = ({ postId, rating, type, userName, title, comment, whereToWatch
 
     try {
     await axios.delete(`/api/post/${postId}`)
-    dispatch(deletePost({ postId: postId }))
-    dispatch(deleteProfilePost({ postId: postId }))
+    refreshProps()
+
     setIsSubmiting(false)
     
     } catch (error) {

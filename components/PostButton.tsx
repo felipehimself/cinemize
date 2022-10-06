@@ -1,14 +1,12 @@
-import { Dispatch, SetStateAction } from 'react';
 import { IoAdd } from 'react-icons/io5';
 import { toggleForm } from '../features/formSlice';
 import { useAppDispatch } from '../store/store';
-
 
 const PostButton = (): JSX.Element => {
 
   const dispatch = useAppDispatch()
 
-const toggleShowForm = () => {
+  const toggleShowForm = () => {
     dispatch(toggleForm(true))
   }
 

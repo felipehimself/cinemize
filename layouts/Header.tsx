@@ -1,9 +1,7 @@
-import Link from 'next/link';
 import Logout from '../components/Logout';
 import Input from '../components/Input';
 import ColorSwitch from '../components/ColorSwitch';
-import { MdHome } from 'react-icons/md';
-import { IoHome, IoBookmark, IoPerson, IoNotifications } from 'react-icons/io5';
+import { IoNotifications } from 'react-icons/io5';
 import Navbar from './Navbar';
 
 const Header = () => {

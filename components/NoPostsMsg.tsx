@@ -1,8 +1,4 @@
-import Link from 'next/link';
-import { Dispatch, SetStateAction } from 'react';
 const { motion } = require('framer-motion');
-
-
 
 const NoPostsMsg = (): JSX.Element => {
   return (

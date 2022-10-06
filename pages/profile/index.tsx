@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { tabs } from '../../utils/constants';
 
 import Head from 'next/head';
@@ -14,8 +14,7 @@ import PostCard from '../../components/PostCard';
 import NoPostsMsg from '../../components/NoPostsMsg';
 import NoFollowMessage from '../../components/NoFollowMessage';
 import PostForm from '../../components/PostForm';
-import { useAppDispatch } from '../../store/store';
-import { saveProfilePosts } from '../../features/profilePostsSlice';
+
 import User from '../../models/User';
 import { connect } from 'mongoose';
 const MONGODB_URI = process.env.MONGODB_URI || '';
@@ -30,17 +29,9 @@ import { RootState } from '../../store/store';
 const Profile: NextPage<{ user: UserProfile; followers: UserProfile[]; following: UserProfile[]; posts:PC[]; loggedUserId:string, genre:string[], options:string[] }> = ({ user, followers, following, posts, loggedUserId,options,genre }) => {
   
   const [tabIndex, setTabIndex] = useState(0);
-  const dispatch = useAppDispatch()
 
   const { showForm } = useSelector((state:RootState)=> state.showForm)
-  const { profilePosts } = useSelector((state:RootState)=> state.profilePosts)
-
-  useEffect(()=> {
-    const userProfilePosts = posts.filter(post => post.userId === loggedUserId)
-    dispatch(saveProfilePosts(userProfilePosts))
-  },[posts, loggedUserId, dispatch])
-
-
+ 
   return (
     <>
       <Head>
@@ -62,9 +53,9 @@ const Profile: NextPage<{ user: UserProfile; followers: UserProfile[]; following
         </UserProfileContainer>
 
           <TabContent tab='posts' activeTab={tabs[tabIndex]}>
-          {profilePosts?.filter(post =>post.userId === loggedUserId).length === 0 && <NoPostsMsg />}
+          {posts?.filter(post =>post.userId === loggedUserId).length === 0 && <NoPostsMsg />}
 
-            {profilePosts?.filter(post =>post.userId === loggedUserId).map((post) => {
+            {posts?.filter(post =>post.userId === loggedUserId).map((post) => {
               return <PostCard loggedUserId={loggedUserId} key={post.postId} {...post} />;
             })}
           </TabContent>
@@ -102,7 +93,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   
   const userResponse = await JSON.parse(JSON.stringify(user));
 
-  // const loggedUserPosts = await getUserPosts(userResponse?.userId!)
   const posts = await getAllPosts(_id!)
 
   const { followers, following } = await getUserFollow(userResponse?.userId)

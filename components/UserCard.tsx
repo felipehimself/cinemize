@@ -2,31 +2,29 @@ import { Dispatch, SetStateAction, useState } from 'react';
 import { MdLocationPin, MdVerified } from 'react-icons/md';
 import { UserProfile } from '../ts/types/user';
 import axios from 'axios';
+import { useRouter } from 'next/router';
 
-type UserCard = {
+type Props = {
   user: UserProfile;
   loggedUser: UserProfile;
   followers: UserProfile[];
   following: UserProfile[];
-  setUserFollowers: Dispatch<SetStateAction<UserProfile[]>>;
-  
 };
 
-const UserCard = ({ user, followers, following, loggedUser, setUserFollowers }: UserCard): JSX.Element => {
+const UserCard = ({ user, followers, loggedUser }: Props): JSX.Element => {
   const [isLoading, setIsLoading] = useState(false);
   
-    // APÓS AJUSTES, REMOVER USUÁRIOS E AJUSTAR MODEL E TYPE QUE TEM ARRAY DE FOLLOWERS/FOLLOWING
+  const router = useRouter()
+  const refreshProps = () => router.replace(router.asPath);
 
 
   const handleFollow = async () => {
     setIsLoading(true);
 
     try {
-     const res = await axios.post('/api/follow', {userId: user.userId})
-     setUserFollowers(res.data.followers)
+     await axios.post('/api/follow', {userId: user.userId})
+      refreshProps()
       setIsLoading(false)
-      // RESPOSTA TEM QUE SER TODOS OS FOLLOWS DO USUARIO PARA setUserFollowers
-      // resposta tem que vir sem senha, email, etc, como na função do dbFunctions
     } catch (error) {
       console.log(error)
       setIsLoading(false)
@@ -37,11 +35,9 @@ const UserCard = ({ user, followers, following, loggedUser, setUserFollowers }: 
     setIsLoading(true);
 
     try {
-      // METHOD = PUT
-     const res = await axios.put('/api/follow', { userId: user.userId })
-     setUserFollowers(res.data.followers)
-      setIsLoading(false)
-      // RESPOSTA TEM QUE SER TODOS OS FOLLOWS DO USUARIO PARA setUserFollowers
+    await axios.put('/api/follow', { userId: user.userId })
+     refreshProps()
+     setIsLoading(false)
 
     } catch (error) {
       console.log(error)

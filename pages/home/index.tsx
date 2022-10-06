@@ -1,14 +1,13 @@
 import { GetServerSideProps, NextPage } from 'next';
-import { useState, useEffect } from 'react';
 
 import Head from 'next/head';
 import PostCard from '../../components/PostCard';
 import PostForm from '../../components/PostForm';
 import PostButton from '../../components/PostButton';
+import NoPostsMsg from '../../components/NoPostsMsg';
 
 
 import { RootState, useAppDispatch } from '../../store/store';
-import { savePosts } from '../../features/postsSlice';
 import { toggleForm } from '../../features/formSlice';
 import { useSelector } from 'react-redux';
 
@@ -18,7 +17,6 @@ import { getAllPosts, getUserId } from '../../utils/dbFunctions';
 
 import { connect } from 'mongoose';
 import User from '../../models/User';
-import NoPostsMsg from '../../components/NoPostsMsg';
 const MONGODB_URI = process.env.MONGODB_URI || '';
 
 const { AnimatePresence } = require('framer-motion');
@@ -29,23 +27,15 @@ const Home: NextPage<{
   posts: AllPosts[];
   loggedUserId: string;
 }> = ({ options, genre, posts, loggedUserId }) => {
-  const [isPageLoading, setIsPageLoading] = useState(true);
 
   const dispatch = useAppDispatch();
 
-  const { posts: allPosts } = useSelector((state: RootState) => state.posts);
   const { showForm } = useSelector((state: RootState) => state.showForm);
 
   const toggleShowForm = () => {
     dispatch(toggleForm(true))
   }
 
-  useEffect(() => {
-    dispatch(savePosts(posts));
-    setIsPageLoading(false);
-  }, [posts, dispatch]);
-
-  if (isPageLoading) return <p>Carregando...</p>;
 
   return (
     <>
@@ -69,11 +59,11 @@ const Home: NextPage<{
         </button>
       </div>
 
-      {allPosts.length === 0 && <NoPostsMsg />}
+      {posts.length === 0 && <NoPostsMsg />}
       <section className='sm:pt-10'>
         {/* TIMELINE */}
         <div className='flex-1 flex flex-col gap-4 pt-2 sm:pt-3'>
-          {allPosts.map((post) => {
+          {posts.map((post) => {
             return (
               <PostCard
                 loggedUserId={loggedUserId}
