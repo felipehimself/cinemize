@@ -34,7 +34,7 @@ const SearchModal = (): JSX.Element => {
           </button>
         </div>
 
-        <Searchbar />
+        <Searchbar className='py-2 px-2' />
       </motion.div>
     </motion.div>
   );

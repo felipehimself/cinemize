@@ -1,4 +1,3 @@
-import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
 import { MdVerified } from 'react-icons/md';
 import { useRouter } from 'next/router';
@@ -6,7 +5,9 @@ import { UserProfile } from './../ts/types/user';
 import { useAppDispatch } from '../store/store';
 import { toggleSearch } from '../features/searchSlice';
 
-const Searchbar = () => {
+import axios from 'axios';
+
+const Searchbar = ({className}:{className?:string}):JSX.Element => {
   const [users, setUsers] = useState<UserProfile[]>([]);
   const [isAutocompleteOpen, setIsAutocompleteOpen] = useState(false);
 
@@ -60,13 +61,12 @@ const Searchbar = () => {
       <input
         placeholder='Buscar usuário...'
         type='text'
-        className='
+        className={`
+        ${className}
          w-full
          dark:border-darker 
-         rounded-md 
-         py-1
-         px-2
-         dark:focus:outline-none focus:outline-none border focus:border-indigo-600 border-gray-300'
+         rounded-md
+         dark:focus:outline-none focus:outline-none border focus:border-indigo-600 border-gray-300`}
         name='user'
         id='user'
         onChange={handleGetUser}
@@ -74,7 +74,7 @@ const Searchbar = () => {
         autoComplete='off'
       />
       {isAutocompleteOpen && (
-        <ul className='absolute rounded-md dark:bg-lightDark bg-white shadow-md w-full overflow-hidden '>
+        <ul className='absolute mt-[1px] rounded-md dark:bg-lightDark bg-white shadow-md w-full overflow-hidden '>
           {users?.map((user) => {
             return (
               <li
@@ -82,10 +82,10 @@ const Searchbar = () => {
                 className='hover:bg-slate-100 dark:hover:bg-darker '
               >
                 <button
-                  className='w-full pl-2 py-1 text-left flex items-center gap-1'
+                  className={`${className} w-full pl-2  text-left flex items-center gap-1`}
                   onClick={() => handleNavigation(user.userName)}
                 >
-                  {user.userName} <span>{user.isVerified && <MdVerified />}</span>
+                  {user.userName} <span>{user.isVerified && <MdVerified size={15} />}</span>
                 </button>
               </li>
             );

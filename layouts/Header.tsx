@@ -15,7 +15,7 @@ const Header = () => {
         <Navbar className='hidden md:flex justify-center flex-1' />
 
         <div className='hidden flex-1 md:block '>
-         <Searchbar />
+         <Searchbar className='px-2 py-1' />
         </div>
         <div className='flex items-center  gap-4 '>
           <div className='text-white md:block'>
