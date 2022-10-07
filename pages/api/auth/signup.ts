@@ -7,6 +7,7 @@ import { serialize } from 'cookie';
 import { v4 as uuid } from 'uuid';
 
 import * as jose from 'jose';
+import Notification from '../../../models/Notification';
 
 const MONGODB_URI = process.env.MONGODB_URI || '';
 const JWT_SECRET = process.env.JWT_SECRET;
@@ -47,6 +48,7 @@ export default async function handler(
             userName: name + id,
             userId: id,
           });
+          await Notification.create({userId: id})
           await Follow.create({userId: id})
 
           const jwtToken = await new jose.SignJWT({ userId: user._id })

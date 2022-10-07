@@ -4,6 +4,7 @@ import User from '../../../models/User';
 import Post from '../../../models/Post';
 import { v4 as uuid } from 'uuid';
 import { getUserId } from '../../../utils/dbFunctions';
+import Notification from '../../../models/Notification';
 
 const MONGODB_URI = process.env.MONGODB_URI || '';
 
@@ -22,9 +23,10 @@ export default async function handler(
   }
 
   const _id = await getUserId(jwt);
+  const userLogged = await User.findById(_id)
 
   if (req.method === 'PUT') {
-    const { postId, isLiking, type } = req.body;
+    const { postId, isLiking } = req.body;
 
     if (!postId) {
       res.status(400).json({ message: 'Dados insuficientes', success: false });
@@ -35,7 +37,7 @@ export default async function handler(
           
           const likeId = uuid();
           await Post.updateOne({ postId }, { $push: { likedBy: { userId: userLiking?.userId, id: likeId } } } );
-         
+          
           const findPost = await Post.aggregate([
               { $match: { postId: postId } },
               { $unwind:'$likedBy'},
@@ -44,7 +46,14 @@ export default async function handler(
               { $replaceRoot: { newRoot: { $mergeObjects: [ "$likedBy" , "$$ROOT" ] } } },
               {$project: { likedBy:0 }}
           ])
+          const userPostId = await Post.findOne({postId: postId})
+          
+          if(userPostId?.userId !== userLiking?.userId){
+            const notificationId = uuid()
+            await Notification.updateOne({userId: userPostId?.userId}, { hasNotification: true, $push: {notifications: {userId: userLiking?.userId, message: 'curtiu sua publicação', redirect: `/user/posts/${postId}`, notificationId: likeId} } }  )
 
+          }
+          
           const postRes = JSON.parse(JSON.stringify(findPost))
 
           res.status(201).json(postRes[0]);
@@ -56,7 +65,13 @@ export default async function handler(
         }
       } else {
         try {
+          const userPostId = await Post.findOne({postId: postId})
           const userLiking = await User.findById({ _id });
+          const likesArr = await Post.findOne({postId})
+          const likeId = likesArr?.likedBy.find(item => item.userId === userLiking?.userId)?.id
+
+          await Notification.updateOne({userId: userPostId?.userId}, { $pull: {notifications: {notificationId: likeId} } }  )
+        
           await Post.updateOne(
             { postId },
             { $pull: { likedBy: { userId: userLiking?.userId } } }

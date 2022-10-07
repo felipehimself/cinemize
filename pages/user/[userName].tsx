@@ -18,6 +18,7 @@ import { UserProfile } from '../../ts/types/user';
 import { PostCard as PC} from './../../ts/types/post';
 import NoDataMsg from '../../components/NoDataMsg';
 import Head from 'next/head';
+import Header from '../../layouts/Header';
 
 const MONGODB_URI = process.env.MONGODB_URI || '';
 

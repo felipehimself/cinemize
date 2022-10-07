@@ -5,7 +5,9 @@ import Layout from '../layouts/Layout';
 import { Provider } from 'react-redux';
 
 import store from '../store/store';
-function MyApp({ Component, pageProps }: AppProps) {
+
+function MyApp({ Component, pageProps }: AppProps ) {
+  
   return (
     <ThemeProvider attribute='class'>
       <Provider store={store}>
