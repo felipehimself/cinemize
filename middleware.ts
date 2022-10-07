@@ -20,7 +20,7 @@ export default async function middleware(req: NextRequest) {
     }
   }
 
-  if (req.nextUrl.pathname.startsWith('/home') || req.nextUrl.pathname.startsWith('/profile')) {
+  if (req.nextUrl.pathname.startsWith('/home') || req.nextUrl.pathname.startsWith('/profile') || req.nextUrl.pathname.startsWith('/user')) {
     if (jwt === undefined) {
       return NextResponse.redirect(new URL('/', req.url));
     } else {

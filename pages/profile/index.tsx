@@ -66,7 +66,7 @@ const Profile: NextPage<{ user: UserProfile; followers: UserProfile[]; following
             })}
           </TabContent>
           <TabContent tab='following' activeTab={tabs[tabIndex]}>
-          {following?.length === 0 && <NoDataMsg message='Você ainda está seguindo ninguém' />}
+          {following?.length === 0 && <NoDataMsg message='Você ainda não está seguindo ninguém' />}
 
             {following?.map((user) => {
               return <UserFollowerCard key={user.userId} {...user} />;

@@ -39,7 +39,7 @@ const Layout = ({ children }: { children: React.ReactNode }): JSX.Element => {
     <>
       {hasComponent && <Header />}
       <main
-        className={`container mx-auto ${hasComponent ? 'py-14' : undefined}`}
+        className={`container mx-auto ${hasComponent ? 'py-16' : undefined}`}
       >
         {children}
       </main>

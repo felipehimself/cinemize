@@ -13,7 +13,7 @@ const PostButton = (): JSX.Element => {
   return (
     <button
       onClick={toggleShowForm}
-      className='group sm:hidden rounded-full bg-indigo-600  p-3 fixed bottom-14 right-6 '
+      className='group sm:hidden rounded-full bg-indigo-600  p-3 fixed bottom-20 right-6 '
     >
       <IoAdd size={22} color='white' className='group-hover:rotate-90 transition' />
     </button>
