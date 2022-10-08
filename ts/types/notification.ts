@@ -4,7 +4,7 @@ export type Notification = {
   notifications: NotificationsArr[];
 };
 
-type NotificationsArr = {
+export type NotificationsArr = {
   userId: string;
   message: string;
   redirect: string;

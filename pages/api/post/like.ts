@@ -49,7 +49,7 @@ export default async function handler(
           const userPostId = await Post.findOne({postId: postId})
           
           if(userPostId?.userId !== userLiking?.userId){
-            const notificationId = uuid()
+            
             await Notification.updateOne({userId: userPostId?.userId}, { hasNotification: true, $push: {notifications: {userId: userLiking?.userId, message: 'curtiu sua publicação', redirect: `/user/posts/${postId}`, notificationId: likeId} } }  )
 
           }
@@ -65,18 +65,20 @@ export default async function handler(
         }
       } else {
         try {
+          
           const userPostId = await Post.findOne({postId: postId})
           const userLiking = await User.findById({ _id });
+          const userDislikedId = userLiking?.userId
           const likesArr = await Post.findOne({postId})
           const likeId = likesArr?.likedBy.find(item => item.userId === userLiking?.userId)?.id
-
-          await Notification.updateOne({userId: userPostId?.userId}, { $pull: {notifications: {notificationId: likeId} } }  )
-        
+          
           await Post.updateOne(
             { postId },
             { $pull: { likedBy: { userId: userLiking?.userId } } }
-          );
-          const userDislikedId = userLiking?.userId
+            );
+            
+            
+            await Notification.updateOne({userId: userPostId?.userId}, { $pull: {notifications: {notificationId: likeId} } }  )
 
           res.status(201).json(userDislikedId);
         } catch (error) {

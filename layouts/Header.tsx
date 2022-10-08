@@ -81,8 +81,9 @@ const Header = ({
 
             {showNotifications && (
               <ul className='flex flex-col gap-1 px-3 py-2 absolute rounded-md dark:bg-darker bg-slate-100 w-64 top-8 right-0 text-sm'>
-                {userNotifications?.notifications.length == 0 && <li>Sem notificações</li>}
-                {userNotifications?.notifications?.map((notification) => {
+                {userNotifications?.notifications.length == 0 || userNotifications?.notifications == null ? 
+                <li>Sem notificações</li> : 
+                userNotifications?.notifications?.map((notification) => {
                   return (
                     <li key={notification._id}>
                       {notification.userName} {notification.message}

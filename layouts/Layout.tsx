@@ -44,6 +44,7 @@ const Layout = ({ children }: { children: React.ReactNode }): JSX.Element => {
       
       try {
         const res = await axios.get('/api/notification')
+        
         setUserNotifications(res.data)
       } catch (error) {
         setUserNotifications(null)
