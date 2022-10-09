@@ -127,14 +127,11 @@ const Header = ({
                   userNotifications?.notifications?.map((notification) => {
                     return (
                       <li
-                        className='cursor-pointer'
+                        className='cursor-pointer py-1'
                         onClick={() => handleRedirect(notification.redirect)}
                         key={notification._id}
                       >
-                        <span className='font-bold'>
-                          {notification.userName}
-                        </span>
-                        {notification.message}
+                        <span className='font-bold'> {notification.userName} </span>  <span>{notification.message}</span>
                       </li>
                     )
                   })

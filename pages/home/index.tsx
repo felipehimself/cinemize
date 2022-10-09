@@ -1,11 +1,9 @@
 import { GetServerSideProps, NextPage } from 'next';
-
 import Head from 'next/head';
 import PostCard from '../../components/PostCard';
 import PostForm from '../../components/PostForm';
 import PostButton from '../../components/PostButton';
 import NoDataMsg from '../../components/NoDataMsg';
-
 import { RootState, useAppDispatch } from '../../store/store';
 import { toggleForm } from '../../features/formSlice';
 import { useSelector } from 'react-redux';
@@ -17,7 +15,6 @@ import { getAllPosts, getUserId } from '../../utils/dbFunctions';
 import { connect } from 'mongoose';
 import User from '../../models/User';
 const MONGODB_URI = process.env.MONGODB_URI || '';
-
 const { AnimatePresence } = require('framer-motion');
 
 const Home: NextPage<{
@@ -49,19 +46,13 @@ const Home: NextPage<{
         )}
       </AnimatePresence>
 
-      <div className='hidden container left-1/2 -translate-x-2/4  sm:flex fixed mt-2  justify-end'>
-        <button
-          onClick={toggleShowForm}
-          className='block transition hover:bg-indigo-800  bg-indigo-600  py-1 px-3 rounded-md text-white'
-        >
-          Postar
-        </button>
-      </div>
+      
 
       {posts.length === 0 && <NoDataMsg message='Você ainda não criou posts' />}
-      <section className='sm:pt-10'>
+      <section className=''>
         {/* TIMELINE */}
-        <div className='flex-1 flex flex-col gap-4 pt-2 sm:pt-3'>
+        {/* sm:pt-3 */}
+        <div className='flex-1 flex flex-col gap-4 pt-2 '>
           {posts.map((post) => {
             return (
               <PostCard
@@ -73,7 +64,17 @@ const Home: NextPage<{
           })}
         </div>
       </section>
-      <PostButton  />
+
+      {/* button desktop */}
+      <div className='hidden container gap-1 left-1/2 -translate-x-2/4 md:flex fixed justify-end bottom-2 z-40'>
+          <PostButton className='self-end mr-2 lg:-mr-20' />
+      </div>
+
+      {/* button mobile e tablet */}
+
+      <div className='md:hidden fixed bottom-20 right-6'>
+        <PostButton  />
+      </div>
     </>
   );
 };

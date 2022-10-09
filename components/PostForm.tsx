@@ -53,7 +53,7 @@ const PostForm = ({ options, genre}: { options: string[]; genre: string[] }): JS
     try {
     setIsSubmiting(true)
      await axios.post('/api/post', body);
-      refreshProps()
+     await refreshProps()
       toggleShowForm()
       setIsSubmiting(false)
     } catch (error) {
