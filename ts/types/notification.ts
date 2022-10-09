@@ -12,4 +12,5 @@ export type NotificationsArr = {
   isRead: boolean;
   _id:string;
   notificationId: string;
+  itemToRemoveId: string;
 };

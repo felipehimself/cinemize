@@ -10,10 +10,11 @@ const notificationSchema = new Schema<Notification, NotificationModel>(
     hasNotification: { type: Boolean, default: false },
     notifications: [
       {
-        userId: { type: String },
-        message: { type: String },
-        redirect: { type: String },
+        userId: { type: String, required:true },
+        message: { type: String, required:true },
+        redirect: { type: String, required:true },
         notificationId: { type: String, required: true },
+        itemToRemoveId: {type:String},
         isRead: { type: Boolean, default: false },
       },
     ],

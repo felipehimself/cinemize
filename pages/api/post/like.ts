@@ -50,7 +50,7 @@ export default async function handler(
           
           if(userPostId?.userId !== userLiking?.userId){
             
-            await Notification.updateOne({userId: userPostId?.userId}, { hasNotification: true, $push: {notifications: {userId: userLiking?.userId, message: 'curtiu sua publicação', redirect: `/user/posts/${postId}`, notificationId: likeId} } }  )
+            await Notification.updateOne({userId: userPostId?.userId}, { hasNotification: true, $push: {notifications: {userId: userLiking?.userId, message: 'curtiu sua publicação', redirect: `/user/posts/${postId}`, notificationId: likeId, itemToRemoveId: postId} } }  )
 
           }
           
