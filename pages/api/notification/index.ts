@@ -9,9 +9,10 @@ import {User as UserType} from  './../../../ts/types/user'
 import User from '../../../models/User';
 const MONGODB_URI = process.env.MONGODB_URI || '';
 
-// IMPLEMENTAR NOTIFICAÇÃO PARA SEGUIR
 // INCLUIR LINK NA NOTIFICAÇÃO PARA O PERFIL OU PUBLICAÇÃO (LIKE OU BOOKMARK)
-// remover notificação ao excluir post
+// INCLUIR TORA PARA LINK DA NOTIFICAÇÃO LIKE OU BOOKMARK
+// NOTIFICATION ICON NA BOTTOM TAB, QUE DEVE ABRIR UM MODAL COM A LISTA DE NOTIFICAÇÕES
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse

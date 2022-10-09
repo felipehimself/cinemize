@@ -80,12 +80,12 @@ const PostForm = ({ options, genre}: { options: string[]; genre: string[] }): JS
       initial='hidden'
       animate='visible'
       exit='exit'
-      className='fixed text-sm z-50 inset-0 flex justify-center bg-[rgba(0,0,0,0.2)] w-full h-full backdrop-blur-[2px]'
+      className='fixed text-sm z-50 inset-0 flex justify-center bg-[rgba(0,0,0,0.2)] w-full h-screen backdrop-blur-[2px]'
       onClick={toggleShowForm}
     >
       <motion.div
         variants={formVariants}
-        className='md:w-6/12 xl:w-5/12 h-full p-6   bg-white dark:bg-dark'
+        className='md:w-6/12 xl:w-5/12 h-screen p-6   bg-white dark:bg-dark'
         onClick={(e: Event) => e.stopPropagation()}
       >
         <button

@@ -5,18 +5,23 @@ import BottonTab from './BottonTab';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store/store';
 import SearchModal from '../components/SearchModal';
+import NotificationModal from '../components/NotificationModal';
 import axios from 'axios';
 import { Notification } from '../ts/types/notification';
 const { AnimatePresence } = require('framer-motion');
 
 const Layout = ({ children }: { children: React.ReactNode }): JSX.Element => {
   const [hasComponent, setHasComponent] = useState(false);
-  const [userNotifications, setUserNotifications] = useState<Notification | null>(null)
+  const [userNotifications, setUserNotifications] =
+    useState<Notification | null>(null);
 
   const router = useRouter();
   const { pathname } = router;
 
   const { showSearch } = useSelector((state: RootState) => state.showSearch);
+  const { showNotification } = useSelector(
+    (state: RootState) => state.showNotification
+  );
 
   useEffect(() => {
     const checkPathame = () => {
@@ -39,39 +44,45 @@ const Layout = ({ children }: { children: React.ReactNode }): JSX.Element => {
     checkPathame();
   }, [pathname, router]);
 
-  useEffect(()=>{
+  useEffect(() => {
     const getNotifications = async () => {
-      
       try {
-        const res = await axios.get('/api/notification')
-        
-        setUserNotifications(res.data)
+        const res = await axios.get('/api/notification');
+
+        setUserNotifications(res.data);
       } catch (error) {
-        setUserNotifications(null)
+        setUserNotifications(null);
       }
-
-
-    }
-    getNotifications()
-    const interval = setInterval(() => getNotifications(), 5000)
+    };
+    getNotifications();
+    const interval = setInterval(() => getNotifications(), 5000);
     return () => {
       clearInterval(interval);
-    }
-  },[pathname])
-
+    };
+  }, [pathname]);
 
   return (
     <>
-      {hasComponent &&  <Header  userNotifications={userNotifications} />}
+      {hasComponent && <Header userNotifications={userNotifications} />}
       <main
         className={`container mx-auto ${hasComponent ? 'py-16' : undefined}`}
       >
         {children}
       </main>
-        {hasComponent && <BottonTab />}
+      
+      
       <AnimatePresence>
         {showSearch && <SearchModal />}
       </AnimatePresence>
+      
+
+      <AnimatePresence>
+        {showNotification && (
+          <NotificationModal userNotifications={userNotifications} />
+          )}
+      </AnimatePresence>
+
+      {hasComponent && <BottonTab hasNotification={userNotifications?.hasNotification} />}
     </>
   );
 };

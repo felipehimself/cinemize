@@ -1,12 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Router from 'next/router';
 
-import { toggleForm } from '../features/formSlice';
-import { useAppDispatch } from '../store/store';
-import { useRouter } from 'next/router';
-export const useShowForm = (isShow: boolean) => {};
-
-export const useLoading = () => {
+export const useIsLoading = () => {
   const [isLoading, setIsLoading] = React.useState(false);
   React.useEffect(() => {
     const start = () => {
