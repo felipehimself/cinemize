@@ -7,6 +7,8 @@ import { AiFillLike, AiOutlineLike } from 'react-icons/ai';
 import { IoBookmark, IoBookmarkOutline, IoTrash } from 'react-icons/io5';
 import { MdVerified } from 'react-icons/md';
 
+const {motion} = require('framer-motion')
+
 import { parseISO, format } from 'date-fns';
 
 
@@ -127,11 +129,13 @@ const PostCard = ({ postId, rating, type, userName, title, comment, whereToWatch
 
 
   return (
-    <article
+    <motion.article
       key={postId}
       className='min-h-[126px] rounded-md w-full border bg-lightWhite dark:bg-lightDark '
+      initial={{y: 0, opacity:1}}
+      exit={{opacity:0}}
     >
-      <div className='py-2 px-3'>
+      <div className='py-2 px-3 flex flex-col gap-2'>
         <div className='flex items-center justify-between'>
           <Link href={`/user/${userName}`}>
             <a className='flex items-center gap-1'>
@@ -141,7 +145,7 @@ const PostCard = ({ postId, rating, type, userName, title, comment, whereToWatch
           </Link>
           <div className='flex items-center gap-2'>
             {loggedUserId === userId && <button onClick={handleDelete} disabled={isSubmiting} 
-            className='hover:scale-110 hover:text-red-500 transition'><IoTrash/></button>}
+            className={`hover:scale-110 hover:text-red-500 transition ${isSubmiting? 'cursor-progress' : undefined } `}> <IoTrash/></button>}
           </div>
         </div>
 
@@ -161,7 +165,22 @@ const PostCard = ({ postId, rating, type, userName, title, comment, whereToWatch
 
           {/* COL 2 */}
           <div className='flex-1 flex flex-col gap-3'>
-            <div className='flex  md:flex-col gap-3'>
+            {/* nota */}
+            <div className='flex flex-col '>
+              <span className='text-xs -mb-2'>
+                Nota <span className='ml-1'>{rating}</span>
+              </span>
+
+              <ReactStars
+                edit={false}
+                isHalf={true}
+                size={28}
+                activeColor='#eab308'
+                value={rating}
+              />
+            </div>
+
+            <div className='flex -mt-2 md:flex-col gap-3'>
               <div className='text-xs'>
                 <span className='mb-1 block'>Onde assistir</span>
                 <ul className='flex flex-wrap items-start gap-2'>
@@ -177,7 +196,9 @@ const PostCard = ({ postId, rating, type, userName, title, comment, whereToWatch
                   })}
                 </ul>
               </div>
-              <div className='text-xs'>
+              
+            </div>
+            <div className='text-xs'>
                 <span className='mb-1 block'>Gênero</span>
                 <ul className='flex gap-2'>
                   {genre.map((gen) => {
@@ -192,24 +213,13 @@ const PostCard = ({ postId, rating, type, userName, title, comment, whereToWatch
                   })}
                 </ul>
               </div>
-            </div>
 
-            <div className='flex flex-col '>
-              <span className='text-xs -mb-2'>
-                Nota <span className='ml-1'>{rating}</span>
-              </span>
-
-              <ReactStars
-                edit={false}
-                isHalf={true}
-                size={28}
-                activeColor='#eab308'
-                value={rating}
-              />
-            </div>
+            
           </div>
         </div>
-        <footer className='flex items-end justify-between gap-3'>
+
+
+        <footer className='flex items-end justify-between gap-3 mt-2'>
         <span className='text-[10px]'>{postDate}</span>
           <div className='flex gap-3'>
             <div className='flex items-end justify-end gap-1'>
@@ -258,7 +268,7 @@ const PostCard = ({ postId, rating, type, userName, title, comment, whereToWatch
           </div>
         </footer>
       </div>
-    </article>
+    </motion.article>
   );
 };
 export default PostCard;

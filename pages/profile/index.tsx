@@ -73,7 +73,9 @@ const Profile: NextPage<{ user: UserProfile; followers: UserProfile[]; following
             })}
           </TabContent>
 
-          <PostButton  />
+          <div className='sm:hidden fixed bottom-20 right-6'>
+            <PostButton  />
+          </div>
           {showForm &&  <PostForm options={options} genre={genre} />}
       </section>
     </>

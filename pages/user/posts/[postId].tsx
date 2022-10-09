@@ -5,6 +5,7 @@ import PostCard from '../../../components/PostCard';
 import { Post as PC } from '../../../ts/types/post';
 import { getUserId } from '../../../utils/dbFunctions';
 import User from '../../../models/User';
+import Head from 'next/head';
 
 const MONGODB_URI = process.env.MONGODB_URI || '';
 
@@ -13,10 +14,17 @@ const PostId: NextPage<{ post: PC; loggedUserId: string }> = ({
   loggedUserId,
 }) => {
   return (
-    <div className='mt-2 flex flex-col gap-2'>
+    <>
+    <Head>
+        <title>cine.mize - post</title>
+        <meta name='home page' content='User home page' />
+        <link rel='icon' href='/favicon.ico' />
+      </Head>
+    <main className='mt-2 flex flex-col gap-2'>
       <h3 className='font-medium'>Postagem</h3>
       <PostCard loggedUserId={loggedUserId} {...post} />
-    </div>
+    </main>
+    </>
   );
 };
 export default PostId;

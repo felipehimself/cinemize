@@ -4,8 +4,7 @@ import PostCard from '../../components/PostCard';
 import PostForm from '../../components/PostForm';
 import PostButton from '../../components/PostButton';
 import NoDataMsg from '../../components/NoDataMsg';
-import { RootState, useAppDispatch } from '../../store/store';
-import { toggleForm } from '../../features/formSlice';
+import { RootState } from '../../store/store';
 import { useSelector } from 'react-redux';
 
 import { Post as AllPosts } from './../../ts/types/post';
@@ -24,13 +23,7 @@ const Home: NextPage<{
   loggedUserId: string;
 }> = ({ options, genre, posts, loggedUserId }) => {
 
-  const dispatch = useAppDispatch();
-
   const { showForm } = useSelector((state: RootState) => state.showForm);
-
-  const toggleShowForm = () => {
-    dispatch(toggleForm(true))
-  }
 
 
   return (
@@ -53,15 +46,17 @@ const Home: NextPage<{
         {/* TIMELINE */}
         {/* sm:pt-3 */}
         <div className='flex-1 flex flex-col gap-4 pt-2 '>
-          {posts.map((post) => {
-            return (
-              <PostCard
-                loggedUserId={loggedUserId}
-                key={post.postId}
-                {...post}
-              />
-            );
-          })}
+          <AnimatePresence>
+            {posts.map((post) => {
+              return (
+                <PostCard
+                  loggedUserId={loggedUserId}
+                  key={post.postId}
+                  {...post}
+                />
+              );
+            })}
+          </AnimatePresence>
         </div>
       </section>
 

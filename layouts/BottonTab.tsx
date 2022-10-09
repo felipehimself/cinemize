@@ -20,8 +20,8 @@ const BottonTab = ({ hasNotification }:{ hasNotification: boolean | undefined })
 
   return (
     <div className='fixed z-40 min-h-[60px] flex items-center justify-center md:hidden bg-indigo-600 dark:bg-darker w-full bottom-0 left-0 right-0'>
-      <nav className='justify-center'>
-      <ul className='flex flex-1 justify-center items-center gap-4 '>
+      <nav className='w-full'>
+      <ul className='flex flex-1 justify-evenly items-center  '>
         <li className='py-3 '>
           <Link href='/home'>
             <a>

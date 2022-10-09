@@ -34,9 +34,6 @@ const UserProfileCard = ({
   ) => {
     const { name, value } = e.target;
 
-    // limitar também para name, userName e location
-    // colocar trim no username e name
-    // colocar trim no form de cadastro
     if (name === 'description') {
       if (userInfo.description.length < 60) {
         setUserInfo((prev) => ({ ...prev, [name]: value }));

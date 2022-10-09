@@ -7,6 +7,7 @@ import PostCard from '../../components/PostCard';
 const MONGODB_URI = process.env.MONGODB_URI || '';
 import { Post as AllPosts } from '../../ts/types/post';
 import NoDataMsg from '../../components/NoDataMsg';
+import Head from 'next/head';
 
 const Favorites: NextPage<{
   favoritedPosts: AllPosts[];
@@ -14,6 +15,12 @@ const Favorites: NextPage<{
 }> = ({ favoritedPosts, loggedUserId }) => {
   
   return (
+    <>
+    <Head>
+        <title>cine.mize - favoritos</title>
+        <meta name='home page' content='User home page' />
+        <link rel='icon' href='/favicon.ico' />
+      </Head>
     <main className='mt-2 flex flex-col gap-4'>
       <h2>Meus favoritos</h2>
 
@@ -25,7 +32,7 @@ const Favorites: NextPage<{
           <PostCard loggedUserId={loggedUserId} key={post.postId} {...post} />
         );
       })}
-    </main>
+    </main></>
   );
 };
 export default Favorites;
