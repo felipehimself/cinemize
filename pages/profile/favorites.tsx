@@ -13,26 +13,32 @@ const Favorites: NextPage<{
   favoritedPosts: AllPosts[];
   loggedUserId: string;
 }> = ({ favoritedPosts, loggedUserId }) => {
-  
   return (
     <>
-    <Head>
+      <Head>
         <title>cine.mize - favoritos</title>
         <meta name='home page' content='User home page' />
         <link rel='icon' href='/favicon.ico' />
       </Head>
-    <main className='mt-2 flex flex-col gap-4'>
-      <h2>Meus favoritos</h2>
+      <div className='fixed top-16 -mt-1 z-30 container left-1/2 -translate-x-2/4'>
+        <div className='bg-white dark:bg-dark mt-2 '>
+          <div className='inline-block text-sm py-1 px-3 rounded-md  bg-lightWhite border dark:bg-lightDark'>
+            <h2>Favoritos</h2>
+          </div>
+        </div>
+      </div>
+      <main className='mt-1 pt-10 flex flex-col gap-4'>
+        {favoritedPosts.length === 0 && (
+          <NoDataMsg message='Você ainda não adicionou favoritos' />
+        )}
 
-      {favoritedPosts.length === 0 && <NoDataMsg message='Você ainda não adicionou favoritos' />}
-
-
-      {favoritedPosts.map((post) => {
-        return (
-          <PostCard loggedUserId={loggedUserId} key={post.postId} {...post} />
-        );
-      })}
-    </main></>
+        {favoritedPosts.map((post) => {
+          return (
+            <PostCard loggedUserId={loggedUserId} key={post.postId} {...post} />
+          );
+        })}
+      </main>
+    </>
   );
 };
 export default Favorites;

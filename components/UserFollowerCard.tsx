@@ -7,7 +7,7 @@ const UserFollowerCard = ({ name, userName, description, location, isVerified }:
     <div className='text-sm border rounded-md p-2 flex flex-col gap-1 dark:bg-lightDark'>
       <Link href={`/user/${userName}`}>
         <a className='text-sm font-bold flex items-center gap-1'>
-          @{userName} {isVerified && <MdVerified />}
+          @{userName} {isVerified && <MdVerified className='fill-indigo-600 dark:fill-white' />}
         </a>
       </Link>
       <div className='mt-2'>

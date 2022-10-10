@@ -37,7 +37,7 @@ export default async function handler(
       await Follow.updateOne({userId: userId }, { $push: { followers: { followId: loggedUser?.userId } } })
 
 
-      await Notification.updateOne({userId: userId}, { hasNotification: true, $push: {notifications: {userId: loggedUser?.userId, message: 'começou a te seguir', redirect: `/user/${loggedUser?.userName}`, notificationId: loggedUser?.userId, itemToRemoveId: loggedUser?.userId} } }  )
+      await Notification.updateOne({userId: userId}, { hasNotification: true, $push: {notifications: {userId: loggedUser?.userId, message: 'começou a te seguir', redirect: `/user/${loggedUser?.userName}?q=${loggedUser?.userId}`, notificationId: loggedUser?.userId, itemToRemoveId: loggedUser?.userId} } }  )
 
       const followedUserFollowers = await getUserFollow(userId)
       res.status(201).json({followers:followedUserFollowers.followers })
@@ -58,7 +58,7 @@ export default async function handler(
       await Follow.updateOne({userId: userId }, { $pull: { followers: { followId: loggedUser?.userId } } })
       const followedUserFollowers = await getUserFollow(userId)
 
-      await Notification.updateOne({userId: userId}, { $pull: {notifications: {itemToRemoveId: loggedUser?.userId} } } )
+      await Notification.updateOne({userId: userId}, { $pull: {notifications: {notificationId: loggedUser?.userId} } } )
 
       res.status(201).json({followers:followedUserFollowers.followers })
 

@@ -4,6 +4,7 @@ import { IoClose } from 'react-icons/io5';
 import { useAppDispatch } from '../store/store';
 import { Notification } from '../ts/types/notification';
 import { useRouter } from 'next/router';
+import CloseIcon from './CloseIcon';
 
 const { motion } = require('framer-motion');
 
@@ -36,11 +37,8 @@ const NotificationModal = ({
         onClick={(e: Event) => e.stopPropagation()}
       >
         <div className='flex justify-end mb-2'>
-          <button onClick={handleHideNotification}>
-            <IoClose
-              size={22}
-              className='group-hover:text-indigo-600 group-hover:rotate-90  group-hover:scale-110 dark:group-hover:text-white transition'
-            />
+          <button className='group' onClick={handleHideNotification}>
+          <CloseIcon />
           </button>
         </div>
         {(userNotifications?.notifications.length == 0 ||

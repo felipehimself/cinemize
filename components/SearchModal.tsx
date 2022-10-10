@@ -3,6 +3,7 @@ import Searchbar from './Searchbar';
 import { toggleSearch } from '../features/searchSlice';
 import { IoClose } from 'react-icons/io5';
 import { useAppDispatch } from '../store/store';
+import CloseIcon from './CloseIcon';
 const { motion } = require('framer-motion');
 
 const SearchModal = (): JSX.Element => {
@@ -26,11 +27,8 @@ const SearchModal = (): JSX.Element => {
         onClick={(e: Event) => e.stopPropagation()}
       >
         <div className='flex justify-end mb-2'>
-          <button onClick={toggleShowSearch}>
-            <IoClose
-              size={22}
-              className='group-hover:text-indigo-600 group-hover:rotate-90  group-hover:scale-110 dark:group-hover:text-white transition'
-            />
+          <button className='group' onClick={toggleShowSearch}>
+          <CloseIcon />
           </button>
         </div>
 

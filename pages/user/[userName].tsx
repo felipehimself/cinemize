@@ -19,6 +19,7 @@ import { PostCard as PC} from './../../ts/types/post';
 import NoDataMsg from '../../components/NoDataMsg';
 import Head from 'next/head';
 import Header from '../../layouts/Header';
+import Notification from '../../models/Notification';
 
 const MONGODB_URI = process.env.MONGODB_URI || '';
 
@@ -82,8 +83,10 @@ export default UserId;
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   await connect(MONGODB_URI).catch((err) => console.log(err));
 
-  const userName = ctx?.params?.userName!;
+  const userName = ctx?.query?.userName!;
+  const notificationId = ctx?.query?.q
 
+ 
   // INFO DO PERFIL VISITADO
   const userExists = await User.findOne(
     { userName },
@@ -98,9 +101,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   // SE USUÁRIO MUDAR URL REDIRECIONA PARA HOME
   if (userExists === null) {
-    
-    // ctx.res.writeHead(301, { Location: '/' });
-    // ctx.res.end();
     return {
       redirect: {
         permanent: false,
@@ -122,8 +122,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   // Redireciona se usuario tentar acessar seu próprio perfil mudando a URL
   if (userName === loggedUser?.userName) {
-    // ctx.res.writeHead(301, { Location: '/profile' });
-    // ctx.res.end();
     return {
       redirect: {
         permanent: false,
@@ -135,11 +133,17 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   }
   //
 
+  
+
+
   const userPosts = await getUserPosts(userExists?.userId!);
 
   const { followers, following } = await getUserFollow(userData?.userId)
 
- 
+  await Notification.updateOne(
+    {userId: loggedUser?.userId, "notifications.notificationId": notificationId },
+    {$set: {"notifications.$.isRead": true}}
+    )
 
   return {
     props: {

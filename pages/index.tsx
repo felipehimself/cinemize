@@ -23,11 +23,9 @@ import { SignUp } from '../ts/types/login';
 
 // limitar também para name, userName e location
 // colocar trim no username e name
-// colocar trim no form de cadastro
-// colocar possibilidade de excluir notificação, com motion e animate presence pra dar efeito
 // seguir cinemize para novas contas
-// isRead da notificação, mostrar em tom mais escuro que não tenha sido ligo e claro caso tenha
-// colocar método para mudar isRead no click
+// ver quais componentes nao estao sendo utilizados e deletar
+// deletar comentários desnecessários
 
 const Home: NextPage = () => {
   const [error, setError] = useState({ message: '', isError: false });

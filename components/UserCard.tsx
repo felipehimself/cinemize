@@ -52,7 +52,7 @@ const UserCard = ({ user, followers, loggedUser }: Props): JSX.Element => {
       <div className='relative flex flex-col gap-2 border p-3 rounded bg-lightWhite dark:bg-lightDark'>
         <span className='font-bold flex items-center gap-1 text-sm absolute left-2 -top-3 bg-light-pattern dark:bg-dark px-1 dark:bg-dark-pattern '>
           @{user.userName.slice(0, user.name.length + 6)}
-          {user.isVerified && <MdVerified className='-mb-[1px]' />}
+          {user.isVerified && <MdVerified className='-mb-[1px] fill-indigo-600 dark:fill-white' />}
         </span>
 
         <div className='flex items-center justify-between mt-2'>

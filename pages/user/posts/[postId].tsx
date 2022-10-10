@@ -6,6 +6,7 @@ import { Post as PC } from '../../../ts/types/post';
 import { getUserId } from '../../../utils/dbFunctions';
 import User from '../../../models/User';
 import Head from 'next/head';
+import Notification from '../../../models/Notification';
 
 const MONGODB_URI = process.env.MONGODB_URI || '';
 
@@ -15,15 +16,17 @@ const PostId: NextPage<{ post: PC; loggedUserId: string }> = ({
 }) => {
   return (
     <>
-    <Head>
+      <Head>
         <title>cine.mize - post</title>
         <meta name='home page' content='User home page' />
         <link rel='icon' href='/favicon.ico' />
       </Head>
-    <main className='mt-2 flex flex-col gap-2'>
-      <h3 className='font-medium'>Postagem</h3>
-      <PostCard loggedUserId={loggedUserId} {...post} />
-    </main>
+      <main className='mt-2 flex flex-col gap-2'>
+        <div className='inline-block self-start text-sm py-1 px-3 rounded-md  bg-lightWhite border dark:bg-lightDark'>
+          <h2>Postagem</h2>
+        </div>
+        <PostCard loggedUserId={loggedUserId} {...post} />
+      </main>
     </>
   );
 };
@@ -32,7 +35,8 @@ export default PostId;
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   await connect(MONGODB_URI).catch((err) => console.log(err));
 
-  const postId = ctx?.params?.postId;
+  const postId = ctx?.query?.postId;
+  const notificationId = ctx?.query?.q;
 
   const jwt = ctx.req.cookies.CinemizeJWT;
   const _id: string = await getUserId(jwt);
@@ -69,6 +73,14 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       props: {},
     };
   }
+
+  await Notification.updateOne(
+    {
+      userId: loggedUser?.userId,
+      'notifications.notificationId': notificationId,
+    },
+    { $set: { 'notifications.$.isRead': true } }
+  );
 
   return {
     props: {

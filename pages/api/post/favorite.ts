@@ -52,7 +52,7 @@ export default async function handler(
 
           if(userPostId?.userId !== userFavoriting?.userId){
             
-            await Notification.updateOne({userId: userPostId?.userId}, { hasNotification: true, $push: {notifications: {userId: userFavoriting?.userId, message: 'favoritou sua publicação', redirect: `/user/posts/${postId}`, notificationId: favoriteId, itemToRemoveId:postId} } }  )
+            await Notification.updateOne({userId: userPostId?.userId}, { hasNotification: true, $push: {notifications: {userId: userFavoriting?.userId, message: 'favoritou sua publicação', redirect: `/user/posts/${postId}?q=${favoriteId}`, notificationId: favoriteId, itemToRemoveId:postId} } }  )
 
           }
 

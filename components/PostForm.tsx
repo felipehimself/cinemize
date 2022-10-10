@@ -12,6 +12,7 @@ import { IoClose } from 'react-icons/io5';
 import { overlayVariants, formVariants } from '../lib/framer';
 import { useAppDispatch } from '../store/store';
 import axios from 'axios';
+import CloseIcon from './CloseIcon';
 
 //@ts-ignore
 import ReactStars from 'react-rating-stars-component';
@@ -92,7 +93,7 @@ const PostForm = ({ options, genre}: { options: string[]; genre: string[] }): JS
           onClick={toggleShowForm}
           className='group mb-1 block ml-auto transition '
         >
-          <IoClose size={22} className='group-hover:text-indigo-600 group-hover:rotate-90  group-hover:scale-110 dark:group-hover:text-white transition' />
+         <CloseIcon />
         </button>
 
         <Form onSubmit={handleSubmit(onSubmit)} className='w-full gap-4'>

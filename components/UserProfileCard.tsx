@@ -151,12 +151,12 @@ const UserProfileCard = ({
               disabled={isLoading}
               maxLength={20}
             />
-            {userInfo.isVerified && <MdVerified className='-mb-[1px]' />}
+            {userInfo.isVerified && <MdVerified className='-mb-[1px] fill-indigo-600 dark:fill-white' />}
           </div>
         ) : (
           <span className='font-bold flex items-center gap-1 text-sm absolute left-2 -top-3 bg-light-pattern dark:bg-dark px-1 dark:bg-dark-pattern '>
             @{userInfo.userName.slice(0, userInfo.name.length + 6)}
-            {userInfo.isVerified && <MdVerified className='-mb-[1px]' />}
+            {userInfo.isVerified && <MdVerified className='-mb-[1px] fill-indigo-600 dark:fill-white' />}
           </span>
         )}
         <span className='text-xs -mt-1 -mb-2 text-red-400 min-h-[16px]'>

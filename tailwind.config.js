@@ -34,10 +34,16 @@ module.exports = {
           '25%': { marginLeft: '2px' },
           '75%' : { marginLeft: '-2px'},
           '100%' : { marginLeft: '0rem'}
-          }
+          },
+          spin: {
+            "0%": {transform: 'rotate(0deg)'   },
+            "100%": {transform: 'rotate(360deg)'}
+          },
         },
         animation: {
-          shake: 'shake 0.2s ease-in-out 0s 2;',
+          shake: 'shake 0.2s ease-in-out 0s 2',
+          spin: 'spin 2s linear infinite',
+
         }
       
       }

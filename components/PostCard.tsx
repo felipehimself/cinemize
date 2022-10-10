@@ -140,12 +140,21 @@ const PostCard = ({ postId, rating, type, userName, title, comment, whereToWatch
           <Link href={`/user/${userName}`}>
             <a className='flex items-center gap-1'>
               <span className='text-sm font-bold'>@{userName}</span>
-              <span> {isVerified ? <MdVerified /> : undefined} </span>
+              <span> {isVerified ? <MdVerified className='fill-indigo-600 dark:fill-white' /> : undefined} </span>
             </a>
           </Link>
           <div className='flex items-center gap-2'>
-            {loggedUserId === userId && <button onClick={handleDelete} disabled={isSubmiting} 
-            className={`hover:scale-110 hover:text-red-500 transition ${isSubmiting? 'cursor-progress' : undefined } `}> <IoTrash/></button>}
+            {loggedUserId === userId && 
+            (
+            <button onClick={handleDelete} disabled={isSubmiting} 
+                className='group'> 
+                    {isSubmiting? 
+                <span 
+                className='block border-[2px] animate-spin border-slate-300 border-t-[2px] border-t-indigo-600 rounded-full h-[16px] w-[16px]'></span> : 
+                <IoTrash className='group-hover:scale-110 group-hover:text-red-500 transition'/> 
+                }
+            </button>)
+            }
           </div>
         </div>
 
@@ -226,7 +235,7 @@ const PostCard = ({ postId, rating, type, userName, title, comment, whereToWatch
               {likedBy.some((lik) => lik?.userId === loggedUserId) ? (
                 <>
                   <button disabled={isSubmiting} onClick={handleDislike} className='peer hover:scale-110 hover:-rotate-6 transition'>
-                    <AiFillLike size={20} />
+                    <AiFillLike  size={20} />
                   </button>
                   <span className='text-xs peer-hover:scale-110'>
                     {likedBy.length}
@@ -248,7 +257,7 @@ const PostCard = ({ postId, rating, type, userName, title, comment, whereToWatch
             {favoritedBy.some((fav) => fav?.userId === loggedUserId) ? (
                 <>
                   <button disabled={isSubmiting} onClick={handleUnfavorite} className='peer hover:scale-110 transition'>
-                    <IoBookmark size={20} />
+                    <IoBookmark  size={20} />
                   </button>
                   <span className='text-xs peer-hover:scale-110'>
                     {favoritedBy.length}

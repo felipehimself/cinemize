@@ -85,7 +85,7 @@ const Searchbar = ({className}:{className?:string}):JSX.Element => {
                   className={`${className} w-full pl-2  text-left flex items-center gap-1`}
                   onClick={() => handleNavigation(user.userName)}
                 >
-                  {user.userName} <span>{user.isVerified && <MdVerified size={15} />}</span>
+                  {user.userName} <span>{user.isVerified && <MdVerified className='fill-indigo-600 dark:fill-white' size={15} />}</span>
                 </button>
               </li>
             );
