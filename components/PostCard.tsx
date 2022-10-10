@@ -49,7 +49,7 @@ const PostCard = ({ postId, rating, type, userName, title, comment, whereToWatch
         postId: postId,
         isLiking: true,
       });
-      refreshProps()
+     await refreshProps()
   
 
       setIsSubmiting(false)
@@ -68,9 +68,8 @@ const PostCard = ({ postId, rating, type, userName, title, comment, whereToWatch
         isLiking: false,
         
       });
-      refreshProps()
+      await refreshProps()
      
-
       setIsSubmiting(false)
     } catch (error) {
       console.log(error)
@@ -85,7 +84,7 @@ const PostCard = ({ postId, rating, type, userName, title, comment, whereToWatch
         postId: postId,
         isFavoriting: true,
       });
-      refreshProps()
+      await refreshProps()
       
       setIsSubmiting(false)
     } catch (error) {
@@ -103,7 +102,7 @@ const PostCard = ({ postId, rating, type, userName, title, comment, whereToWatch
         isFavoriting: false,
         
       });
-      refreshProps()
+      await refreshProps()
       setIsSubmiting(false)
     } catch (error) {
       console.log(error)

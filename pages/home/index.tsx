@@ -61,7 +61,7 @@ const Home: NextPage<{
       </section>
 
       {/* button desktop */}
-      <div className='hidden container gap-1 left-1/2 -translate-x-2/4 md:flex fixed justify-end bottom-2 z-40'>
+      <div className='hidden container gap-1 left-1/2 -translate-x-2/4 md:flex fixed justify-end bottom-4 z-40'>
           <PostButton className='self-end mr-2 lg:-mr-20' />
       </div>
 
