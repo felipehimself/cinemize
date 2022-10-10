@@ -9,12 +9,12 @@ const followSchema = new Schema<Follow, FollowModel>(
     userId: { type: String, required:true },
     following: [
       {
-        followId: { type: String, required: false },
+        userId: { type: String, required: false },
       },
     ],
     followers: [
       {
-        followId: { type: String, required: false },
+        userId: { type: String, required: false },
       },
     ],
   },

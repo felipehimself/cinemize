@@ -33,8 +33,8 @@ export default async function handler(
     else {
 
       const loggedUser = await User.findById(_id)
-      await Follow.updateOne({userId: loggedUser?.userId }, { $push: { following: { followId: userId } } })
-      await Follow.updateOne({userId: userId }, { $push: { followers: { followId: loggedUser?.userId } } })
+      await Follow.updateOne({userId: loggedUser?.userId }, { $push: { following: { userId: userId } } })
+      await Follow.updateOne({userId: userId }, { $push: { followers: { userId: loggedUser?.userId } } })
 
 
       await Notification.updateOne({userId: userId}, { hasNotification: true, $push: {notifications: {userId: loggedUser?.userId, message: 'começou a te seguir', redirect: `/user/${loggedUser?.userName}?q=${loggedUser?.userId}`, notificationId: loggedUser?.userId, itemToRemoveId: loggedUser?.userId} } }  )
@@ -54,8 +54,8 @@ export default async function handler(
       // const userFollowing = await User.findOne({userId})
 
       const loggedUser = await User.findById(_id)
-      await Follow.updateOne({userId: loggedUser?.userId }, { $pull: { following: { followId: userId } } })
-      await Follow.updateOne({userId: userId }, { $pull: { followers: { followId: loggedUser?.userId } } })
+      await Follow.updateOne({userId: loggedUser?.userId }, { $pull: { following: { userId: userId } } })
+      await Follow.updateOne({userId: userId }, { $pull: { followers: { userId: loggedUser?.userId } } })
       const followedUserFollowers = await getUserFollow(userId)
 
       await Notification.updateOne({userId: userId}, { $pull: {notifications: {notificationId: loggedUser?.userId} } } )

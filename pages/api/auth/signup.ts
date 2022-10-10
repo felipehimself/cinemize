@@ -66,8 +66,8 @@ export default async function handler(
           });
       
       // usuário novo segue Cinemize 
-       await Follow.updateOne({userId: 'bd8c2218-62eb-4dbf-a016-24345782da62' }, { $push: { followers: { followId: id } } })
-       await Follow.updateOne({userId: id }, { $push: { following: { followId: 'bd8c2218-62eb-4dbf-a016-24345782da62' } } })
+       await Follow.updateOne({userId: 'bd8c2218-62eb-4dbf-a016-24345782da62' }, { $push: { followers: { userId: id } } })
+       await Follow.updateOne({userId: id }, { $push: { following: { userId: 'bd8c2218-62eb-4dbf-a016-24345782da62' } } })
 
           res.setHeader('Set-Cookie', serialized);
           res.status(201).json({ message: 'Usuário criado', success: true });

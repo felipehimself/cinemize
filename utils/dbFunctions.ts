@@ -35,7 +35,7 @@ export const getAllPosts = async (_id:string) => {
 
   const loggedUserPosts = JSON.parse(JSON.stringify(loggedUser))
   const userFollowCollection = await Follow.find({userId: user?.userId})
-  const userFollowingIds = userFollowCollection[0].following.map(follow =>follow.followId)
+  const userFollowingIds = userFollowCollection[0].following.map(follow =>follow.userId)
 
   const followingPosts = await Post.aggregate([
     {$match: {userId: {$in: userFollowingIds}}},
@@ -79,10 +79,10 @@ export const getUserFollow = async (id:string) => {
 
     const followDocument = await Follow.find({userId: id})
 
-    const followersIds = followDocument[0]?.followers.map(follow => follow.followId)
+    const followersIds = followDocument[0]?.followers.map(follow => follow.userId)
     const followersProfile = await User.find({userId: {$in: followersIds}},{password: 0,email:0,createdAt:0,updatedAt:0,_id:0})
 
-    const followingIds = followDocument[0]?.following.map(follow => follow.followId)
+    const followingIds = followDocument[0]?.following.map(follow => follow.userId)
     const followingProfile = await User.find({userId: {$in: followingIds}},{password: 0,email:0,createdAt:0,updatedAt:0,_id:0})
 
     return {followers: JSON.parse(JSON.stringify(followersProfile)), following:JSON.parse(JSON.stringify(followingProfile))}

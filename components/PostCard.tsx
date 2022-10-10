@@ -158,9 +158,10 @@ const PostCard = ({ postId, rating, type, userName, title, comment, whereToWatch
         </div>
 
         {/* content container */}
-        <div className='mt-2 flex flex-col md:flex-row gap-3'>
+        <div className='mt-2 grid grid-cols-1 flex-col md:grid-cols-2 gap-3'>
+
           {/* COL 1 */}
-          <div className='flex-[2] flex flex-col gap-1'>
+          <div className='flex flex-col gap-1'>
             <div className='flex items-center gap-2'>
               <h3 className='text-sm'>{title}</h3>
               <span>•</span>
@@ -172,7 +173,7 @@ const PostCard = ({ postId, rating, type, userName, title, comment, whereToWatch
           </div>
 
           {/* COL 2 */}
-          <div className='flex-1 flex flex-col gap-3'>
+          <div className='flex flex-col gap-3'>
             {/* nota */}
             <div className='flex flex-col '>
               <span className='text-xs -mb-2'>
@@ -208,7 +209,7 @@ const PostCard = ({ postId, rating, type, userName, title, comment, whereToWatch
             </div>
             <div className='text-xs'>
                 <span className='mb-1 block'>Gênero</span>
-                <ul className='flex gap-2'>
+                <ul className='flex flex-wrap gap-2'>
                   {genre.map((gen) => {
                     return (
                       <li

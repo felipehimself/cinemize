@@ -5,5 +5,5 @@ export type Follow = {
 }
 
 type FollowersAndFollowing = {
-  followId: string
+  userId: string
 }
