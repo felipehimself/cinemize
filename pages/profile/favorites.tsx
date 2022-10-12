@@ -4,10 +4,10 @@ import { getUserId } from '../../utils/dbFunctions';
 import User from '../../models/User';
 import Post from '../../models/Post';
 import PostCard from '../../components/PostCard';
-const MONGODB_URI = process.env.MONGODB_URI || '';
 import { Post as AllPosts } from '../../ts/types/post';
 import NoDataMsg from '../../components/NoDataMsg';
 import Head from 'next/head';
+const MONGODB_URI = process.env.MONGODB_URI || '';
 
 const Favorites: NextPage<{
   favoritedPosts: AllPosts[];
@@ -48,7 +48,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   const jwt = ctx.req.cookies.CinemizeJWT;
 
-  const _id = await getUserId(jwt);
+  const _id = await getUserId(jwt, ctx.req.url);
 
   const userId = await User.findOne({ _id });
 

@@ -1,6 +1,5 @@
 import { overlayVariants, formVariants } from '../lib/framer';
 import { toggleNotification } from '../features/notificationSlice';
-import { IoClose } from 'react-icons/io5';
 import { useAppDispatch } from '../store/store';
 import { Notification } from '../ts/types/notification';
 import { useRouter } from 'next/router';

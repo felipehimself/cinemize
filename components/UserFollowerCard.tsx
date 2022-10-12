@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { UserProfile } from '../ts/types/user';
-import { MdVerified , MdLocationPin} from 'react-icons/md';
+import { MdVerified } from 'react-icons/md';
 
 const UserFollowerCard = ({ name, userName, description, location, isVerified }: Omit<UserProfile, 'followers' | 'following'>): JSX.Element => {
   return (
@@ -16,9 +16,6 @@ const UserFollowerCard = ({ name, userName, description, location, isVerified }:
       <div>
         <p >{description}</p>
       </div>
-      {/* <div className='flex gap-1 items-center'>
-       <MdLocationPin /> <p >{location}</p>
-      </div> */}
     </div>
   );
 };

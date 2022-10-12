@@ -28,7 +28,7 @@ export default async function handler(
       res.status(400).json({ message: 'Dados insuficientes', success: false });
     } else {
       try {
-        const _id = await getUserId(jwt)
+        const _id = await getUserId(jwt, req.url)
         const user = await User.findById(_id)
 
         await Post.deleteOne({ postId: postId });

@@ -6,7 +6,7 @@ import { Provider } from 'react-redux';
 import store from '../store/store';
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
-
+  
   return (
     <ThemeProvider attribute='class'>
       <Provider store={store}>

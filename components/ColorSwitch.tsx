@@ -9,8 +9,6 @@ const ColorSwitch = ({size, className}:{size:number, className?:string}) :JSX.El
 
   const currentTheme = theme == 'system' ? systemTheme : theme;
 
-  
-
   useEffect(() => {
     setMount(true);
   }, []);

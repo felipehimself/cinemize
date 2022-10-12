@@ -1,24 +1,24 @@
 import User from '../models/User';
 import Post from '../models/Post';
 
-import { Post as PostType , PostCard } from '../ts/types/post';
-import { UserId, UserPost , User as UserType, UserProfile} from '../ts/types/user';
+import { PostCard } from '../ts/types/post';
 
 import * as jose from 'jose';
 import Follow from '../models/Follow';
+import { NextResponse } from 'next/server';
 const JWT_SECRET = process.env.JWT_SECRET;
 
-export const getUserId = async (jwt: string | undefined) : Promise<string> => {
-  let id:string = ''
+export const getUserId = async (jwt: string | undefined, reqUrl?:string) : Promise<string | unknown > => {
+  
   try {
     const response = await jose.jwtVerify( jwt!, new TextEncoder().encode(JWT_SECRET));
     const _id = await response.payload.userId as string; 
-    id = _id
+    return  _id
   } catch (error) {
-    console.log(error);
+    return NextResponse.redirect(new URL('/', reqUrl));
   }
 
-  return id
+  
 };
 
 export const getAllPosts = async (_id:string) => {

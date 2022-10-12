@@ -44,7 +44,6 @@ const Home: NextPage<{
       {posts.length === 0 && <NoDataMsg message='Você ainda não criou posts' />}
       <section className=''>
         {/* TIMELINE */}
-        {/* sm:pt-3 */}
         <div className='flex-1 flex flex-col gap-4 pt-2 '>
           <AnimatePresence>
             {posts.map((post) => {
@@ -79,11 +78,11 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   await connect(MONGODB_URI).catch((err) => console.log(err));
 
   const jwt = ctx.req.cookies.CinemizeJWT;
-  const _id: string = await getUserId(jwt);
+  const _id = await getUserId(jwt, ctx.req.url) as string;
 
   const loggedUser = await User.findById(_id);
 
-  const allPosts = await getAllPosts(_id!);
+  const allPosts = await getAllPosts(_id);
 
   const options = [
     'netflix',

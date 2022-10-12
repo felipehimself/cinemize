@@ -20,7 +20,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       res.status(401).json({ message: 'Sem autorização', success: false});
     } 
 
-    const _id = await getUserId(jwt)
+    const _id = await getUserId(jwt, req.url)
 
     if (req.method === 'POST') {
 
@@ -38,8 +38,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           const postId = uuid()
           const post = {...req.body, userId: userPosting?.userId, postId: postId}
           const postCreated = await Post.create(post)
-          // await User.updateOne({ _id }, { $push: { posts:  { postId: postId } } });
-
           res.status(201).json({...postCreated?.toJSON(), userId: userPosting?.userId, userName: userPosting?.userName, isVerified:userPosting?.isVerified})
         } catch (error) {
           res.status(400).json({ message: 'Algo deu errado ao criar post', success: false,  });

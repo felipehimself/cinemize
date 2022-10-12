@@ -25,7 +25,7 @@ export default async function handler(
     return;
   }
 
-  const _id = await getUserId(jwt);
+  const _id = await getUserId(jwt, req.url);
   const loggedUser = await User.findById(_id);
   if (req.method === 'GET') {
     try {

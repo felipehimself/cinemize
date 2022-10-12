@@ -37,9 +37,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   const postId = ctx?.query?.postId;
   const notificationId = ctx?.query?.q;
-
+  
   const jwt = ctx.req.cookies.CinemizeJWT;
-  const _id: string = await getUserId(jwt);
+  const _id = await getUserId(jwt, ctx.req.url);
   const loggedUser = await User.findById(_id);
 
   const post = await Post.aggregate([

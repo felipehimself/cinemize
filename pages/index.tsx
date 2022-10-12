@@ -20,12 +20,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { signupValidation } from '../lib/yup';
 import { SignUp } from '../ts/types/login';
 
-
-// ver quais componentes nao estao sendo utilizados e deletar
-// deletar comentários desnecessários
-// validação dos campos do form, mostrar limite de caracteres
-// refresh props na pagina principal pra atualizar em tempo real? se sim, mesmo n segundos que notificações
-
 const Home: NextPage = () => {
   const [error, setError] = useState({ message: '', isError: false });
   const [isLoading, setIsLoading] = useState(false);

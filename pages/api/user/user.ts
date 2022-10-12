@@ -1,11 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { connect } from 'mongoose';
 import User from '../../../models/User';
-// import * as jose from 'jose';
 import { getUserId } from '../../../utils/dbFunctions';
 
 const MONGODB_URI = process.env.MONGODB_URI || '';
-// const JWT_SECRET = process.env.JWT_SECRET;
 
 type Response = {
   message: string;
@@ -35,9 +33,7 @@ export default async function handler(
     } else {
 
         try {
-          const _id = await getUserId(jwt)
-          // const response = await jose.jwtVerify(jwt!, new TextEncoder().encode(JWT_SECRET) );
-          // const _id = await response.payload.userId;
+          const _id = await getUserId(jwt, req.url)
           
           // logged user
           const currentUser = await User.findById({_id})

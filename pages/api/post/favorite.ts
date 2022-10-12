@@ -22,7 +22,7 @@ export default async function handler(
     res.status(401).json({ message: 'Sem autorização', success: false });
   }
 
-  const _id = await getUserId(jwt);
+  const _id = await getUserId(jwt, req.url);
 
   if (req.method === 'PUT') {
     const { postId, isFavoriting } = req.body;

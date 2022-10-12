@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-
 const notificationSlice = createSlice({
   name: 'notificationSlice',
   initialState: { showNotification: false, hasNotification: false },

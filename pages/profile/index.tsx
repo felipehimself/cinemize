@@ -88,13 +88,13 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   const jwt = ctx.req.cookies.CinemizeJWT;
 
-  const _id = await getUserId(jwt);
+  const _id = await getUserId(jwt, ctx.req.url) as string;
   
   const user = await User.findOne({_id}, { password: 0, createdAt: 0, _id: 0, email: 0, updatedAt: 0 });
   
   const userResponse = await JSON.parse(JSON.stringify(user));
 
-  const posts = await getAllPosts(_id!)
+  const posts = await getAllPosts(_id)
 
   const { followers, following } = await getUserFollow(userResponse?.userId)
 

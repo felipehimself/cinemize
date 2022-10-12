@@ -4,6 +4,7 @@ import User from '../../../models/User';
 import Follow from '../../../models/Follow';
 import { getUserFollow, getUserId } from '../../../utils/dbFunctions';
 import Notification from '../../../models/Notification';
+import { NextResponse } from 'next/server';
 
 const MONGODB_URI = process.env.MONGODB_URI || '';
 
@@ -22,7 +23,8 @@ export default async function handler(
     res.status(401).json({ message: 'Não autorizado', success: false });
   }
   
-  const _id = await getUserId(jwt)
+  const _id = await getUserId(jwt, req.url)
+
 
   if (req.method === 'POST') {
     const { userId } = req.body;
@@ -51,7 +53,6 @@ export default async function handler(
       res.status(400).json({ message: 'Dados Insuficientes', success: false });
     } 
     else {
-      // const userFollowing = await User.findOne({userId})
 
       const loggedUser = await User.findById(_id)
       await Follow.updateOne({userId: loggedUser?.userId }, { $pull: { following: { userId: userId } } })

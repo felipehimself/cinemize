@@ -86,7 +86,6 @@ const UserProfileCard = ({
       if (status === 302) {
         setUserExists(true);
       }
-      // setError({ message: error.response.data.message, isError: true });
       setIsLoading(false);
     }
   };
@@ -157,7 +156,6 @@ const UserProfileCard = ({
               value={userInfo.userName || ''}
               className=' font-bold focus:outline-none  bg-light-pattern dark:bg-dark-pattern '
               onChange={handleChange}
-             // ref={inputRef}
               disabled={isLoading}
               maxLength={20}
             />
