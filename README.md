@@ -77,157 +77,133 @@ npm install
 O projeto está estruturado da seguinte forma:
 
 ```
+|   middleware.ts
+|   next-env.d.ts
+|   next.config.js
+|   package-lock.json
+|   package.json
+|   postcss.config.js
+|   README.md
+|   tailwind.config.js
+|   tsconfig.json
+|
 +---components
-|   |   Main.tsx
-|   |
-|   +---AccountForm
-|   |       AccountForm.tsx
-|   |       Styles.module.css
-|   |
-|   +---BottomTab
-|   |       BottomTab.tsx
-|   |       Styles.module.css
-|   |
-|   +---Button
-|   |       Button.tsx
-|   |       Styles.module.css
-|   |
-|   +---ButtonLink
-|   |       ButtonLink.tsx
-|   |       Styles.module.css
-|   |
-|   +---CardProduct
-|   |       CardProduct.tsx
-|   |       Styles.module.css
-|   |
-|   +---CartBar
-|   |       CartBar.tsx
-|   |       Styles.module.css
-|   |
-|   +---CartItem
-|   |       CartItem.tsx
-|   |       Styles.module.css
-|   |
-|   +---ErrorMessage
-|   |       ErrorMessage.tsx
-|   |       Styles.module.css
-|   |
-|   +---Header
-|   |       Header.tsx
-|   |       Styles.module.css
-|   |
-|   +---Loading
-|   |       Loading.tsx
-|   |       Styles.module.css
-|   |
-|   +---ModalCupom
-|   |       ModalCupom.tsx
-|   |       Styles.module.css
-|   |
-|   \---Topbar
-|           Styles.module.css
-|           Topbar.tsx
+|       Button.tsx
+|       CloseIcon.tsx
+|       ColorSwitch.tsx
+|       ErrorMessage.tsx
+|       Fieldset.tsx
+|       Form.tsx
+|       FormControl.tsx
+|       IconLoading.tsx
+|       Input.tsx
+|       InputError.tsx
+|       Label.tsx
+|       Loading.tsx
+|       Logout.tsx
+|       NoDataMsg.tsx
+|       NotificationModal.tsx
+|       OptionsContainer.tsx
+|       PostButton.tsx
+|       PostCard.tsx
+|       PostForm.tsx
+|       ProgressBar.tsx
+|       Searchbar.tsx
+|       SearchModal.tsx
+|       TabButtons.tsx
+|       TabContent.tsx
+|       TextArea.tsx
+|       UserCard.tsx
+|       UserFollowerCard.tsx
+|       UserProfileCard.tsx
+|       UserProfileContainer.tsx
 |
 +---features
-|       cartSlice.ts
+|       formSlice.ts
+|       notificationSlice.ts
+|       searchSlice.ts
 |
-+---hooks
-|       hooks.ts
++---layouts
+|       BottonTab.tsx
+|       Header.tsx
+|       Layout.tsx
+|       Navbar.tsx
 |
 +---lib
-|       createModel.ts
-|       framerMotion.ts
-|       hotToast.ts
+|       framer.ts
 |       yup.ts
 |
 +---models
-|       Order.ts
-|       Product.ts
+|       Follow.ts
+|       Notification.ts
+|       Post.ts
 |       User.ts
 |
 +---pages
 |   |   index.tsx
 |   |   _app.tsx
-|   |   _document.tsx
-|   |
-|   +---about
-|   |       index.tsx
-|   |
-|   +---account
-|   |       my-account.tsx
 |   |
 |   +---api
-|   |   +---account
-|   |   |       index.ts
-|   |   |
 |   |   +---auth
 |   |   |       login.ts
 |   |   |       logout.ts
 |   |   |       signup.ts
 |   |   |
-|   |   +---order
+|   |   +---follow
 |   |   |       index.ts
 |   |   |
-|   |   \---product
-|   |           index.ts
+|   |   +---notification
+|   |   |       index.ts
+|   |   |
+|   |   +---post
+|   |   |       favorite.ts
+|   |   |       index.ts
+|   |   |       like.ts
+|   |   |       [postId].ts
+|   |   |
+|   |   \---user
+|   |           profile.ts
+|   |           user.ts
 |   |
-|   +---auth
-|   |       login.tsx
-|   |       signup.tsx
-|   |
-|   +---cart
+|   +---home
 |   |       index.tsx
 |   |
-|   +---product
-|   |       [id].tsx
+|   +---login
+|   |       index.tsx
 |   |
-|   \---search
-|           index.tsx
+|   +---profile
+|   |       favorites.tsx
+|   |       index.tsx
+|   |
+|   \---user
+|       |   [userName].tsx
+|       |
+|       \---posts
+|               [postId].tsx
 |
 +---public
-|   |   favicon.ico
-|   |   icon-192x192.png
-|   |   icon-256x256.png
-|   |   icon-384x384.png
-|   |   icon-512x512.png
-|   |   manifest.json
-|   |   sw.js
-|   |   vercel.svg
-|   |   workbox-6a1bf588.js
-|   |
-|   \---assets
-|           no-search.svg
-|           pizza.jpg
+|       favicon.ico
+|       vercel.svg
 |
 +---store
 |       store.ts
 |
 +---styles
-|       About.module.css
-|       Cart.module.css
-|       Global.module.css
 |       globals.css
-|       Index.module.css
-|       Login.module.css
-|       MyAccount.module.css
-|       Product.module.css
-|       Search.module.css
-|       Signup.module.css
 |
 +---ts
-|   +---enums
-|   |       enums.ts
-|   |
-|   +---interfaces
-|   |       interfaces.ts
-|   |       user.ts
-|   |
 |   \---types
-|           types.ts
+|           follow.ts
+|           login.ts
+|           notification.ts
+|           post.ts
+|           ui.ts
+|           user.ts
 |
 \---utils
         constants.ts
-        functions.ts   
+        createModel.ts
+        dbFunctions.ts  
 ```
 
 ## Desenvolvimento <a name="desenvolvimento"></a>
@@ -314,5 +290,5 @@ Utilizado para criptografar as senhas dos usuários antes de salvar no banco de 
 <img src='./app-screen-shots/user-posts-mobile.JPG' alt='página da postagem do usuário que foi curtida por outro usuário' width="340" /> 
 <img src='./app-screen-shots/search-mobile.JPG' alt='página home' width="340" /> 
 <img src='./app-screen-shots/notificacoes-mobile.JPG' alt='campo que mostra as notificações do usuário' width="340" /> 
-<img src='./app-screen-shots/form-mobile.JPG' alt='página home' width="340" /> 
+<img src='./app-screen-shots/form-mobile.JPG' alt='formulário para criar postagem' width="340" /> 
 
