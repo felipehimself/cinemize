@@ -22,8 +22,15 @@ export default async function handler(
       .json({ message: 'Algo deu errado', success: false,  })
   );
 
+  const { name, userName, description, location } = req.body;
+
+  if(!userName){
+    res.status(400).json({ message: 'Dados insuficientes', success: true,  });
+    return
+  }
+
+
   if (req.method === 'PATCH') {
-    const { name, userName, description, location } = req.body;
 
     const jwt = req?.cookies?.CinemizeJWT;
 
@@ -31,6 +38,7 @@ export default async function handler(
       res
         .status(401)
         .json({ message: 'Sem autorização', success: false});
+        
     } else {
       try {
         const response = await jose.jwtVerify(jwt!, new TextEncoder().encode(JWT_SECRET));

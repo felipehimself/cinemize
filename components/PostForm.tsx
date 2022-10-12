@@ -30,7 +30,7 @@ const PostForm = ({ options, genre}: { options: string[]; genre: string[] }): JS
 
   const dispatch = useAppDispatch()
 
-  const { register, handleSubmit, formState: { errors }, formState, clearErrors,
+  const { register, handleSubmit, formState: { errors }, formState, clearErrors, watch
   } = useForm<Post>({
     resolver: yupResolver(postValidation),
   });
@@ -73,7 +73,6 @@ const PostForm = ({ options, genre}: { options: string[]; genre: string[] }): JS
     }
   },[formState, rating])
 
-  
 
   return (
     <motion.div
@@ -96,7 +95,7 @@ const PostForm = ({ options, genre}: { options: string[]; genre: string[] }): JS
          <CloseIcon />
         </button>
 
-        <Form onSubmit={handleSubmit(onSubmit)} className='w-full gap-4'>
+        <Form onSubmit={handleSubmit(onSubmit)} className='w-full gap-3'>
         <FormControl className={`${errors.type ? 'animate-shake' : undefined}`}>
             <div className='flex gap-4'>
               <div
@@ -133,7 +132,7 @@ const PostForm = ({ options, genre}: { options: string[]; genre: string[] }): JS
               Título
             </Label>
             <input
-              className='-mt-1  w-full dark:border-dark focus:outline-none focus:border-indigo-600 p-2   border rounded-md'
+              className='-mt-1  w-full dark:border-dark focus:outline-none dark:focus:border-indigo-600 focus:border-indigo-600 p-2   border rounded-md'
               type='text'
               id='title'
               {...register('title')}
@@ -141,10 +140,10 @@ const PostForm = ({ options, genre}: { options: string[]; genre: string[] }): JS
           </FormControl>
           
           <FormControl  className={`${ratingError ? 'animate-shake' : undefined}`}>
-            <Label htmlFor='title' className='mb-2'>
+            <Label htmlFor='rating' className='mb-2'>
               Nota
             </Label>
-            <div className='flex gap-1'>
+            <div id='rating' className='flex gap-1'>
               <ReactStars
                 onChange={ratingChanged}
                 isHalf={true}
@@ -158,10 +157,12 @@ const PostForm = ({ options, genre}: { options: string[]; genre: string[] }): JS
             <textarea
               id='comment'
               placeholder='Comentários...'
-              className='h-32 dark:border-dark focus:outline-none focus:border-indigo-600 p-2  w-full border rounded-md resize-none
-              '
+              className={`
+              h-32 dark:border-dark dark:focus:border-indigo-600 focus:outline-none focus:border-indigo-600 p-2  w-full border rounded-md resize-none
+              `}
               {...register('comment')}
             />
+            <small className={`${watch('comment') && watch('comment').length > 460 ? 'text-red-600' : undefined} flex justify-end text-right text-xs`}>{watch('comment') ? watch('comment').length : 0}/460</small>
           </FormControl>
           <FormControl className={`${errors.whereToWatch ? 'animate-shake' : undefined}`}>
             <Label htmlFor='' className='mb-1'>

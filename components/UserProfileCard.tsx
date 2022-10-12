@@ -41,7 +41,7 @@ const UserProfileCard = ({
         setUserInfo((prev) => ({ ...prev, [name]: value.slice(0, -1) }));
       }
     } else if (name === 'userName') {
-      if (userInfo.userName.length < 20) {
+      if (userInfo.userName.length < 26) {
         setUserInfo((prev) => ({ ...prev, [name]: value }));
       } else {
         setUserInfo((prev) => ({ ...prev, [name]: value.slice(0, -1) }));
@@ -65,8 +65,18 @@ const UserProfileCard = ({
     setIsLoading(true);
     setUserExists(false);
 
+    if(!userInfo.userName.trim()){
+      setIsLoading(false);
+      return
+    }
+    const {isVerified, __v, ...rest} = JSON.parse(JSON.stringify(userInfo))
+
+    for (let key in rest){
+      rest[key as keyof typeof rest] = rest[key as keyof typeof rest].trim()
+    }
+  
     try {
-      await axios.patch('/api/user/profile', userInfo);
+      await axios.patch('/api/user/profile', rest);
       refreshProps()
       setIsLoading(false);
       setIsEditing(false);
@@ -80,20 +90,19 @@ const UserProfileCard = ({
       setIsLoading(false);
     }
   };
-
   const handleCancel = () => {
     setUserInfo(userInfoBkp);
     setUserExists(false);
     setIsEditing(false);
   };
 
-  // resize width input username
-  useEffect(() => {
-    if (inputRef && isEditing) {
-      // @ts-ignore
-      inputRef.current.style.width = inputRef.current.value.length + 'ch';
-    }
-  }, [isEditing, userInfo]);
+  // resize width input userName
+  // useEffect(() => {
+  //   if (inputRef && isEditing) {
+  //     // @ts-ignore
+  //     inputRef.current.style.width = inputRef.current.value.length + 'ch';
+  //   }
+  // }, [isEditing, userInfo]);
 
   // resize height textarea
   useEffect(() => {
@@ -104,7 +113,8 @@ const UserProfileCard = ({
       textAreaRef.current.style.height = textAreaRef.current.scrollHeight + 'px';
     }
   }, [isEditing, userInfo]);
-
+  
+  
   return (
     <header className=' w-full  flex-1 flex flex-col gap-4 pt-6'>
       <div className='relative w-full flex flex-col gap-2 border p-3 rounded bg-lightWhite dark:bg-lightDark'>
@@ -147,11 +157,11 @@ const UserProfileCard = ({
               value={userInfo.userName || ''}
               className=' font-bold focus:outline-none  bg-light-pattern dark:bg-dark-pattern '
               onChange={handleChange}
-              ref={inputRef}
+             // ref={inputRef}
               disabled={isLoading}
               maxLength={20}
             />
-            {userInfo.isVerified && <MdVerified className='-mb-[1px] fill-indigo-600 dark:fill-white' />}
+            {/* {userInfo.isVerified && <MdVerified className='-mb-[1px] fill-indigo-600 dark:fill-white' />} */}
           </div>
         ) : (
           <span className='font-bold flex items-center gap-1 text-sm absolute left-2 -top-3 bg-light-pattern dark:bg-dark px-1 dark:bg-dark-pattern '>

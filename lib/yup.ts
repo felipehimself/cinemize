@@ -31,7 +31,7 @@ export const profileValidation = Yup.object().shape({
 export const postValidation = Yup.object().shape({
   type: Yup.mixed().oneOf(['filme', 'série']).defined().required(),
   title: Yup.string().trim().max(30).required(),
-  comment: Yup.string().trim().max(400).required(),
+  comment: Yup.string().trim().max(460).required(),
   whereToWatch: Yup.array().min(1).of(Yup.string().required()).required(),
   genre: Yup.array().min(1).of(Yup.string().required()).required(),
 });

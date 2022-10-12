@@ -21,11 +21,9 @@ import { signupValidation } from '../lib/yup';
 import { SignUp } from '../ts/types/login';
 
 
-// limitar também para name, userName e location
-// colocar trim no username e name
-// seguir cinemize para novas contas
 // ver quais componentes nao estao sendo utilizados e deletar
 // deletar comentários desnecessários
+// validação dos campos do form, mostrar limite de caracteres
 
 const Home: NextPage = () => {
   const [error, setError] = useState({ message: '', isError: false });
