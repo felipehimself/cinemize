@@ -8,7 +8,6 @@ const MONGODB_URI = process.env.MONGODB_URI || '';
 import { Post as AllPosts } from '../../ts/types/post';
 import NoDataMsg from '../../components/NoDataMsg';
 import Head from 'next/head';
-import { IoBookmark } from 'react-icons/io5';
 
 const Favorites: NextPage<{
   favoritedPosts: AllPosts[];
