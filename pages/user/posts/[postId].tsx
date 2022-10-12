@@ -7,6 +7,7 @@ import { getUserId } from '../../../utils/dbFunctions';
 import User from '../../../models/User';
 import Head from 'next/head';
 import Notification from '../../../models/Notification';
+import {GoNote} from 'react-icons/go'
 
 const MONGODB_URI = process.env.MONGODB_URI || '';
 
@@ -22,8 +23,8 @@ const PostId: NextPage<{ post: PC; loggedUserId: string }> = ({
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <main className='mt-2 flex flex-col gap-2'>
-        <div className='inline-block self-start text-sm py-1 px-3 rounded-md  bg-lightWhite border dark:bg-lightDark'>
-          <h2>Postagem</h2>
+        <div className='flex items-center gap-2 '>
+         Postagem <GoNote size={20}/>
         </div>
         <PostCard loggedUserId={loggedUserId} {...post} />
       </main>

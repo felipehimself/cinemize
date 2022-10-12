@@ -7,6 +7,8 @@ import PostCard from '../../components/PostCard';
 import { Post as AllPosts } from '../../ts/types/post';
 import NoDataMsg from '../../components/NoDataMsg';
 import Head from 'next/head';
+import { IoBookmark } from 'react-icons/io5';
+
 const MONGODB_URI = process.env.MONGODB_URI || '';
 
 const Favorites: NextPage<{
@@ -21,10 +23,8 @@ const Favorites: NextPage<{
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <div className='fixed top-16 -mt-1 z-30 container left-1/2 -translate-x-2/4'>
-        <div className='bg-white dark:bg-dark mt-2 '>
-          <div className='inline-block text-sm py-1 px-3 rounded-md  bg-lightWhite border dark:bg-lightDark'>
-            <h2>Favoritos</h2>
-          </div>
+        <div className='flex items-center gap-1  bg-white dark:bg-dark mt-3 '>
+         Favoritos  <IoBookmark />
         </div>
       </div>
       <main className='mt-1 pt-10 flex flex-col gap-4'>
