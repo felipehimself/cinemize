@@ -80,6 +80,8 @@ export default async function handler(
         });
       });
 
+      notificationsCopy?.notifications.reverse()
+
       res.status(200).json(notificationsCopy);
     } catch (error) {
       res.status(400).json({ message: 'Algo deu erradoss', success: false });
