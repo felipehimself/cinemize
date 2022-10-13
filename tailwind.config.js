@@ -49,7 +49,7 @@ module.exports = {
       }
     },
   
-  plugins: [require('tw-elements/dist/plugin'),function changeContainerWidth ({ addComponents }) {
+  plugins: [function changeContainerWidth ({ addComponents }) {
     addComponents({
       '.container': {
         maxWidth: '100%',
